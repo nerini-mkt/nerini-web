@@ -414,9 +414,9 @@ export default function NeriniWeb() {
   return (
     <div style={{ fontFamily: SANS, color: C.negro, background: "#fff", overflowX: "hidden", textWrap: "pretty" }}>
       {/* NAV */}
-      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#fff", borderBottom: `1px solid ${C.grisBorde}` }}>
+      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: C.beige, borderBottom: `1px solid ${C.grisBorde}` }}>
         <div style={{ maxWidth: MAX, margin: "0 auto", padding: `0 ${PAD_X}`, minHeight: 68, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24 }}>
-          <a href="#top" style={{ display: "inline-flex" }}>
+          <a href="#top" style={{ display: "inline-flex", color: "inherit", textDecoration: "none" }}>
             <Logo size={21} />
           </a>
           <div style={{ display: "flex", alignItems: "center", gap: "clamp(16px, 3vw, 32px)" }}>
@@ -567,7 +567,7 @@ export default function NeriniWeb() {
       </section>
 
       {/* EL SISTEMA */}
-      <section id="sistema" style={{ background: C.grisBg, padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}`, scrollMarginTop: 68 }}>
+      <section id="sistema" style={{ background: C.beige, padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}`, scrollMarginTop: 68 }}>
         <div style={{ maxWidth: MAX, margin: "0 auto" }}>
           <Reveal style={{ marginBottom: "clamp(36px, 5vw, 56px)" }}>
             <h2 style={{ ...h2, margin: "0 0 20px" }}>El sistema</h2>
