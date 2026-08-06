@@ -235,7 +235,7 @@ export default function App() {
           {/* Foto + credenciales */}
           <Reveal>
             <div>
-              <img src="/debora.jpg" alt="Debora Nerini" style={{ width: "100%", aspectRatio: "3/4", objectFit: "cover", objectPosition: "top", borderRadius: 4, display: "block" }} />
+              <img src="/debora.png" alt="Debora Nerini" style={{ width: "100%", aspectRatio: "3/4", objectFit: "cover", objectPosition: "top", borderRadius: 4, display: "block" }} />
               <div style={{ marginTop: 20, fontSize: 12, color: C.grisClaro, lineHeight: 2 }}>
                 Lic. en Comercialización<br />
                 Especialización en Marketing Digital<br />
