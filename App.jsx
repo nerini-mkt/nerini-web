@@ -106,13 +106,14 @@ export default function App() {
     window.addEventListener("scroll", fn); return () => window.removeEventListener("scroll", fn);
   }, []);
 
-  const BtnWA = ({ light = false }) => (
+  const BtnWA = ({ light = false, outline = false }) => (
     <a href={WA} target="_blank" rel="noopener noreferrer" style={{
       display: "inline-block", textDecoration: "none",
       fontFamily: "'Raleway',sans-serif", fontWeight: 600, fontSize: 14, letterSpacing: ".05em",
-      padding: "13px 32px", borderRadius: 3,
-      background: light ? C.beige : C.bordo,
-      color: light ? C.bordo : C.beige,
+      padding: "11px 22px", borderRadius: 3,
+      background: outline ? "transparent" : light ? C.beige : C.bordo,
+      color: outline ? C.bordo : light ? C.bordo : C.beige,
+      border: outline ? `1.5px solid ${C.bordo}` : "none",
     }}>Hablemos por WhatsApp</a>
   );
 
@@ -123,7 +124,7 @@ export default function App() {
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 1000, background: "rgba(255,255,255,.96)", backdropFilter: "blur(8px)", borderBottom: `1px solid ${scrolled ? C.grisBorde : "transparent"}`, transition: "border-color .3s" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 48px", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <Logo size={19} />
-          <BtnWA />
+          <BtnWA outline />
         </div>
       </nav>
 
