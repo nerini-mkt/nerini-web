@@ -235,9 +235,7 @@ export default function App() {
           {/* Foto + credenciales */}
           <Reveal>
             <div>
-              <div style={{ background: C.grisBg, border: `1px solid ${C.grisBorde}`, borderRadius: 4, aspectRatio: "3/4", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", padding: 16 }}>
-                <div style={{ fontSize: 11, color: C.grisClaro }}>Debora Nerini</div>
-              </div>
+              <img src="/debora.jpg" alt="Debora Nerini" style={{ width: "100%", aspectRatio: "3/4", objectFit: "cover", objectPosition: "top", borderRadius: 4, display: "block" }} />
               <div style={{ marginTop: 20, fontSize: 12, color: C.grisClaro, lineHeight: 2 }}>
                 Lic. en Comercialización<br />
                 Especialización en Marketing Digital<br />
@@ -312,7 +310,16 @@ export default function App() {
       </section>
 
       {/* ── CTA FINAL ── */}
-      <section style={{ background: C.bordo, padding: "72px 48px" }}>
+      <section style={{ background: C.bordo, padding: "72px 48px", position: "relative", overflow: "hidden" }}>
+        <div style={{
+          position: "absolute", inset: 0, pointerEvents: "none", userSelect: "none", overflow: "hidden",
+          display: "grid", gridTemplateColumns: "repeat(auto-fill, 72px)",
+          fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+          fontWeight: 700, fontSize: 52, letterSpacing: "0.12em", lineHeight: "72px",
+          color: C.beige, opacity: 0.07, textAlign: "center",
+        }}>
+          {Array(120).fill(null).map((_, i) => <span key={i}>N</span>)}
+        </div>
         <div style={{ maxWidth: 820, margin: "0 auto" }}>
           <Reveal>
             <h2 style={{ fontWeight: 300, fontSize: "clamp(30px, 5vw, 58px)", color: C.beige, lineHeight: 1.1, marginBottom: 24 }}>
