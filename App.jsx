@@ -477,14 +477,16 @@ export default function NeriniWeb() {
   return (
     <div style={{ fontFamily: SANS, color: C.negro, background: "#fff", overflowX: "hidden", textWrap: "pretty" }}>
       {/* NAV */}
+      <style>{`@media (max-width: 760px){ .nerini-nav-links > a { display: none; } }`}</style>
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#fff", borderBottom: `1px solid ${C.grisBorde}` }}>
         <div style={{ maxWidth: MAX, margin: "0 auto", padding: `0 ${PAD_X}`, minHeight: 68, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24 }}>
           <a href="#top" style={{ display: "inline-flex", textDecoration: "none", color: "inherit" }}>
             <Logo size={21} />
           </a>
-          <div style={{ display: "flex", alignItems: "center", gap: "clamp(14px, 2.6vw, 28px)", flexWrap: "wrap" }}>
-            <a href="#contratas" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none" }}>Nuestro Servicio</a>
-            <a href="#empezamos" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none" }}>Primeros pasos</a>
+          <div className="nerini-nav-links" style={{ display: "flex", alignItems: "center", gap: "clamp(14px, 2.6vw, 28px)" }}>
+            <a href="#contratas" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none", whiteSpace: "nowrap" }}>Nuestro Servicio</a>
+            <a href="#sistema" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none", whiteSpace: "nowrap" }}>Nuestro Sistema</a>
+            <a href="#empezamos" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none", whiteSpace: "nowrap" }}>Primeros pasos</a>
             <BtnWA variant="secondary" size="sm">WhatsApp</BtnWA>
           </div>
         </div>
