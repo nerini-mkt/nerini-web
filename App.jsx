@@ -1,14 +1,19 @@
 import { useState, useEffect, useRef } from "react";
+import fotoDebora from "./debora.png";
 
 /**
- * NERINI — sitio web (versión corregida)
- * Pegar este archivo en Lovable como src/pages/Index.jsx (o src/App.jsx) y renderizar <NeriniWeb />.
+ * NERINI — sitio web
+ * Repo: nerini-mkt/nerini-web · Archivo: App.jsx (raiz) · Deploy automatico en Vercel.
+ * La foto se importa desde debora.png, en la misma carpeta.
  *
- * FOTO: reemplazar FOTO_DEBORA por la URL de la foto (subirla al proyecto e importarla,
- * o pegar un link). Si queda en null se muestra un recuadro gris con leyenda.
+ * PENDIENTE:
+ * - Seccion "Preguntas" (FAQ): las 4 preguntas estan definidas pero sin respuestas.
+ * - Hero en singular o plural: hoy la bajada dice "Ayudo" y el resto de la web esta en plural.
+ * - Usuarios de Instagram / LinkedIn para el footer.
+ * - Title y meta description: van en index.html, no en este archivo.
  */
 
-const FOTO_DEBORA = "/debora.png";
+const FOTO_DEBORA = fotoDebora;
 
 const WA =
   "https://wa.me/5491122419299?text=Hola%20Debora%2C%20me%20interesa%20saber%20m%C3%A1s%20sobre%20tus%20servicios";
@@ -18,10 +23,10 @@ const C = {
   bordoHover: "#571821",
   bordoMedio: "#9B5059",
   cuero: "#A0714A",
+  cueroTexto: "#8B5F3D",
   cueroClaro: "#D4B896",
   beige: "#FAF5EE",
   negro: "#3A1A1F",
-  grisBg: "#FAFAFA",
   grisBorde: "#E8E2D9",
   grisTexto: "#6B6660",
   grisClaro: "#A8A39E",
@@ -31,7 +36,7 @@ const SANS = "'Raleway','Open Sans',system-ui,-apple-system,sans-serif";
 const LOGO_FONT = "'Arimo','Liberation Sans',Arial,Helvetica,sans-serif";
 
 const PAD_X = "clamp(20px, 5vw, 48px)";
-const PAD_Y = "clamp(56px, 8vw, 96px)";
+const PAD_Y = "clamp(52px, 6.5vw, 84px)";
 const MAX = 1120;
 
 /* ── fuentes de marca ─────────────────────────────── */
@@ -127,8 +132,8 @@ function Logo({ dark = false, size = 21 }) {
   );
 }
 
-/* ── patrón N (solo portadas / secciones de impacto) ─ */
-function Pattern({ cell = 96, opacity = 0.06, color = C.bordo }) {
+/* ── patrón N (solo hero y cierre) ─────────────────── */
+function Pattern({ cell = 96, opacity = 0.028, color = C.bordo }) {
   return (
     <span
       aria-hidden="true"
@@ -295,7 +300,9 @@ function BtnWA({ variant = "primary", size = "lg", children = "Hablemos por What
   };
   const skins = {
     primary: { background: h ? C.bordoHover : C.bordo, color: C.beige, borderColor: C.bordo },
-    secondary: { background: h ? C.grisBg : "#fff", color: C.bordo, borderColor: C.bordo },
+    secondary: { background: h ? C.beige : "#fff", color: C.bordo, borderColor: C.bordo },
+    inverse: { background: h ? C.cueroClaro : C.beige, color: C.bordo, borderColor: h ? C.cueroClaro : C.beige },
+    cuero: { background: h ? C.cuero : C.cueroTexto, color: C.beige, borderColor: h ? C.cuero : C.cueroTexto },
   };
   return (
     <a
@@ -320,15 +327,14 @@ function BtnWA({ variant = "primary", size = "lg", children = "Hablemos por What
         ...skins[variant],
       }}
     >
-      {children}
+      <span style={{ whiteSpace: "nowrap" }}>{children}</span>
     </a>
   );
 }
 
 /* ── card ─────────────────────────────────────────── */
-function Card({ variant = "default", accentTop = false, children, style = {} }) {
+function Card({ variant = "plain", children, style = {} }) {
   const fills = {
-    default: { background: C.grisBg, border: `1px solid ${C.grisBorde}` },
     plain: { background: "#fff", border: `1px solid ${C.grisBorde}` },
     brand: { background: C.bordo, border: `1px solid ${C.bordo}` },
   };
@@ -340,7 +346,6 @@ function Card({ variant = "default", accentTop = false, children, style = {} }) 
         height: "100%",
         boxShadow: variant === "brand" ? "none" : "0 1px 2px rgba(58,26,31,.04)",
         ...fills[variant],
-        ...(accentTop ? { borderTop: `3px solid ${C.bordo}` } : null),
         ...style,
       }}
     >
@@ -354,14 +359,16 @@ const eyebrow = {
   fontWeight: 600,
   letterSpacing: ".14em",
   textTransform: "uppercase",
-  color: C.bordoMedio,
+  color: C.cueroTexto,
 };
 const h2 = {
   fontWeight: 300,
-  fontSize: "clamp(30px, 4vw, 46px)",
+  fontSize: "clamp(34px, 4.6vw, 52px)",
   color: C.negro,
-  lineHeight: 1.15,
+  lineHeight: 1.12,
+  letterSpacing: "-.01em",
 };
+const SECTION_GAP = "clamp(32px, 4vw, 48px)";
 const chip = {
   display: "flex",
   alignItems: "center",
@@ -373,31 +380,44 @@ const chip = {
   fontSize: 14,
   color: C.negro,
 };
+const nota = { fontSize: 13, color: C.grisTexto, lineHeight: 1.6, margin: 0 };
 
 /* ── datos ────────────────────────────────────────── */
 const PROBLEMAS = [
-  { icon: <IcoProveedores />, title: "Diferentes proveedores. Diferentes estrategias.", desc: "Cada proveedor ejecuta su área sin una estrategia integral." },
-  { icon: <IcoDuenio />, title: "El marketing lo planificás vos.", desc: "La planificación y ejecución dependen de tu disponibilidad permanente." },
-  { icon: <IcoMedicion />, title: "Invertís dinero y tiempo sin medir retorno.", desc: "Reportes aislados de cada proveedor, sin un tablero que muestre el resultado conjunto." },
-  { icon: <IcoLeads />, title: "Leads sin seguimiento.", desc: "No hay registro de origen ni proceso definido para convertirlos en oportunidades de venta." },
+  { icon: <IcoProveedores />, title: "Proveedores sin estrategia común", desc: "Cada proveedor ejecuta su área con su propio criterio." },
+  { icon: <IcoDuenio />, title: "Planificación sin equipo propio", desc: "El marketing avanza cuando vos tenés tiempo." },
+  { icon: <IcoMedicion />, title: "Inversión sin retorno medido", desc: "Reportes aislados por proveedor, sin un tablero que muestre el resultado conjunto." },
+  { icon: <IcoLeads />, title: "Leads sin seguimiento", desc: "Sin registro de origen ni proceso para convertirlos en oportunidades de venta." },
 ];
 
-const CENTRALIZADO = [
-  "Todos los canales integrados en un CRM con flujos automatizados.",
-  "Cada lead registrado con su origen y seguimiento activo.",
-  "Cada inversión medida contra resultado.",
-  "Todo centralizado en un solo tablero.",
+const CON_SISTEMA = [
+  "Leads trackeados por origen y con seguimiento",
+  "Inversión medida contra resultado",
+  "Un único tablero con todos los canales",
 ];
+
+const CONTRATAS = [
+  { icon: "focus", title: "Estrategia", desc: "Un plan por etapa, con prioridades y canales definidos." },
+  { icon: "coordination", title: "Coordinación del equipo", desc: "Un equipo de especialistas por área ejecuta bajo una sola dirección." },
+  { icon: "modules", title: "Medición", desc: "Un único tablero con todos los canales. Los datos ajustan el plan cada mes." },
+];
+
+const TRABAJAMOS_CON = [
+  "Empresas de servicios sin equipo interno de marketing",
+  "Empresas con equipo comercial que necesita oportunidades de venta",
+  "Dueños o socios que entienden el valor de invertir en marketing para tener presencia y obtener leads",
+];
+const NO_TRABAJAMOS_CON = ["Emprendimientos sin presupuesto para marketing", "Comercios minoristas", "Empresas que buscan ejecución de servicios de marketing por separado"];
 
 const DIGITALES = [
   ["coordination", "Redes sociales"],
-  ["focus", "Pauta digital"],
   ["modules", "Sitio web"],
+  ["action", "WhatsApp"],
 ];
 const OFFLINE = [
-  ["planning", "Eventos y ferias"],
+  ["planning", "Eventos"],
+  ["focus", "Ferias"],
   ["client", "Referidos"],
-  ["action", "WhatsApp directo"],
 ];
 const CRM = ["Respuesta automatizada.", "Historial de puntos de contacto.", "Tratamiento de leads fríos."];
 
@@ -407,6 +427,49 @@ const ETAPAS = [
   { icon: <IcoLoop />, num: "03", name: "Nutrición", desc: "Seguimiento de cada contacto hasta la conversación de venta.", channels: "Email Marketing" },
 ];
 
+const PASOS = [
+  { num: "01", title: "Reunión inicial", desc: "Media hora de conversación para revisar el estado actual de tu empresa y definir el punto de partida." },
+  { num: "02", title: "Diagnóstico", desc: "Revisión del estado actual: canales, proveedores, medición y leads." },
+  { num: "03", title: "Plan de marketing", desc: "Etapa de partida, prioridades y roadmap." },
+];
+
+/* ── whatsapp flotante ────────────────────────────── */
+function FloatingWA() {
+  const [h, setH] = useState(false);
+  return (
+    <a
+      href={WA}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Escribinos por WhatsApp"
+      title="Escribinos por WhatsApp"
+      onMouseEnter={() => setH(true)}
+      onMouseLeave={() => setH(false)}
+      style={{
+        position: "fixed",
+        right: "clamp(16px, 3vw, 28px)",
+        bottom: "clamp(16px, 3vw, 28px)",
+        zIndex: 90,
+        width: 54,
+        height: 54,
+        borderRadius: "50%",
+        background: h ? C.cueroTexto : C.cuero,
+        color: C.beige,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        boxShadow: "0 6px 20px rgba(58,26,31,.24)",
+        transform: h ? "translateY(-2px)" : "none",
+        transition: "background .18s ease, transform .18s ease",
+      }}
+    >
+      <svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884a9.82 9.82 0 0 1 6.988 2.896 9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.8 11.8 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.9 11.9 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 0 0-3.48-8.413" />
+      </svg>
+    </a>
+  );
+}
+
 /* ── página ───────────────────────────────────────── */
 export default function NeriniWeb() {
   useBrandFonts();
@@ -414,35 +477,36 @@ export default function NeriniWeb() {
   return (
     <div style={{ fontFamily: SANS, color: C.negro, background: "#fff", overflowX: "hidden", textWrap: "pretty" }}>
       {/* NAV */}
-      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: C.beige, borderBottom: `1px solid ${C.grisBorde}` }}>
+      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#fff", borderBottom: `1px solid ${C.grisBorde}` }}>
         <div style={{ maxWidth: MAX, margin: "0 auto", padding: `0 ${PAD_X}`, minHeight: 68, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24 }}>
-          <a href="#top" style={{ display: "inline-flex", color: "inherit", textDecoration: "none" }}>
+          <a href="#top" style={{ display: "inline-flex" }}>
             <Logo size={21} />
           </a>
-          <div style={{ display: "flex", alignItems: "center", gap: "clamp(16px, 3vw, 32px)" }}>
-            <a href="#sistema" style={{ fontSize: 14, fontWeight: 500, color: C.grisTexto, textDecoration: "none" }}>El sistema</a>
-            <a href="#quien" style={{ fontSize: 14, fontWeight: 500, color: C.grisTexto, textDecoration: "none" }}>Quién dirige</a>
+          <div style={{ display: "flex", alignItems: "center", gap: "clamp(14px, 2.6vw, 28px)", flexWrap: "wrap" }}>
+            <a href="#contratas" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none" }}>Nuestro Servicio</a>
+            <a href="#empezamos" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none" }}>Primeros pasos</a>
             <BtnWA variant="secondary" size="sm">WhatsApp</BtnWA>
           </div>
         </div>
       </nav>
 
       {/* HERO */}
-      <section id="top" style={{ position: "relative", minHeight: "min(88vh, 900px)", display: "flex", alignItems: "center", padding: `clamp(120px, 16vh, 180px) ${PAD_X} clamp(64px, 10vh, 110px)`, overflow: "hidden" }}>
-        <Pattern />
+      <section id="top" style={{ position: "relative", background: "#fff", minHeight: "min(62vh, 620px)", display: "flex", alignItems: "center", padding: `clamp(100px, 11vh, 132px) ${PAD_X} clamp(48px, 6vh, 72px)`, overflow: "hidden" }}>
+        <Pattern opacity={0.16} color={C.cueroClaro} />
+        <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(100deg, #fff 0%, #fff 46%, rgba(255,255,255,0) 78%)" }} />
         <div style={{ position: "relative", maxWidth: MAX, margin: "0 auto", width: "100%" }}>
           <Reveal>
-            <h1 style={{ fontWeight: 300, fontSize: "clamp(40px, 6.6vw, 76px)", lineHeight: 1.06, letterSpacing: "-.02em", color: C.negro, margin: "0 0 28px" }}>
+            <h1 style={{ fontWeight: 300, fontSize: "clamp(38px, min(5.2vw, 8.4vh), 64px)", lineHeight: 1.08, letterSpacing: "-.02em", color: C.negro, margin: "0 0 26px" }}>
               El área de marketing<br />que tu empresa<br />necesita
             </h1>
           </Reveal>
           <Reveal delay={90}>
-            <p style={{ fontStyle: "italic", fontWeight: 300, fontSize: "clamp(18px, 1.9vw, 22px)", color: C.grisTexto, lineHeight: 1.55, margin: "0 0 44px", maxWidth: "32em" }}>
+            <p style={{ fontStyle: "italic", fontWeight: 300, fontSize: "clamp(17px, 1.7vw, 20px)", color: C.grisTexto, lineHeight: 1.55, margin: "0 0 32px", maxWidth: "32em" }}>
               Ayudo a empresas de servicios sin equipo de marketing a posicionarse y generar oportunidades de venta, a través de un sistema que centraliza, automatiza y mide todas sus acciones.
             </p>
           </Reveal>
           <Reveal delay={170}>
-            <BtnWA />
+            <BtnWA variant="cuero">Pedí tu diagnóstico</BtnWA>
           </Reveal>
         </div>
       </section>
@@ -451,15 +515,15 @@ export default function NeriniWeb() {
       <section style={{ background: "#fff", padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}` }}>
         <div style={{ maxWidth: MAX, margin: "0 auto" }}>
           <Reveal>
-            <h2 style={{ ...h2, margin: "0 0 clamp(36px, 5vw, 56px)" }}>¿Te está pasando esto?</h2>
+            <h2 style={{ ...h2, margin: `0 0 ${SECTION_GAP}` }}>¿Te está pasando esto?</h2>
           </Reveal>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20, marginBottom: "clamp(28px, 3.5vw, 40px)" }}>
             {PROBLEMAS.map((item, i) => (
               <Reveal key={i} delay={i * 70}>
-                <Card>
-                  <div style={{ color: C.bordo, marginBottom: 20 }}>{item.icon}</div>
+                <Card variant="plain">
+                  <div style={{ color: C.cuero, marginBottom: 20 }}>{item.icon}</div>
                   <div style={{ fontWeight: 600, fontSize: 17, color: C.negro, lineHeight: 1.35, marginBottom: 10 }}>{item.title}</div>
-                  <div style={{ fontSize: 15, color: C.grisTexto, lineHeight: 1.7 }}>{item.desc}</div>
+                  <div style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7 }}>{item.desc}</div>
                 </Card>
               </Reveal>
             ))}
@@ -467,157 +531,238 @@ export default function NeriniWeb() {
         </div>
       </section>
 
-      {/* MARKETING CENTRALIZADO */}
-      <section style={{ background: C.grisBg, padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}` }}>
-        <div style={{ maxWidth: MAX, margin: "0 auto", display: "flex", flexWrap: "wrap", gap: "clamp(40px, 6vw, 80px)", alignItems: "center" }}>
-          <Reveal style={{ flex: "1 1 380px", minWidth: 300 }}>
-            <h2 style={{ ...h2, margin: "0 0 28px" }}>Marketing centralizado</h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              {CENTRALIZADO.map((t, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, fontSize: 16, color: C.grisTexto, lineHeight: 1.65 }}>
-                  <span style={{ width: 5, height: 5, borderRadius: "50%", background: C.cuero, flexShrink: 0, marginTop: 9 }} />
-                  <span>{t}</span>
-                </div>
-              ))}
-            </div>
+      {/* NUESTRO SERVICIO */}
+      <section id="contratas" style={{ background: "#fff", padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}`, scrollMarginTop: 68 }}>
+        <div style={{ maxWidth: MAX, margin: "0 auto" }}>
+          <Reveal>
+            <h2 style={{ ...h2, margin: `0 0 ${SECTION_GAP}` }}>Nuestro Servicio</h2>
           </Reveal>
-
-          <Reveal delay={90} style={{ flex: "1 1 420px", minWidth: 300 }}>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 20, alignItems: "center" }}>
-              <div style={{ flex: "1 1 200px", minWidth: 190 }}>
-                <div style={{ ...eyebrow, marginBottom: 10 }}>Canales digitales</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  {DIGITALES.map(([ico, label]) => (
-                    <div key={label} style={chip}>
-                      <Icon name={ico} color={C.cuero} />
-                      {label}
-                    </div>
-                  ))}
-                </div>
-                <div style={{ ...eyebrow, margin: "18px 0 10px" }}>Canales offline</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  {OFFLINE.map(([ico, label]) => (
-                    <div key={label} style={chip}>
-                      <Icon name={ico} color={C.cuero} />
-                      {label}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div style={{ flex: "0 0 auto", display: "flex", justifyContent: "center" }}>
-                <Icon name="action" size={22} color={C.cuero} />
-              </div>
-
-              <div style={{ flex: "1 1 220px", minWidth: 210 }}>
-                <Card variant="brand">
-                  <div style={{ fontWeight: 300, fontSize: 26, color: C.beige, lineHeight: 1.1, marginBottom: 8 }}>Sistema Centralizado</div>
-                  <div style={{ fontSize: 10, letterSpacing: ".14em", fontWeight: 600, color: C.cueroClaro, textTransform: "uppercase", marginBottom: 16 }}>Todo en un CRM</div>
-                  <div style={{ width: 28, height: 1, background: C.cueroClaro, opacity: 0.5, marginBottom: 18 }} />
-                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                    {CRM.map((t) => (
-                      <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: 10, fontSize: 14, color: C.beige, lineHeight: 1.5 }}>
-                        <Icon name="check" size={15} color={C.cueroClaro} />
-                        {t}
-                      </div>
-                    ))}
+          <Reveal>
+            <h3 style={{ fontWeight: 300, fontSize: "clamp(22px, 2.6vw, 30px)", color: C.cuero, lineHeight: 1.2, margin: "0 0 22px" }}>Dirección de Marketing</h3>
+          </Reveal>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20, marginBottom: 22 }}>
+            {CONTRATAS.map((item) => (
+              <Reveal key={item.title}>
+                <Card variant="plain">
+                  <div style={{ marginBottom: 20 }}>
+                    <Icon name={item.icon} size={28} />
                   </div>
+                  <div style={{ fontWeight: 600, fontSize: 17, color: C.negro, marginBottom: 10 }}>{item.title}</div>
+                  <div style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7 }}>{item.desc}</div>
                 </Card>
-              </div>
-            </div>
+              </Reveal>
+            ))}
+          </div>
+
+          <Reveal>
+            <div style={{ borderTop: `1px solid ${C.grisBorde}`, margin: "clamp(40px, 5vw, 56px) 0" }} />
           </Reveal>
+
+          <Reveal>
+            <h3 id="quien" style={{ fontWeight: 300, fontSize: "clamp(22px, 2.6vw, 30px)", color: C.cuero, lineHeight: 1.2, margin: "0 0 22px", scrollMarginTop: 68 }}>Directora</h3>
+          </Reveal>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "clamp(32px, 4.5vw, 64px)", alignItems: "flex-start" }}>
+            <Reveal style={{ flex: "1 1 240px", maxWidth: 300, minWidth: 220 }}>
+              <div style={{ width: "100%", aspectRatio: "1 / 1", borderRadius: 8, overflow: "hidden", background: C.beige, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                {FOTO_DEBORA ? (
+                  <img src={FOTO_DEBORA} alt="Debora Nerini" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                ) : (
+                  <span style={{ fontSize: 12, color: C.grisClaro }}>Foto de Debora</span>
+                )}
+              </div>
+            </Reveal>
+
+            <div style={{ flex: "1 1 420px", minWidth: 300 }}>
+              <Reveal>
+                <div style={{ fontWeight: 600, fontSize: 20, color: C.cuero, marginBottom: 18 }}>Debora Nerini</div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px 18px", fontSize: 13, color: C.grisTexto, marginBottom: 26 }}>
+                  <span>Lic. en Comercialización</span>
+                  <span style={{ color: C.grisBorde }}>·</span>
+                  <span>Especialización en Marketing Digital</span>
+                  <span style={{ color: C.grisBorde }}>·</span>
+                  <span>15 años en marketing y negocios en grandes empresas</span>
+                </div>
+                <div style={{ borderTop: `1px solid ${C.grisBorde}`, marginBottom: 26 }} />
+              </Reveal>
+              <Reveal delay={80}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: "40em" }}>
+                  <p style={{ fontSize: 17, color: C.grisTexto, lineHeight: 1.8, margin: 0 }}>
+                    Debora es tu Responsable Externa de Marketing: define la estrategia, coordina al equipo que ejecuta y responde por el resultado.
+                  </p>
+                  <p style={{ fontSize: 17, color: C.grisTexto, lineHeight: 1.8, margin: 0 }}>
+                    El marketing pasa a funcionar como un sistema ordenado y constante, sin depender de tu seguimiento.
+                  </p>
+                </div>
+              </Reveal>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* QUIÉN DIRIGE */}
-      <section id="quien" style={{ background: "#fff", padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}`, scrollMarginTop: 68 }}>
-        <div style={{ maxWidth: MAX, margin: "0 auto", display: "flex", flexWrap: "wrap", gap: "clamp(40px, 6vw, 80px)", alignItems: "flex-start" }}>
-          <Reveal style={{ flex: "1 1 280px", maxWidth: 340, minWidth: 240 }}>
-            <div style={{ width: "100%", aspectRatio: "3 / 4", border: `1px solid ${C.grisBorde}`, borderRadius: 8, overflow: "hidden", background: C.grisBg, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              {FOTO_DEBORA ? (
-                <img src={FOTO_DEBORA} alt="Debora Nerini" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-              ) : (
-                <span style={{ fontSize: 12, color: C.grisClaro }}>Foto de Debora</span>
-              )}
-            </div>
-            <div style={{ marginTop: 24, fontSize: 14, color: C.grisTexto, lineHeight: 1.9 }}>
-              Lic. en Comercialización<br />
-              Especialización en Marketing Digital<br />
-              15 años en grandes empresas
-            </div>
+      {/* CON QUÉ EMPRESAS TRABAJAMOS */}
+      <section style={{ background: "#fff", padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}` }}>
+        <div style={{ maxWidth: MAX, margin: "0 auto" }}>
+          <Reveal>
+            <h2 style={{ ...h2, margin: `0 0 ${SECTION_GAP}` }}>Con qué empresas trabajamos</h2>
           </Reveal>
-
-          <div style={{ flex: "1 1 420px", minWidth: 300 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "clamp(32px, 4.5vw, 56px)" }}>
             <Reveal>
-              <div style={{ ...eyebrow, fontSize: 12, marginBottom: 20 }}>Quién dirige</div>
-              <h2 style={{ ...h2, margin: "0 0 8px" }}>Debora Nerini</h2>
-              <div style={{ fontWeight: 600, fontSize: 16, color: C.cuero, marginBottom: 32 }}>Responsable Externa de Marketing</div>
+              <div style={{ fontSize: 11, letterSpacing: ".14em", fontWeight: 600, color: C.cueroTexto, textTransform: "uppercase", marginBottom: 16 }}>Trabajamos con</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                {TRABAJAMOS_CON.map((t) => (
+                  <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: 12, fontSize: 16, color: C.grisTexto, lineHeight: 1.55 }}>
+                    <span style={{ width: 5, height: 5, borderRadius: "50%", background: C.bordo, flexShrink: 0, marginTop: 9 }} />
+                    <span>{t}</span>
+                  </div>
+                ))}
+              </div>
             </Reveal>
-            <div style={{ borderTop: `1px solid ${C.grisBorde}`, marginBottom: 32 }} />
-            <Reveal delay={80}>
-              <h3 style={{ fontWeight: 300, fontSize: "clamp(22px, 2.6vw, 30px)", color: C.negro, lineHeight: 1.25, margin: "0 0 24px" }}>
-                Una sola persona.<br />Todo el marketing<br />de tu empresa.
-              </h3>
-              <p style={{ fontSize: 17, color: C.grisTexto, lineHeight: 1.8, margin: 0, maxWidth: "40em" }}>
-                Dirijo el marketing de la empresa: defino el plan, coordino a los proveedores que ejecutan y respondo por el resultado. El marketing pasa a funcionar como un sistema, sin requerir tu seguimiento permanente.
-              </p>
+            <Reveal delay={70}>
+              <div style={{ fontSize: 11, letterSpacing: ".14em", fontWeight: 600, color: C.cueroTexto, textTransform: "uppercase", marginBottom: 16 }}>No trabajamos con</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                {NO_TRABAJAMOS_CON.map((t) => (
+                  <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: 12, fontSize: 16, color: C.grisTexto, lineHeight: 1.55 }}>
+                    <span style={{ width: 5, height: 5, borderRadius: "50%", background: C.grisClaro, flexShrink: 0, marginTop: 9 }} />
+                    <span>{t}</span>
+                  </div>
+                ))}
+              </div>
             </Reveal>
           </div>
         </div>
       </section>
 
       {/* EL SISTEMA */}
-      <section id="sistema" style={{ background: C.beige, padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}`, scrollMarginTop: 68 }}>
+      <section id="sistema" style={{ background: "#fff", padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}`, scrollMarginTop: 68 }}>
         <div style={{ maxWidth: MAX, margin: "0 auto" }}>
-          <Reveal style={{ marginBottom: "clamp(36px, 5vw, 56px)" }}>
-            <h2 style={{ ...h2, margin: "0 0 20px" }}>El sistema</h2>
-            <p style={{ fontSize: 17, fontStyle: "italic", fontWeight: 300, color: C.grisTexto, lineHeight: 1.6, margin: 0, maxWidth: "42em" }}>
-              El recorrido es el mismo para todos. El punto de partida lo define el estado actual de la empresa.
+          <Reveal style={{ marginBottom: SECTION_GAP }}>
+            <h2 style={{ ...h2, margin: "0 0 20px" }}>Nuestro Sistema</h2>
+            <p style={{ fontSize: 17, fontStyle: "italic", fontWeight: 300, color: C.grisTexto, lineHeight: 1.6, margin: 0 }}>
+              Todas las empresas recorren las 3 etapas. El punto de partida y el ritmo dependen del estado actual de cada una.
             </p>
           </Reveal>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 16, marginBottom: 16 }}>
-            {ETAPAS.map((s, i) => (
-              <Reveal key={s.num} delay={i * 70}>
-                <Card variant="plain" accentTop>
-                  <div style={{ color: C.bordo, marginBottom: 28 }}>{s.icon}</div>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: C.grisClaro, letterSpacing: ".14em", marginBottom: 12 }}>{s.num}</div>
-                  <div style={{ fontWeight: 600, fontSize: 21, color: C.negro, marginBottom: 14 }}>{s.name}</div>
-                  <p style={{ fontSize: 15, color: C.grisTexto, lineHeight: 1.75, margin: "0 0 24px" }}>{s.desc}</p>
-                  <div style={{ fontSize: 13, color: C.grisClaro, letterSpacing: ".04em" }}>{s.channels}</div>
-                </Card>
-              </Reveal>
-            ))}
-          </div>
+          <Reveal>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 22 }}>
+              {ETAPAS.map((s, i) => (
+                <div key={s.num} style={{ gridColumn: `${i + 1} / 4`, gridRow: i + 1, borderRadius: 8, background: C.bordo, padding: "16px 20px" }}>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: C.cueroClaro, letterSpacing: ".14em", marginBottom: 6 }}>{s.num}</div>
+                  <div style={{ fontWeight: 600, fontSize: 18, color: C.beige, marginBottom: 6 }}>{s.name}</div>
+                  <p style={{ fontSize: 14, color: C.cueroClaro, lineHeight: 1.55, margin: "0 0 8px" }}>{s.desc}</p>
+                  <div style={{ fontSize: 12, color: C.beige, opacity: 0.8, letterSpacing: ".03em" }}>{s.channels}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ textAlign: "right", fontSize: 12, color: C.cueroTexto, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 22 }}>Conversión de venta →</div>
+          </Reveal>
 
-          <Reveal delay={220}>
-            <div style={{ background: "#fff", border: `1px solid ${C.grisBorde}`, borderLeft: `3px solid ${C.bordo}`, borderRadius: 12, padding: "22px 28px", display: "flex", alignItems: "center", gap: 18, flexWrap: "wrap" }}>
-              <Icon name="planning" size={22} />
+          <Reveal>
+            <div style={{ borderTop: `1px solid ${C.grisBorde}`, margin: "clamp(40px, 5vw, 56px) 0" }} />
+          </Reveal>
+
+          <Reveal>
+            <h3 style={{ fontWeight: 300, fontSize: "clamp(22px, 2.6vw, 30px)", color: C.cuero, lineHeight: 1.2, margin: "0 0 10px" }}>Gestión de Leads</h3>
+            <p style={{ fontSize: 16, fontStyle: "italic", fontWeight: 300, color: C.grisTexto, lineHeight: 1.6, margin: `0 0 ${SECTION_GAP}` }}>Un solo sistema, del primer clic al cierre.</p>
+          </Reveal>
+          <Reveal>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "20px 40px" }}>
               <div>
-                <div style={{ fontWeight: 600, fontSize: 16, color: C.negro }}>Dirección de Marketing</div>
-                <div style={{ fontSize: 15, color: C.grisTexto, marginTop: 4, lineHeight: 1.6 }}>La base transversal del sistema. Incluida en las tres etapas desde el primer día.</div>
+                <div style={{ ...eyebrow, marginBottom: 10 }}>Canales digitales</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  {DIGITALES.map(([ico, label]) => (
+                    <div key={label} style={chip}>
+                      <Icon name={ico} />
+                      {label}
+                    </div>
+                  ))}
+                </div>
               </div>
+              <div>
+                <div style={{ ...eyebrow, marginBottom: 10 }}>Canales offline</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  {OFFLINE.map(([ico, label]) => (
+                    <div key={label} style={chip}>
+                      <Icon name={ico} />
+                      {label}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, padding: "18px 0" }}>
+              <span style={{ width: 1, height: 20, background: C.grisBorde }} />
+              <span style={{ display: "inline-flex", transform: "rotate(90deg)" }}>
+                <Icon name="action" size={22} />
+              </span>
+            </div>
+
+            <Card variant="brand">
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "28px 48px", alignItems: "flex-start", justifyContent: "space-between" }}>
+                <div style={{ flex: "0 1 260px" }}>
+                  <div style={{ fontWeight: 300, fontSize: 26, color: C.beige, lineHeight: 1.15, marginBottom: 8 }}>Marketing Centralizado</div>
+                  <div style={{ fontSize: 11, letterSpacing: ".14em", fontWeight: 600, color: C.cueroClaro, textTransform: "uppercase" }}>Todo en un CRM</div>
+                </div>
+                <div style={{ flex: "1 1 420px" }}>
+                  <p style={{ fontSize: 15, color: C.beige, lineHeight: 1.6, margin: 0 }}>Todos los canales quedan conectados en un mismo sistema, con respuesta automatizada, historial de contacto por lead y tratamiento automatizado de cada oportunidad.</p>
+                </div>
+              </div>
+            </Card>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* CÓMO EMPEZAMOS */}
+      <section id="empezamos" style={{ background: "#fff", padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}`, scrollMarginTop: 68 }}>
+        <div style={{ maxWidth: MAX, margin: "0 auto" }}>
+          <Reveal>
+            <h2 style={{ ...h2, margin: "0 0 clamp(28px, 3.5vw, 40px)" }}>Primeros pasos</h2>
+          </Reveal>
+          <Reveal>
+            <div style={{ background: "#fff", border: `1px solid ${C.grisBorde}`, borderLeft: `3px solid ${C.bordo}`, borderRadius: 12, padding: "clamp(24px, 3vw, 32px)", marginBottom: 16 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: C.cueroTexto, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 20 }}>Onboarding</div>
+              <div style={{ position: "relative", marginBottom: 20 }}>
+                <div style={{ position: "absolute", top: 6, left: 6, right: 6, height: 1, background: C.grisBorde }} />
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20, position: "relative" }}>
+                  {PASOS.map((p) => (
+                    <div key={p.num} style={{ paddingTop: 26, position: "relative" }}>
+                      <span style={{ position: "absolute", top: 0, left: 0, width: 12, height: 12, borderRadius: "50%", background: C.bordo }} />
+                      <div style={{ fontSize: 11, fontWeight: 600, color: C.cueroTexto, letterSpacing: ".14em", marginBottom: 10 }}>{p.num}</div>
+                      <div style={{ fontWeight: 600, fontSize: 19, color: C.negro, marginBottom: 10 }}>{p.title}</div>
+                      <div style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7 }}>{p.desc}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <p style={{ ...nota, margin: 0 }}>El diagnóstico es el primer mes de trabajo y es obligatorio.</p>
+            </div>
+          </Reveal>
+          <Reveal>
+            <div style={{ background: "#fff", border: `1px solid ${C.grisBorde}`, borderLeft: `3px solid ${C.bordo}`, borderRadius: 12, padding: "clamp(24px, 3vw, 32px)" }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: C.cueroTexto, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 20 }}>Mensual</div>
+              <div style={{ fontWeight: 600, fontSize: 19, color: C.negro, marginBottom: 10 }}>Gestión mensual</div>
+              <div style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7 }}>Ejecución del equipo, medición y ajuste.</div>
             </div>
           </Reveal>
         </div>
       </section>
 
-      {/* CTA FINAL */}
-      <section style={{ position: "relative", background: C.bordo, padding: `clamp(64px, 9vw, 110px) ${PAD_X}`, overflow: "hidden" }}>
-        <Pattern opacity={0.1} color={C.cueroClaro} />
+      {/* CIERRE */}
+      <section style={{ position: "relative", background: C.bordo, padding: `clamp(52px, 6.5vw, 84px) ${PAD_X}`, overflow: "hidden" }}>
+        <Pattern opacity={0.045} color={C.cueroClaro} />
         <div style={{ position: "relative", maxWidth: 900, margin: "0 auto" }}>
           <Reveal>
-            <h2 style={{ fontWeight: 300, fontSize: "clamp(32px, 5vw, 58px)", color: C.beige, lineHeight: 1.1, margin: "0 0 28px" }}>
-              ¿Querés tener un equipo externo de marketing?
+            <h2 style={{ fontWeight: 300, fontSize: "clamp(34px, 4.6vw, 52px)", color: C.beige, lineHeight: 1.12, letterSpacing: "-.01em", margin: "0 0 22px" }}>
+              Reunión inicial
             </h2>
           </Reveal>
           <Reveal delay={80}>
-            <p style={{ fontStyle: "italic", fontWeight: 300, fontSize: "clamp(18px, 2vw, 21px)", color: C.cueroClaro, lineHeight: 1.5, margin: "0 0 48px" }}>
-              Agendemos una reunión y te cuento cómo podemos trabajar.
+            <p style={{ fontStyle: "italic", fontWeight: 300, fontSize: "clamp(17px, 1.7vw, 20px)", color: C.cueroClaro, lineHeight: 1.5, margin: "0 0 36px" }}>
+              Media hora de conversación para revisar el estado actual de tu empresa y definir el punto de partida.
             </p>
           </Reveal>
           <Reveal delay={150}>
-            <BtnWA variant="secondary" />
+            <BtnWA variant="inverse">Escribinos por WhatsApp</BtnWA>
           </Reveal>
         </div>
       </section>
@@ -635,6 +780,8 @@ export default function NeriniWeb() {
           © 2026 NERINI. Todos los derechos reservados.
         </div>
       </footer>
+
+      <FloatingWA />
     </div>
   );
 }
