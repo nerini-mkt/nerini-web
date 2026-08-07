@@ -479,7 +479,7 @@ export default function NeriniWeb() {
       {/* NAV */}
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#fff", borderBottom: `1px solid ${C.grisBorde}` }}>
         <div style={{ maxWidth: MAX, margin: "0 auto", padding: `0 ${PAD_X}`, minHeight: 68, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24 }}>
-          <a href="#top" style={{ display: "inline-flex" }}>
+          <a href="#top" style={{ display: "inline-flex", textDecoration: "none", color: "inherit" }}>
             <Logo size={21} />
           </a>
           <div style={{ display: "flex", alignItems: "center", gap: "clamp(14px, 2.6vw, 28px)", flexWrap: "wrap" }}>
