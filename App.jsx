@@ -8,8 +8,8 @@ import fotoDebora from "./debora.png";
  *
  * PENDIENTE:
  * - Seccion "Preguntas" (FAQ): las 4 preguntas estan definidas pero sin respuestas.
- * - Hero en singular o plural: hoy la bajada dice "Ayudo" y el resto de la web esta en plural.
- * - Usuarios de Instagram / LinkedIn para el footer.
+ * - Banda de contraste del problema: el array CON_SISTEMA esta declarado y no se renderiza.
+ * - Nota de limite en Nuestro Servicio: pauta fuera del fee, cierre comercial del cliente.
  * - Title y meta description: van en index.html, no en este archivo.
  */
 
@@ -487,14 +487,14 @@ export default function NeriniWeb() {
             <a href="#contratas" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none", whiteSpace: "nowrap" }}>Nuestro Servicio</a>
             <a href="#sistema" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none", whiteSpace: "nowrap" }}>Nuestro Sistema</a>
             <a href="#empezamos" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none", whiteSpace: "nowrap" }}>Primeros pasos</a>
-            <BtnWA variant="secondary" size="sm">WhatsApp</BtnWA>
+            <BtnWA variant="primary" size="sm">WhatsApp</BtnWA>
           </div>
         </div>
       </nav>
 
       {/* HERO */}
       <section id="top" style={{ position: "relative", background: "#fff", minHeight: "min(62vh, 620px)", display: "flex", alignItems: "center", padding: `clamp(100px, 11vh, 132px) ${PAD_X} clamp(48px, 6vh, 72px)`, overflow: "hidden" }}>
-        <Pattern opacity={0.16} color={C.cueroClaro} />
+        <Pattern opacity={0.11} color={C.cueroClaro} />
         <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(100deg, #fff 0%, #fff 46%, rgba(255,255,255,0) 78%)" }} />
         <div style={{ position: "relative", maxWidth: MAX, margin: "0 auto", width: "100%" }}>
           <Reveal>
@@ -504,7 +504,7 @@ export default function NeriniWeb() {
           </Reveal>
           <Reveal delay={90}>
             <p style={{ fontStyle: "italic", fontWeight: 300, fontSize: "clamp(17px, 1.7vw, 20px)", color: C.grisTexto, lineHeight: 1.55, margin: "0 0 32px", maxWidth: "32em" }}>
-              Ayudo a empresas de servicios sin equipo de marketing a posicionarse y generar oportunidades de venta, a través de un sistema que centraliza, automatiza y mide todas sus acciones.
+              Ayudamos a empresas de servicios sin equipo de marketing a posicionarse y generar oportunidades de venta, a través de un sistema que centraliza, automatiza y mide todas sus acciones.
             </p>
           </Reveal>
           <Reveal delay={170}>
@@ -540,7 +540,7 @@ export default function NeriniWeb() {
             <h2 style={{ ...h2, margin: `0 0 ${SECTION_GAP}` }}>Nuestro Servicio</h2>
           </Reveal>
           <Reveal>
-            <h3 style={{ fontWeight: 300, fontSize: "clamp(22px, 2.6vw, 30px)", color: C.cuero, lineHeight: 1.2, margin: "0 0 22px" }}>Dirección de Marketing</h3>
+            <h3 style={{ fontWeight: 300, fontSize: "clamp(22px, 2.6vw, 30px)", color: C.bordo, lineHeight: 1.2, margin: "0 0 22px" }}>Dirección de Marketing</h3>
           </Reveal>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20, marginBottom: 22 }}>
             {CONTRATAS.map((item) => (
@@ -561,7 +561,7 @@ export default function NeriniWeb() {
           </Reveal>
 
           <Reveal>
-            <h3 id="quien" style={{ fontWeight: 300, fontSize: "clamp(22px, 2.6vw, 30px)", color: C.cuero, lineHeight: 1.2, margin: "0 0 22px", scrollMarginTop: 68 }}>Directora</h3>
+            <h3 id="quien" style={{ fontWeight: 300, fontSize: "clamp(22px, 2.6vw, 30px)", color: C.bordo, lineHeight: 1.2, margin: "0 0 22px", scrollMarginTop: 68 }}>Directora Externa de Marketing</h3>
           </Reveal>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "clamp(32px, 4.5vw, 64px)", alignItems: "flex-start" }}>
             <Reveal style={{ flex: "1 1 240px", maxWidth: 300, minWidth: 220 }}>
@@ -589,7 +589,7 @@ export default function NeriniWeb() {
               <Reveal delay={80}>
                 <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: "40em" }}>
                   <p style={{ fontSize: 17, color: C.grisTexto, lineHeight: 1.8, margin: 0 }}>
-                    Debora es tu Responsable Externa de Marketing: define la estrategia, coordina al equipo que ejecuta y responde por el resultado.
+                    Defino la estrategia, coordino a mi equipo de especialistas y respondo por el resultado.
                   </p>
                   <p style={{ fontSize: 17, color: C.grisTexto, lineHeight: 1.8, margin: 0 }}>
                     El marketing pasa a funcionar como un sistema ordenado y constante, sin depender de tu seguimiento.
@@ -663,7 +663,7 @@ export default function NeriniWeb() {
           </Reveal>
 
           <Reveal>
-            <h3 style={{ fontWeight: 300, fontSize: "clamp(22px, 2.6vw, 30px)", color: C.cuero, lineHeight: 1.2, margin: "0 0 10px" }}>Gestión de Leads</h3>
+            <h3 style={{ fontWeight: 300, fontSize: "clamp(22px, 2.6vw, 30px)", color: C.bordo, lineHeight: 1.2, margin: "0 0 10px" }}>Gestión de Leads</h3>
             <p style={{ fontSize: 16, fontStyle: "italic", fontWeight: 300, color: C.grisTexto, lineHeight: 1.6, margin: `0 0 ${SECTION_GAP}` }}>Un solo sistema, del primer clic al cierre.</p>
           </Reveal>
           <Reveal>
@@ -736,7 +736,7 @@ export default function NeriniWeb() {
                   ))}
                 </div>
               </div>
-              <p style={{ ...nota, margin: 0 }}>El diagnóstico es el primer mes de trabajo y es obligatorio.</p>
+              <p style={{ ...nota, margin: 0 }}>El diagnóstico es el punto de partida del servicio.</p>
             </div>
           </Reveal>
           <Reveal>
@@ -776,6 +776,10 @@ export default function NeriniWeb() {
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             <a href="mailto:debora@nerini.ar" style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>debora@nerini.ar</a>
             <a href="https://nerini.ar" style={{ fontSize: 15, color: C.grisClaro, textDecoration: "none" }}>nerini.ar</a>
+            <div style={{ display: "flex", gap: 18, marginTop: 8 }}>
+              <a href="https://instagram.com/nerini.marketing" target="_blank" rel="noopener noreferrer" style={{ fontSize: 14, color: C.cueroClaro, textDecoration: "none" }}>Instagram</a>
+              <a href="https://linkedin.com/company/nerini" target="_blank" rel="noopener noreferrer" style={{ fontSize: 14, color: C.cueroClaro, textDecoration: "none" }}>LinkedIn</a>
+            </div>
           </div>
         </div>
         <div style={{ maxWidth: MAX, margin: "0 auto", borderTop: "1px solid rgba(232,226,217,.14)", paddingTop: 24, textAlign: "center", fontSize: 12, color: C.grisClaro, opacity: 0.6 }}>
