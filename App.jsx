@@ -6,11 +6,12 @@ import fotoDebora from "./debora.png";
  * Repo: nerini-mkt/nerini-web · Archivo: App.jsx (raiz) · Deploy automatico en Vercel.
  * La foto se importa desde debora.png, en la misma carpeta.
  *
+ * Actualizado a la estrategia vigente: Departamento Externo de Marketing,
+ * cuatro areas ejecutadas con equipo propio, sistema centralizado.
+ *
  * PENDIENTE:
- * - Seccion "Preguntas" (FAQ): las 4 preguntas estan definidas pero sin respuestas.
- * - Banda de contraste del problema: el array CON_SISTEMA esta declarado y no se renderiza.
- * - Nota de limite en Nuestro Servicio: pauta fuera del fee, cierre comercial del cliente.
- * - Title y meta description: van en index.html, no en este archivo.
+ * - Reemplazar debora.png por una foto sin logo de terceros.
+ * - Title, meta description y Open Graph: van en index.html, no en este archivo.
  */
 
 const FOTO_DEBORA = fotoDebora;
@@ -209,6 +210,20 @@ const PATHS = {
       <line x1="8.4" y1="6" x2="15.6" y2="6" />
     </>
   ),
+  site: (
+    <>
+      <rect x="3.5" y="5" width="17" height="14" rx="1.8" />
+      <line x1="3.5" y1="9.5" x2="20.5" y2="9.5" />
+      <line x1="6.4" y1="7.2" x2="6.5" y2="7.2" />
+      <line x1="9.2" y1="7.2" x2="9.3" y2="7.2" />
+    </>
+  ),
+  mail: (
+    <>
+      <rect x="3.5" y="5.5" width="17" height="13" rx="1.8" />
+      <polyline points="4.5 7.5 12 13 19.5 7.5" />
+    </>
+  ),
 };
 
 function Icon({ name = "check", size = 16, color = C.bordo }) {
@@ -264,6 +279,14 @@ const IcoLeads = () => (
     <line x1="22" y1="18" x2="28" y2="18" strokeDasharray="2.5 2" />
     <line x1="22" y1="22" x2="28" y2="22" strokeDasharray="2.5 2" />
     <line x1="22" y1="26" x2="28" y2="26" strokeDasharray="2.5 2" />
+  </svg>
+);
+const IcoPresencia = () => (
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="5" width="26" height="19" rx="2" />
+    <line x1="3" y1="10.5" x2="29" y2="10.5" />
+    <circle cx="14" cy="17" r="4" />
+    <line x1="17" y1="20" x2="21" y2="24" />
   </svg>
 );
 const IcoGlobo = () => (
@@ -384,53 +407,78 @@ const nota = { fontSize: 13, color: C.grisTexto, lineHeight: 1.6, margin: 0 };
 
 /* ── datos ────────────────────────────────────────── */
 const PROBLEMAS = [
-  { icon: <IcoProveedores />, title: "Proveedores sin estrategia común", desc: "Cada proveedor ejecuta su área con su propio criterio." },
-  { icon: <IcoDuenio />, title: "Planificación sin equipo propio", desc: "El marketing avanza cuando vos tenés tiempo." },
-  { icon: <IcoMedicion />, title: "Inversión sin retorno medido", desc: "Reportes aislados por proveedor, sin un tablero que muestre el resultado conjunto." },
-  { icon: <IcoLeads />, title: "Leads sin seguimiento", desc: "Sin registro de origen ni proceso para convertirlos en oportunidades de venta." },
+  { icon: <IcoProveedores />, title: "Canales sin objetivo común", desc: "Redes, pauta y sitio operando cada uno con su propio criterio." },
+  { icon: <IcoMedicion />, title: "Medición por canal, sin visión del conjunto", desc: "Cada plataforma informa sus métricas y ninguna se cruza con la otra." },
+  { icon: <IcoPresencia />, title: "Presencia por debajo de la trayectoria", desc: "Lo que el cliente encuentra al buscar a la empresa no refleja su capacidad real." },
+  { icon: <IcoLeads />, title: "Contactos sin registro ni seguimiento", desc: "Sin canal de origen, historial ni próximo paso definido." },
+  { icon: <IcoDuenio />, title: "Un proveedor distinto por área", desc: "Cada uno con su formato de reporte y su interlocutor, y el dueño coordinando entre todos." },
 ];
 
-const CON_SISTEMA = [
-  "Leads trackeados por origen y con seguimiento",
-  "Inversión medida contra resultado",
-  "Un único tablero con todos los canales",
-];
-
-const CONTRATAS = [
-  { icon: "focus", title: "Estrategia", desc: "Un plan por etapa, con prioridades y canales definidos." },
-  { icon: "coordination", title: "Coordinación del equipo", desc: "Un equipo de especialistas por área ejecuta bajo una sola dirección." },
-  { icon: "modules", title: "Medición", desc: "Un único tablero con todos los canales. Los datos ajustan el plan cada mes." },
+const AREAS = [
+  { icon: "focus", title: "Dirección", desc: "Diagnóstico, plan mensual y reunión de resultados. Un solo interlocutor responsable." },
+  { icon: "coordination", title: "Redes sociales", desc: "Instagram y LinkedIn: calendario, contenidos, diseño y publicación." },
+  { icon: "action", title: "Pauta digital", desc: "Meta Ads y Google Ads: campañas, audiencias, piezas y optimización mensual." },
+  { icon: "site", title: "Sitio web", desc: "Estructura y textos orientados a convertir, con el formulario conectado al sistema." },
+  { icon: "mail", title: "Email marketing", desc: "Secuencias automáticas, segmentación de la base y envíos periódicos." },
+  { icon: "modules", title: "Sistema centralizado", desc: "Todos los canales en un solo lugar, con seguimiento automatizado y un único tablero." },
 ];
 
 const TRABAJAMOS_CON = [
   "Empresas de servicios sin equipo interno de marketing",
-  "Empresas con equipo comercial que necesita oportunidades de venta",
-  "Dueños o socios que entienden el valor de invertir en marketing para tener presencia y obtener leads",
+  "Empresas que ya destinan un presupuesto mensual a marketing",
+  "Empresas que necesitan generar oportunidades de venta de forma sostenida",
+  "Dueños o socios dispuestos a delegar el área completa",
 ];
-const NO_TRABAJAMOS_CON = ["Emprendimientos sin presupuesto para marketing", "Comercios minoristas", "Empresas que buscan ejecución de servicios de marketing por separado"];
+const NO_TRABAJAMOS_CON = [
+  "Emprendimientos sin presupuesto para marketing",
+  "Comercios minoristas",
+  "Empresas que buscan contratar un área suelta y conservar el resto de sus proveedores",
+];
 
 const DIGITALES = [
   ["coordination", "Redes sociales"],
-  ["modules", "Sitio web"],
-  ["action", "WhatsApp"],
+  ["action", "Pauta digital"],
+  ["site", "Sitio web"],
+  ["client", "WhatsApp"],
 ];
 const OFFLINE = [
-  ["planning", "Eventos"],
-  ["focus", "Ferias"],
-  ["client", "Referidos"],
+  ["planning", "Eventos y ferias"],
+  ["check", "Referidos"],
 ];
-const CRM = ["Respuesta automatizada.", "Historial de puntos de contacto.", "Tratamiento de leads fríos."];
 
 const ETAPAS = [
-  { icon: <IcoGlobo />, num: "01", name: "Presencia", desc: "La base digital de la empresa. Presencia y mensajes consistentes donde están los clientes.", channels: "Sitio web · Instagram · LinkedIn" },
-  { icon: <IcoTrend />, num: "02", name: "Crecimiento", desc: "Generación continua de demanda, sin depender exclusivamente de alcance orgánico.", channels: "Meta Ads · Google Ads" },
-  { icon: <IcoLoop />, num: "03", name: "Nutrición", desc: "Seguimiento de cada contacto hasta la conversación de venta.", channels: "Email Marketing" },
+  { icon: <IcoGlobo />, num: "01", name: "Presencia", desc: "La base digital de la empresa: sitio, Instagram y LinkedIn." },
+  { icon: <IcoTrend />, num: "02", name: "Crecimiento", desc: "Generación continua de demanda con Meta Ads y Google Ads." },
+  { icon: <IcoLoop />, num: "03", name: "Nutrición", desc: "Seguimiento de cada contacto hasta la conversación de venta, con email marketing y flujos automatizados." },
 ];
 
 const PASOS = [
   { num: "01", title: "Reunión inicial", desc: "Media hora de conversación para revisar el estado actual de tu empresa y definir el punto de partida." },
-  { num: "02", title: "Diagnóstico", desc: "Revisión del estado actual: canales, proveedores, medición y leads." },
-  { num: "03", title: "Plan de marketing", desc: "Etapa de partida, prioridades y roadmap." },
+  { num: "02", title: "Diagnóstico", desc: "Revisión del estado actual: canales, proveedores, medición y contactos." },
+  { num: "03", title: "Puesta en marcha", desc: "Plan de marketing, roadmap y arranque de las primeras áreas." },
+];
+
+const PREGUNTAS = [
+  {
+    q: "¿Qué pasa con los proveedores que ya tengo?",
+    a: "Redes, pauta y email marketing los ejecuta nuestro equipo, así que esas áreas dejan de estar en manos de tus proveedores actuales. Si hay un compromiso vigente, coordinamos una reunión de traspaso para tomar lo que ya funciona: audiencias, campañas y calendario. El sitio es la excepción: si ya tiene un proveedor a cargo, los cambios se coordinan con él.",
+  },
+  {
+    q: "¿En cuánto tiempo se ven resultados?",
+    a: "No trabajamos con promesas de resultado en un plazo. Cada área se pone en marcha según el estado en el que está hoy tu marketing, y la pauta se activa cuando el sitio y las redes ya están funcionando. Lo que sí está desde el primer mes es la medición: vas a ver qué entra, por qué canal y a qué costo.",
+  },
+  {
+    q: "¿Por qué esto y no contratar a alguien interno?",
+    a: "Una persona sola no cubre redes, pauta, sitio, email marketing y medición al mismo tiempo. Termina necesitando un diseñador y alguien de pauta. Acá contratás el área completa: la dirección, la ejecución de las cuatro áreas y el sistema que las conecta, con un solo interlocutor responsable por el resultado.",
+  },
+  {
+    q: "¿Cómo se cobra?",
+    a: "Un fee mensual único, con todo el alcance incluido desde el primer mes. No hay planes ni módulos que se sumen, y no hay costo de arranque aparte. La inversión publicitaria va aparte del fee: la define y la paga tu empresa. El número está en la propuesta, que se envía después de la reunión inicial.",
+  },
+  {
+    q: "¿Por qué pago el mes completo si la pauta todavía no arrancó?",
+    a: "Los dos primeros meses concentran el trabajo más pesado: diagnóstico, ajuste del sitio, configuración del sistema y armado de los flujos de seguimiento. Ese trabajo no se factura aparte, va absorbido en el fee. La pauta se activa cuando el sitio y las redes están funcionando, porque amplifica lo que ya existe.",
+  },
 ];
 
 /* ── whatsapp flotante ────────────────────────────── */
@@ -484,8 +532,8 @@ export default function NeriniWeb() {
             <Logo size={21} />
           </a>
           <div className="nerini-nav-links" style={{ display: "flex", alignItems: "center", gap: "clamp(14px, 2.6vw, 28px)" }}>
-            <a href="#contratas" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none", whiteSpace: "nowrap" }}>Nuestro Servicio</a>
-            <a href="#sistema" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none", whiteSpace: "nowrap" }}>Nuestro Sistema</a>
+            <a href="#departamento" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none", whiteSpace: "nowrap" }}>El departamento</a>
+            <a href="#sistema" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none", whiteSpace: "nowrap" }}>El sistema</a>
             <a href="#empezamos" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none", whiteSpace: "nowrap" }}>Primeros pasos</a>
             <BtnWA variant="primary" size="sm">WhatsApp</BtnWA>
           </div>
@@ -499,12 +547,12 @@ export default function NeriniWeb() {
         <div style={{ position: "relative", maxWidth: MAX, margin: "0 auto", width: "100%" }}>
           <Reveal>
             <h1 style={{ fontWeight: 300, fontSize: "clamp(38px, min(5.2vw, 8.4vh), 64px)", lineHeight: 1.08, letterSpacing: "-.02em", color: C.negro, margin: "0 0 26px" }}>
-              El área de marketing<br />que tu empresa<br />necesita
+              El departamento<br />de marketing que<br />tu empresa no tiene
             </h1>
           </Reveal>
           <Reveal delay={90}>
             <p style={{ fontStyle: "italic", fontWeight: 300, fontSize: "clamp(17px, 1.7vw, 20px)", color: C.grisTexto, lineHeight: 1.55, margin: "0 0 32px", maxWidth: "32em" }}>
-              Ayudamos a empresas de servicios sin equipo de marketing a posicionarse y generar oportunidades de venta, a través de un sistema que centraliza, automatiza y mide todas sus acciones.
+              Ayudamos a empresas de servicios sin equipo interno a tener todas las áreas del marketing ejecutadas por un solo equipo, con un sistema que centraliza, automatiza y mide todos los canales.
             </p>
           </Reveal>
           <Reveal delay={170}>
@@ -517,11 +565,11 @@ export default function NeriniWeb() {
       <section style={{ background: "#fff", padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}` }}>
         <div style={{ maxWidth: MAX, margin: "0 auto" }}>
           <Reveal>
-            <h2 style={{ ...h2, margin: `0 0 ${SECTION_GAP}` }}>¿Te está pasando esto?</h2>
+            <h2 style={{ ...h2, margin: `0 0 ${SECTION_GAP}` }}>Marketing sin dirección</h2>
           </Reveal>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20, marginBottom: "clamp(28px, 3.5vw, 40px)" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 20 }}>
             {PROBLEMAS.map((item, i) => (
-              <Reveal key={i} delay={i * 70}>
+              <Reveal key={item.title} delay={i * 70}>
                 <Card variant="plain">
                   <div style={{ color: C.cuero, marginBottom: 20 }}>{item.icon}</div>
                   <div style={{ fontWeight: 600, fontSize: 17, color: C.negro, lineHeight: 1.35, marginBottom: 10 }}>{item.title}</div>
@@ -533,35 +581,63 @@ export default function NeriniWeb() {
         </div>
       </section>
 
-      {/* NUESTRO SERVICIO */}
-      <section id="contratas" style={{ background: "#fff", padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}`, scrollMarginTop: 68 }}>
+      {/* EL DEPARTAMENTO */}
+      <section id="departamento" style={{ background: "#fff", padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}`, scrollMarginTop: 68 }}>
         <div style={{ maxWidth: MAX, margin: "0 auto" }}>
-          <Reveal>
-            <h2 style={{ ...h2, margin: `0 0 ${SECTION_GAP}` }}>Nuestro Servicio</h2>
+          <Reveal style={{ marginBottom: SECTION_GAP }}>
+            <h2 style={{ ...h2, margin: "0 0 20px" }}>Departamento Externo de Marketing</h2>
+            <p style={{ fontSize: 17, fontStyle: "italic", fontWeight: 300, color: C.grisTexto, lineHeight: 1.6, margin: 0, maxWidth: "40em" }}>
+              Todas las áreas del marketing de tu empresa, ejecutadas por un solo equipo y conectadas a un solo sistema.
+            </p>
           </Reveal>
+
           <Reveal>
-            <h3 style={{ fontWeight: 300, fontSize: "clamp(22px, 2.6vw, 30px)", color: C.bordo, lineHeight: 1.2, margin: "0 0 22px" }}>Dirección de Marketing</h3>
-          </Reveal>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20, marginBottom: 22 }}>
-            {CONTRATAS.map((item) => (
-              <Reveal key={item.title}>
-                <Card variant="plain">
-                  <div style={{ marginBottom: 20 }}>
-                    <Icon name={item.icon} size={28} />
+            <div style={{ background: "#fff", border: `1px solid ${C.grisBorde}`, borderRadius: 12, overflow: "hidden", boxShadow: "0 1px 2px rgba(58,26,31,.04)" }}>
+              {AREAS.map((a, i) => (
+                <div
+                  key={a.title}
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 16,
+                    padding: "clamp(18px, 2.2vw, 24px)",
+                    borderTop: i === 0 ? "none" : `1px solid ${C.grisBorde}`,
+                  }}
+                >
+                  <span style={{ marginTop: 3 }}>
+                    <Icon name={a.icon} size={22} />
+                  </span>
+                  <div>
+                    <div style={{ fontWeight: 600, fontSize: 17, color: C.negro, marginBottom: 8 }}>{a.title}</div>
+                    <div style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7 }}>{a.desc}</div>
                   </div>
-                  <div style={{ fontWeight: 600, fontSize: 17, color: C.negro, marginBottom: 10 }}>{item.title}</div>
-                  <div style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7 }}>{item.desc}</div>
-                </Card>
-              </Reveal>
-            ))}
-          </div>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+          <Reveal>
+            <p style={{ ...nota, marginTop: 16 }}>
+              La inversión en pauta no está contemplada en el fee. La gestión comercial y el cierre quedan a cargo de la empresa.
+            </p>
+          </Reveal>
+
+          {/* EJECUCIÓN PROPIA */}
+          <Reveal>
+            <div style={{ background: "#fff", border: `1px solid ${C.grisBorde}`, borderLeft: `3px solid ${C.bordo}`, borderRadius: 12, padding: "clamp(24px, 3vw, 32px)", marginTop: "clamp(28px, 3.5vw, 40px)" }}>
+              <div style={{ fontWeight: 600, fontSize: 19, color: C.negro, marginBottom: 12 }}>Ejecución propia</div>
+              <p style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7, margin: 0, maxWidth: "46em" }}>
+                Redes, pauta y email marketing los ejecuta nuestro equipo. No dirigimos proveedores externos en esas áreas: el sistema requiere que quien ejecuta trabaje adentro de la misma plataforma y con la misma medición. Si tu sitio ya tiene proveedor, los cambios se coordinan con él.
+              </p>
+            </div>
+          </Reveal>
 
           <Reveal>
             <div style={{ borderTop: `1px solid ${C.grisBorde}`, margin: "clamp(40px, 5vw, 56px) 0" }} />
           </Reveal>
 
+          {/* DIRECCIÓN */}
           <Reveal>
-            <h3 id="quien" style={{ fontWeight: 300, fontSize: "clamp(22px, 2.6vw, 30px)", color: C.bordo, lineHeight: 1.2, margin: "0 0 22px", scrollMarginTop: 68 }}>Directora Externa de Marketing</h3>
+            <h3 id="quien" style={{ fontWeight: 300, fontSize: "clamp(22px, 2.6vw, 30px)", color: C.bordo, lineHeight: 1.2, margin: "0 0 22px", scrollMarginTop: 68 }}>Directora de Marketing</h3>
           </Reveal>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "clamp(32px, 4.5vw, 64px)", alignItems: "flex-start" }}>
             <Reveal style={{ flex: "1 1 240px", maxWidth: 300, minWidth: 220 }}>
@@ -578,9 +654,9 @@ export default function NeriniWeb() {
               <Reveal>
                 <div style={{ fontWeight: 600, fontSize: 20, color: C.cuero, marginBottom: 18 }}>Debora Nerini</div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "8px 18px", fontSize: 13, color: C.grisTexto, marginBottom: 26 }}>
-                  <span>Lic. en Comercialización</span>
+                  <span>Lic. en Comercialización (UADE)</span>
                   <span style={{ color: C.grisBorde }}>·</span>
-                  <span>Especialización en Marketing Digital</span>
+                  <span>Especialización en Marketing Digital (UBA)</span>
                   <span style={{ color: C.grisBorde }}>·</span>
                   <span>15 años en marketing y negocios en grandes empresas</span>
                 </div>
@@ -589,7 +665,7 @@ export default function NeriniWeb() {
               <Reveal delay={80}>
                 <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: "40em" }}>
                   <p style={{ fontSize: 17, color: C.grisTexto, lineHeight: 1.8, margin: 0 }}>
-                    Defino la estrategia, coordino a mi equipo de especialistas y respondo por el resultado.
+                    Defino la estrategia, dirijo al equipo que ejecuta y respondo por el resultado.
                   </p>
                   <p style={{ fontSize: 17, color: C.grisTexto, lineHeight: 1.8, margin: 0 }}>
                     El marketing pasa a funcionar como un sistema ordenado y constante, sin depender de tu seguimiento.
@@ -638,9 +714,9 @@ export default function NeriniWeb() {
       <section id="sistema" style={{ background: "#fff", padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}`, scrollMarginTop: 68 }}>
         <div style={{ maxWidth: MAX, margin: "0 auto" }}>
           <Reveal style={{ marginBottom: SECTION_GAP }}>
-            <h2 style={{ ...h2, margin: "0 0 20px" }}>Nuestro Sistema</h2>
-            <p style={{ fontSize: 17, fontStyle: "italic", fontWeight: 300, color: C.grisTexto, lineHeight: 1.6, margin: 0 }}>
-              Todas las empresas recorren las 3 etapas. El punto de partida y el ritmo dependen del estado actual de cada una.
+            <h2 style={{ ...h2, margin: "0 0 20px" }}>El sistema</h2>
+            <p style={{ fontSize: 17, fontStyle: "italic", fontWeight: 300, color: C.grisTexto, lineHeight: 1.6, margin: 0, maxWidth: "40em" }}>
+              Todos los canales conectados a un solo lugar. Cada contacto entra con su origen, recibe respuesta y avanza por flujos de seguimiento.
             </p>
           </Reveal>
 
@@ -650,12 +726,14 @@ export default function NeriniWeb() {
                 <div key={s.num} style={{ gridColumn: `${i + 1} / 4`, gridRow: i + 1, borderRadius: 8, background: C.bordo, padding: "16px 20px" }}>
                   <div style={{ fontSize: 11, fontWeight: 600, color: C.cueroClaro, letterSpacing: ".14em", marginBottom: 6 }}>{s.num}</div>
                   <div style={{ fontWeight: 600, fontSize: 18, color: C.beige, marginBottom: 6 }}>{s.name}</div>
-                  <p style={{ fontSize: 14, color: C.cueroClaro, lineHeight: 1.55, margin: "0 0 8px" }}>{s.desc}</p>
-                  <div style={{ fontSize: 12, color: C.beige, opacity: 0.8, letterSpacing: ".03em" }}>{s.channels}</div>
+                  <p style={{ fontSize: 14, color: C.cueroClaro, lineHeight: 1.55, margin: 0 }}>{s.desc}</p>
                 </div>
               ))}
             </div>
-            <div style={{ textAlign: "right", fontSize: 12, color: C.cueroTexto, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 22 }}>Conversión de venta →</div>
+            <div style={{ textAlign: "right", fontSize: 12, color: C.cueroTexto, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 16 }}>Conversión de venta →</div>
+            <p style={{ ...nota, marginBottom: 22 }}>
+              Todo está incluido desde el primer mes. Las etapas son el orden en que se pone en marcha cada área, según el estado actual de tu empresa.
+            </p>
           </Reveal>
 
           <Reveal>
@@ -714,7 +792,7 @@ export default function NeriniWeb() {
         </div>
       </section>
 
-      {/* CÓMO EMPEZAMOS */}
+      {/* PRIMEROS PASOS */}
       <section id="empezamos" style={{ background: "#fff", padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}`, scrollMarginTop: 68 }}>
         <div style={{ maxWidth: MAX, margin: "0 auto" }}>
           <Reveal>
@@ -722,7 +800,7 @@ export default function NeriniWeb() {
           </Reveal>
           <Reveal>
             <div style={{ background: "#fff", border: `1px solid ${C.grisBorde}`, borderLeft: `3px solid ${C.bordo}`, borderRadius: 12, padding: "clamp(24px, 3vw, 32px)", marginBottom: 16 }}>
-              <div style={{ fontSize: 11, fontWeight: 600, color: C.cueroTexto, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 20 }}>Onboarding</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: C.cueroTexto, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 20 }}>Punto de partida</div>
               <div style={{ position: "relative", marginBottom: 20 }}>
                 <div style={{ position: "absolute", top: 6, left: 6, right: 6, height: 1, background: C.grisBorde }} />
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20, position: "relative" }}>
@@ -736,14 +814,39 @@ export default function NeriniWeb() {
                   ))}
                 </div>
               </div>
-              <p style={{ ...nota, margin: 0 }}>El diagnóstico es el punto de partida del servicio.</p>
+              <p style={{ ...nota, margin: 0 }}>El diagnóstico y la puesta en marcha están incluidos en el servicio. No hay costo de arranque aparte.</p>
             </div>
           </Reveal>
           <Reveal>
             <div style={{ background: "#fff", border: `1px solid ${C.grisBorde}`, borderLeft: `3px solid ${C.bordo}`, borderRadius: 12, padding: "clamp(24px, 3vw, 32px)" }}>
-              <div style={{ fontSize: 11, fontWeight: 600, color: C.cueroTexto, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 20 }}>Mensual</div>
-              <div style={{ fontWeight: 600, fontSize: 19, color: C.negro, marginBottom: 10 }}>Gestión mensual</div>
-              <div style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7 }}>Ejecución del equipo, medición y ajuste.</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: C.cueroTexto, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 20 }}>Gestión mensual</div>
+              <div style={{ fontWeight: 600, fontSize: 19, color: C.negro, marginBottom: 10 }}>El mes de trabajo</div>
+              <div style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7 }}>Ejecución de las cuatro áreas, medición en un único tablero y reunión mensual de resultados.</div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* PREGUNTAS FRECUENTES */}
+      <section id="preguntas" style={{ background: "#fff", padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}`, scrollMarginTop: 68 }}>
+        <div style={{ maxWidth: MAX, margin: "0 auto" }}>
+          <Reveal>
+            <h2 style={{ ...h2, margin: `0 0 ${SECTION_GAP}` }}>Preguntas frecuentes</h2>
+          </Reveal>
+          <Reveal>
+            <div style={{ background: "#fff", border: `1px solid ${C.grisBorde}`, borderRadius: 12, overflow: "hidden", boxShadow: "0 1px 2px rgba(58,26,31,.04)" }}>
+              {PREGUNTAS.map((f, i) => (
+                <div
+                  key={f.q}
+                  style={{
+                    padding: "clamp(22px, 2.6vw, 28px)",
+                    borderTop: i === 0 ? "none" : `1px solid ${C.grisBorde}`,
+                  }}
+                >
+                  <div style={{ fontWeight: 600, fontSize: 17, color: C.negro, lineHeight: 1.4, marginBottom: 10 }}>{f.q}</div>
+                  <p style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7, margin: 0, maxWidth: "46em" }}>{f.a}</p>
+                </div>
+              ))}
             </div>
           </Reveal>
         </div>
@@ -776,9 +879,9 @@ export default function NeriniWeb() {
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             <a href="mailto:debora@nerini.ar" style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>debora@nerini.ar</a>
             <a href="https://nerini.ar" style={{ fontSize: 15, color: C.grisClaro, textDecoration: "none" }}>nerini.ar</a>
-            <div style={{ display: "flex", gap: 18, marginTop: 8 }}>
-              <a href="https://instagram.com/nerini.marketing" target="_blank" rel="noopener noreferrer" style={{ fontSize: 14, color: C.cueroClaro, textDecoration: "none" }}>Instagram</a>
-              <a href="https://linkedin.com/company/nerini" target="_blank" rel="noopener noreferrer" style={{ fontSize: 14, color: C.cueroClaro, textDecoration: "none" }}>LinkedIn</a>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 8 }}>
+              <a href="https://instagram.com/nerini.marketing" target="_blank" rel="noopener noreferrer" style={{ fontSize: 14, color: C.cueroClaro, textDecoration: "none" }}>@nerini.marketing</a>
+              <a href="https://linkedin.com/company/nerini" target="_blank" rel="noopener noreferrer" style={{ fontSize: 14, color: C.cueroClaro, textDecoration: "none" }}>linkedin.com/company/nerini</a>
             </div>
           </div>
         </div>
