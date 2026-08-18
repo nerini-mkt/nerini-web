@@ -478,8 +478,8 @@ const PREGUNTAS = [
     a: "No trabajamos con promesas de resultado en un plazo. Cada área se pone en marcha según el estado en el que está hoy tu marketing, y la pauta se activa cuando el sitio y las redes ya están funcionando. Lo que sí está desde el primer mes es la medición: vas a ver qué entra, por qué canal y a qué costo.",
   },
   {
-    q: "¿Por qué esto y no contratar a alguien interno?",
-    a: "Un perfil interno cubre una parte del área, no el área completa. Redes, pauta, sitio, email marketing y medición son especialidades distintas, y en la práctica esa persona necesita proveedores adicionales para sostenerlas. El departamento incluye la dirección, la ejecución de las cuatro áreas y el sistema que las conecta, con un solo interlocutor responsable por el resultado.",
+    q: "¿Cuál es el beneficio de contratar el departamento completo frente a otras opciones?",
+    a: "Las alternativas habituales son tres: un perfil interno, un proveedor por área o una consultora. Un perfil interno cubre una parte del área y necesita proveedores adicionales para sostener el resto. Los proveedores por área ejecutan cada uno con su criterio, con un reporte distinto por cada uno y el seguimiento a cargo del dueño. Una consultora define el plan y no lo ejecuta. El departamento incluye la dirección, la ejecución de las cuatro áreas y el sistema que las conecta, con un solo interlocutor responsable por el resultado y todos los canales medidos en un único tablero.",
   },
   {
     q: "¿Cuál es el costo del servicio?",
@@ -660,7 +660,7 @@ export default function NeriniWeb() {
         <div style={{ maxWidth: MAX, margin: "0 auto" }}>
           <Reveal style={{ marginBottom: SECTION_GAP }}>
             <h2 style={{ ...h2, margin: "0 0 20px" }}>Departamento Externo de Marketing</h2>
-            <p style={{ fontSize: 17, fontStyle: "italic", fontWeight: 300, color: C.grisTexto, lineHeight: 1.6, margin: 0, maxWidth: "40em" }}>
+            <p style={{ fontSize: 17, fontStyle: "italic", fontWeight: 300, color: C.grisTexto, lineHeight: 1.6, margin: 0 }}>
               Todas las áreas del marketing de tu empresa, ejecutadas por un solo equipo y conectadas a un solo sistema.
             </p>
           </Reveal>
@@ -800,7 +800,7 @@ export default function NeriniWeb() {
         <div style={{ maxWidth: MAX, margin: "0 auto" }}>
           <Reveal style={{ marginBottom: SECTION_GAP }}>
             <h2 style={{ ...h2, margin: "0 0 20px" }}>El sistema</h2>
-            <p style={{ fontSize: 17, fontStyle: "italic", fontWeight: 300, color: C.grisTexto, lineHeight: 1.6, margin: 0, maxWidth: "58em", textWrap: "balance" }}>
+            <p style={{ fontSize: 17, fontStyle: "italic", fontWeight: 300, color: C.grisTexto, lineHeight: 1.6, margin: 0 }}>
               Todos los canales conectados a un solo lugar. Cada contacto entra con su origen, recibe respuesta y avanza por flujos de seguimiento.
             </p>
           </Reveal>
