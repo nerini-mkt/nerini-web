@@ -479,11 +479,11 @@ const PREGUNTAS = [
   },
   {
     q: "¿Por qué esto y no contratar a alguien interno?",
-    a: "Una persona sola no cubre redes, pauta, sitio, email marketing y medición al mismo tiempo. Termina necesitando un diseñador y alguien de pauta. Acá contratás el área completa: la dirección, la ejecución de las cuatro áreas y el sistema que las conecta, con un solo interlocutor responsable por el resultado.",
+    a: "Un perfil interno cubre una parte del área, no el área completa. Redes, pauta, sitio, email marketing y medición son especialidades distintas, y en la práctica esa persona necesita proveedores adicionales para sostenerlas. El departamento incluye la dirección, la ejecución de las cuatro áreas y el sistema que las conecta, con un solo interlocutor responsable por el resultado.",
   },
   {
-    q: "¿Cómo se cobra?",
-    a: "Un fee mensual único, con todo el alcance incluido desde el primer mes. No hay planes ni módulos que se sumen, y no hay costo de arranque aparte. La inversión publicitaria va aparte del fee: la define y la paga tu empresa. El número está en la propuesta, que se envía después de la reunión inicial.",
+    q: "¿Cuál es el costo del servicio?",
+    a: "Un fee mensual único, con todo el alcance incluido desde el primer mes. No hay planes ni módulos que se sumen y no hay costo de arranque aparte. La inversión publicitaria va aparte del fee: la define y la paga tu empresa. El monto está en la propuesta, que se envía después de la reunión inicial.",
   },
   {
     q: "¿Por qué pago el mes completo si la pauta todavía no arrancó?",
@@ -530,7 +530,7 @@ function Preguntas() {
             </button>
             {abierto && (
               <div style={{ padding: "0 clamp(20px, 2.4vw, 26px) clamp(22px, 2.6vw, 28px)" }}>
-                <p style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7, margin: 0, maxWidth: "46em" }}>{f.a}</p>
+                <p style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7, margin: 0, maxWidth: "64em" }}>{f.a}</p>
               </div>
             )}
           </div>
@@ -815,8 +815,7 @@ export default function NeriniWeb() {
                 </div>
               ))}
             </div>
-            <div style={{ textAlign: "right", fontSize: 12, color: C.cueroTexto, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 16 }}>Conversión de venta →</div>
-            <p style={{ ...nota, marginBottom: 22 }}>Todo está incluido desde el primer mes.</p>
+            <div style={{ textAlign: "right", fontSize: 12, color: C.cueroTexto, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 22 }}>Conversión de venta →</div>
           </Reveal>
 
           <Reveal>
