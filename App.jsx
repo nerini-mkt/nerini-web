@@ -414,14 +414,24 @@ const PROBLEMAS = [
   { icon: <IcoDuenio />, title: "Un proveedor distinto por área", desc: "Cada uno con su formato de reporte y su interlocutor, y el dueño coordinando entre todos." },
 ];
 
+const DIRECCION = {
+  icon: "focus",
+  title: "Dirección",
+  desc: "Diagnóstico, plan mensual y reunión de resultados. Un solo interlocutor responsable.",
+};
+
 const AREAS = [
-  { icon: "focus", title: "Dirección", desc: "Diagnóstico, plan mensual y reunión de resultados. Un solo interlocutor responsable." },
   { icon: "coordination", title: "Redes sociales", desc: "Instagram y LinkedIn: calendario, contenidos, diseño y publicación." },
   { icon: "action", title: "Pauta digital", desc: "Meta Ads y Google Ads: campañas, audiencias, piezas y optimización mensual." },
   { icon: "site", title: "Sitio web", desc: "Estructura y textos orientados a convertir, con el formulario conectado al sistema." },
   { icon: "mail", title: "Email marketing", desc: "Secuencias automáticas, segmentación de la base y envíos periódicos." },
-  { icon: "modules", title: "Sistema centralizado", desc: "Todos los canales en un solo lugar, con seguimiento automatizado y un único tablero." },
 ];
+
+const SISTEMA = {
+  icon: "modules",
+  title: "Sistema centralizado",
+  desc: "Todos los canales en un solo lugar, con seguimiento automatizado y un único tablero.",
+};
 
 const TRABAJAMOS_CON = [
   "Empresas de servicios sin equipo interno de marketing",
@@ -481,6 +491,55 @@ const PREGUNTAS = [
   },
 ];
 
+/* ── preguntas desplegables ───────────────────────── */
+function Preguntas() {
+  const [abierta, setAbierta] = useState(null);
+  return (
+    <div style={{ background: "#fff", border: `1px solid ${C.grisBorde}`, borderRadius: 12, overflow: "hidden", boxShadow: "0 1px 2px rgba(58,26,31,.04)" }}>
+      {PREGUNTAS.map((f, i) => {
+        const abierto = abierta === i;
+        return (
+          <div key={f.q} style={{ borderTop: i === 0 ? "none" : `1px solid ${C.grisBorde}` }}>
+            <button
+              type="button"
+              onClick={() => setAbierta(abierto ? null : i)}
+              aria-expanded={abierto}
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 20,
+                padding: "clamp(20px, 2.4vw, 26px)",
+                background: "none",
+                border: "none",
+                textAlign: "left",
+                cursor: "pointer",
+                fontFamily: SANS,
+              }}
+            >
+              <span style={{ fontWeight: 600, fontSize: 17, color: abierto ? C.bordo : C.negro, lineHeight: 1.4, transition: "color .18s ease" }}>{f.q}</span>
+              <span
+                aria-hidden="true"
+                style={{ display: "inline-flex", flexShrink: 0, transform: abierto ? "rotate(180deg)" : "none", transition: "transform .2s ease" }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={C.bordo} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="6 9.5 12 15.5 18 9.5" />
+                </svg>
+              </span>
+            </button>
+            {abierto && (
+              <div style={{ padding: "0 clamp(20px, 2.4vw, 26px) clamp(22px, 2.6vw, 28px)" }}>
+                <p style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7, margin: 0, maxWidth: "46em" }}>{f.a}</p>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 /* ── whatsapp flotante ────────────────────────────── */
 function FloatingWA() {
   const [h, setH] = useState(false);
@@ -525,7 +584,22 @@ export default function NeriniWeb() {
   return (
     <div style={{ fontFamily: SANS, color: C.negro, background: "#fff", overflowX: "hidden", textWrap: "pretty" }}>
       {/* NAV */}
-      <style>{`@media (max-width: 760px){ .nerini-nav-links > a { display: none; } }`}</style>
+      <style>{`
+        @media (max-width: 760px){ .nerini-nav-links > a { display: none; } }
+        .nerini-areas { display: grid; grid-template-columns: repeat(4, 1fr); }
+        .nerini-areas > div { border-right: 1px solid ${C.grisBorde}; }
+        .nerini-areas > div:last-child { border-right: none; }
+        @media (max-width: 900px){
+          .nerini-areas { grid-template-columns: repeat(2, 1fr); }
+          .nerini-areas > div:nth-child(2n) { border-right: none; }
+          .nerini-areas > div:nth-child(-n+2) { border-bottom: 1px solid ${C.grisBorde}; }
+        }
+        @media (max-width: 560px){
+          .nerini-areas { grid-template-columns: 1fr; }
+          .nerini-areas > div { border-right: none; border-bottom: 1px solid ${C.grisBorde}; }
+          .nerini-areas > div:last-child { border-bottom: none; }
+        }
+      `}</style>
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#fff", borderBottom: `1px solid ${C.grisBorde}` }}>
         <div style={{ maxWidth: MAX, margin: "0 auto", padding: `0 ${PAD_X}`, minHeight: 68, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24 }}>
           <a href="#top" style={{ display: "inline-flex", textDecoration: "none", color: "inherit" }}>
@@ -593,26 +667,37 @@ export default function NeriniWeb() {
 
           <Reveal>
             <div style={{ background: "#fff", border: `1px solid ${C.grisBorde}`, borderRadius: 12, overflow: "hidden", boxShadow: "0 1px 2px rgba(58,26,31,.04)" }}>
-              {AREAS.map((a, i) => (
-                <div
-                  key={a.title}
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: 16,
-                    padding: "clamp(18px, 2.2vw, 24px)",
-                    borderTop: i === 0 ? "none" : `1px solid ${C.grisBorde}`,
-                  }}
-                >
-                  <span style={{ marginTop: 3 }}>
-                    <Icon name={a.icon} size={22} />
-                  </span>
-                  <div>
-                    <div style={{ fontWeight: 600, fontSize: 17, color: C.negro, marginBottom: 8 }}>{a.title}</div>
-                    <div style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7 }}>{a.desc}</div>
-                  </div>
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 16, padding: "clamp(20px, 2.4vw, 26px)", borderBottom: `1px solid ${C.grisBorde}` }}>
+                <span style={{ marginTop: 3 }}>
+                  <Icon name={DIRECCION.icon} size={22} />
+                </span>
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: 17, color: C.negro, marginBottom: 8 }}>{DIRECCION.title}</div>
+                  <div style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7 }}>{DIRECCION.desc}</div>
                 </div>
-              ))}
+              </div>
+
+              <div className="nerini-areas">
+                {AREAS.map((a) => (
+                  <div key={a.title} style={{ padding: "clamp(20px, 2.4vw, 26px)" }}>
+                    <div style={{ marginBottom: 14 }}>
+                      <Icon name={a.icon} size={22} />
+                    </div>
+                    <div style={{ fontWeight: 600, fontSize: 17, color: C.negro, marginBottom: 8 }}>{a.title}</div>
+                    <div style={{ fontSize: 15, color: C.grisTexto, lineHeight: 1.65 }}>{a.desc}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 16, padding: "clamp(20px, 2.4vw, 26px)", borderTop: `1px solid ${C.grisBorde}` }}>
+                <span style={{ marginTop: 3 }}>
+                  <Icon name={SISTEMA.icon} size={22} />
+                </span>
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: 17, color: C.negro, marginBottom: 8 }}>{SISTEMA.title}</div>
+                  <div style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7 }}>{SISTEMA.desc}</div>
+                </div>
+              </div>
             </div>
           </Reveal>
           <Reveal>
@@ -715,7 +800,7 @@ export default function NeriniWeb() {
         <div style={{ maxWidth: MAX, margin: "0 auto" }}>
           <Reveal style={{ marginBottom: SECTION_GAP }}>
             <h2 style={{ ...h2, margin: "0 0 20px" }}>El sistema</h2>
-            <p style={{ fontSize: 17, fontStyle: "italic", fontWeight: 300, color: C.grisTexto, lineHeight: 1.6, margin: 0, maxWidth: "40em" }}>
+            <p style={{ fontSize: 17, fontStyle: "italic", fontWeight: 300, color: C.grisTexto, lineHeight: 1.6, margin: 0, maxWidth: "58em", textWrap: "balance" }}>
               Todos los canales conectados a un solo lugar. Cada contacto entra con su origen, recibe respuesta y avanza por flujos de seguimiento.
             </p>
           </Reveal>
@@ -731,9 +816,7 @@ export default function NeriniWeb() {
               ))}
             </div>
             <div style={{ textAlign: "right", fontSize: 12, color: C.cueroTexto, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 16 }}>Conversión de venta →</div>
-            <p style={{ ...nota, marginBottom: 22 }}>
-              Todo está incluido desde el primer mes. Las etapas son el orden en que se pone en marcha cada área, según el estado actual de tu empresa.
-            </p>
+            <p style={{ ...nota, marginBottom: 22 }}>Todo está incluido desde el primer mes.</p>
           </Reveal>
 
           <Reveal>
@@ -834,20 +917,7 @@ export default function NeriniWeb() {
             <h2 style={{ ...h2, margin: `0 0 ${SECTION_GAP}` }}>Preguntas frecuentes</h2>
           </Reveal>
           <Reveal>
-            <div style={{ background: "#fff", border: `1px solid ${C.grisBorde}`, borderRadius: 12, overflow: "hidden", boxShadow: "0 1px 2px rgba(58,26,31,.04)" }}>
-              {PREGUNTAS.map((f, i) => (
-                <div
-                  key={f.q}
-                  style={{
-                    padding: "clamp(22px, 2.6vw, 28px)",
-                    borderTop: i === 0 ? "none" : `1px solid ${C.grisBorde}`,
-                  }}
-                >
-                  <div style={{ fontWeight: 600, fontSize: 17, color: C.negro, lineHeight: 1.4, marginBottom: 10 }}>{f.q}</div>
-                  <p style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7, margin: 0, maxWidth: "46em" }}>{f.a}</p>
-                </div>
-              ))}
-            </div>
+            <Preguntas />
           </Reveal>
         </div>
       </section>
