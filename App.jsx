@@ -945,15 +945,23 @@ export default function NeriniWeb() {
 
       {/* FOOTER */}
       <footer style={{ background: C.negro, padding: `clamp(40px, 6vw, 56px) ${PAD_X} 28px` }}>
-        <div style={{ maxWidth: MAX, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 32, marginBottom: 40 }}>
+        <div style={{ maxWidth: MAX, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "32px 56px", marginBottom: 40 }}>
           <Logo dark size={24} />
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            <a href="mailto:debora@nerini.ar" style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>debora@nerini.ar</a>
-            <a href={WA} target="_blank" rel="noopener noreferrer" style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>WhatsApp · +54 9 11 2241 9299</a>
-            <a href="https://nerini.ar" style={{ fontSize: 15, color: C.grisClaro, textDecoration: "none" }}>nerini.ar</a>
-            <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 8 }}>
-              <a href="https://instagram.com/nerini.marketing" target="_blank" rel="noopener noreferrer" style={{ fontSize: 14, color: C.cueroClaro, textDecoration: "none" }}>@nerini.marketing</a>
-              <a href="https://linkedin.com/company/nerini" target="_blank" rel="noopener noreferrer" style={{ fontSize: 14, color: C.cueroClaro, textDecoration: "none" }}>linkedin.com/company/nerini</a>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "28px 56px" }}>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".14em", textTransform: "uppercase", color: C.cueroClaro, marginBottom: 14 }}>Contacto</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <a href="mailto:debora@nerini.ar" style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>debora@nerini.ar</a>
+                <a href={WA} target="_blank" rel="noopener noreferrer" style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>WhatsApp · +54 9 11 2241 9299</a>
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".14em", textTransform: "uppercase", color: C.cueroClaro, marginBottom: 14 }}>Perfiles</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <a href="https://nerini.ar" style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>nerini.ar</a>
+                <a href="https://instagram.com/nerini.marketing" target="_blank" rel="noopener noreferrer" style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>@nerini.marketing</a>
+                <a href="https://linkedin.com/company/nerini" target="_blank" rel="noopener noreferrer" style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>linkedin.com/company/nerini</a>
+              </div>
             </div>
           </div>
         </div>
