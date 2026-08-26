@@ -19,6 +19,8 @@ const FOTO_DEBORA = fotoDebora;
 const WA =
   "https://wa.me/5491122419299?text=Hola%20Debora%2C%20me%20interesa%20saber%20m%C3%A1s%20sobre%20tus%20servicios";
 
+const AGENDA = "https://reuniones.clientify.com/#/nerini/reu?v2=true";
+
 const C = {
   bordo: "#6B1F2A",
   bordoHover: "#571821",
@@ -315,7 +317,7 @@ const IcoLoop = () => (
 );
 
 /* ── botón ────────────────────────────────────────── */
-function BtnWA({ variant = "primary", size = "lg", children = "Hablemos por WhatsApp" }) {
+function Btn({ href = AGENDA, variant = "primary", size = "lg", children = "Agendá tu reunión" }) {
   const [h, setH] = useState(false);
   const sizes = {
     sm: { padding: "7px 14px", fontSize: 13 },
@@ -329,7 +331,7 @@ function BtnWA({ variant = "primary", size = "lg", children = "Hablemos por What
   };
   return (
     <a
-      href={WA}
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
       onMouseEnter={() => setH(true)}
@@ -351,6 +353,31 @@ function BtnWA({ variant = "primary", size = "lg", children = "Hablemos por What
       }}
     >
       <span style={{ whiteSpace: "nowrap" }}>{children}</span>
+    </a>
+  );
+}
+
+/* ── enlace secundario de WhatsApp ────────────────── */
+function LinkWA({ color = C.cueroTexto }) {
+  const [h, setH] = useState(false);
+  return (
+    <a
+      href={WA}
+      target="_blank"
+      rel="noopener noreferrer"
+      onMouseEnter={() => setH(true)}
+      onMouseLeave={() => setH(false)}
+      style={{
+        fontFamily: SANS,
+        fontSize: 15,
+        fontWeight: 500,
+        color,
+        textDecoration: h ? "underline" : "none",
+        textUnderlineOffset: 4,
+        whiteSpace: "nowrap",
+      }}
+    >
+      Escribinos por WhatsApp
     </a>
   );
 }
@@ -609,7 +636,7 @@ export default function NeriniWeb() {
             <a href="#departamento" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none", whiteSpace: "nowrap" }}>El departamento</a>
             <a href="#sistema" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none", whiteSpace: "nowrap" }}>El sistema</a>
             <a href="#empezamos" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none", whiteSpace: "nowrap" }}>Primeros pasos</a>
-            <BtnWA variant="primary" size="sm">WhatsApp</BtnWA>
+            <Btn href={AGENDA} variant="primary" size="sm">Agendar reunión</Btn>
           </div>
         </div>
       </nav>
@@ -630,7 +657,10 @@ export default function NeriniWeb() {
             </p>
           </Reveal>
           <Reveal delay={170}>
-            <BtnWA variant="cuero">Pedí tu diagnóstico</BtnWA>
+            <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "16px 24px" }}>
+              <Btn href={AGENDA} variant="cuero">Agendá tu reunión</Btn>
+              <LinkWA />
+            </div>
           </Reveal>
         </div>
       </section>
@@ -936,7 +966,10 @@ export default function NeriniWeb() {
             </p>
           </Reveal>
           <Reveal delay={150}>
-            <BtnWA variant="inverse">Escribinos por WhatsApp</BtnWA>
+            <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "16px 24px" }}>
+              <Btn href={AGENDA} variant="inverse">Agendá tu reunión</Btn>
+              <LinkWA color={C.cueroClaro} />
+            </div>
           </Reveal>
         </div>
       </section>
