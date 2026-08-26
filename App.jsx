@@ -357,31 +357,6 @@ function Btn({ href = AGENDA, variant = "primary", size = "lg", children = "Agen
   );
 }
 
-/* ── enlace secundario de WhatsApp ────────────────── */
-function LinkWA({ color = C.cueroTexto }) {
-  const [h, setH] = useState(false);
-  return (
-    <a
-      href={WA}
-      target="_blank"
-      rel="noopener noreferrer"
-      onMouseEnter={() => setH(true)}
-      onMouseLeave={() => setH(false)}
-      style={{
-        fontFamily: SANS,
-        fontSize: 15,
-        fontWeight: 500,
-        color,
-        textDecoration: h ? "underline" : "none",
-        textUnderlineOffset: 4,
-        whiteSpace: "nowrap",
-      }}
-    >
-      Escribinos por WhatsApp
-    </a>
-  );
-}
-
 /* ── card ─────────────────────────────────────────── */
 function Card({ variant = "plain", children, style = {} }) {
   const fills = {
@@ -657,10 +632,7 @@ export default function NeriniWeb() {
             </p>
           </Reveal>
           <Reveal delay={170}>
-            <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "16px 24px" }}>
-              <Btn href={AGENDA} variant="cuero">Agendá tu reunión</Btn>
-              <LinkWA />
-            </div>
+            <Btn href={AGENDA} variant="cuero">Agendá tu reunión</Btn>
           </Reveal>
         </div>
       </section>
@@ -966,10 +938,7 @@ export default function NeriniWeb() {
             </p>
           </Reveal>
           <Reveal delay={150}>
-            <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "16px 24px" }}>
-              <Btn href={AGENDA} variant="inverse">Agendá tu reunión</Btn>
-              <LinkWA color={C.cueroClaro} />
-            </div>
+            <Btn href={AGENDA} variant="inverse">Agendá tu reunión</Btn>
           </Reveal>
         </div>
       </section>
@@ -980,6 +949,7 @@ export default function NeriniWeb() {
           <Logo dark size={24} />
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             <a href="mailto:debora@nerini.ar" style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>debora@nerini.ar</a>
+            <a href={WA} target="_blank" rel="noopener noreferrer" style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>WhatsApp · +54 9 11 2241 9299</a>
             <a href="https://nerini.ar" style={{ fontSize: 15, color: C.grisClaro, textDecoration: "none" }}>nerini.ar</a>
             <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 8 }}>
               <a href="https://instagram.com/nerini.marketing" target="_blank" rel="noopener noreferrer" style={{ fontSize: 14, color: C.cueroClaro, textDecoration: "none" }}>@nerini.marketing</a>
