@@ -21,6 +21,13 @@ const WA =
 
 const AGENDA = "https://reuniones.clientify.com/#/nerini/reu?v2=true";
 
+/* Registra un evento en Analytics. Si Analytics no cargó, no hace nada. */
+function medir(nombre, datos = {}) {
+  if (typeof window !== "undefined" && typeof window.gtag === "function") {
+    window.gtag("event", nombre, datos);
+  }
+}
+
 const C = {
   bordo: "#6B1F2A",
   bordoHover: "#571821",
@@ -317,7 +324,7 @@ const IcoLoop = () => (
 );
 
 /* ── botón ────────────────────────────────────────── */
-function Btn({ href = AGENDA, variant = "primary", size = "lg", children = "Agendá tu reunión" }) {
+function Btn({ href = AGENDA, variant = "primary", size = "lg", ubicacion = "", children = "Agendá tu reunión" }) {
   const [h, setH] = useState(false);
   const sizes = {
     sm: { padding: "7px 14px", fontSize: 13 },
@@ -329,11 +336,15 @@ function Btn({ href = AGENDA, variant = "primary", size = "lg", children = "Agen
     inverse: { background: h ? C.cueroClaro : C.beige, color: C.bordo, borderColor: h ? C.cueroClaro : C.beige },
     cuero: { background: h ? C.cuero : C.cueroTexto, color: C.beige, borderColor: h ? C.cuero : C.cueroTexto },
   };
+  const registrarClic = () => {
+    if (href === AGENDA) medir("clic_agenda", { ubicacion });
+  };
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={registrarClic}
       onMouseEnter={() => setH(true)}
       onMouseLeave={() => setH(false)}
       style={{
@@ -504,7 +515,10 @@ function Preguntas() {
           <div key={f.q} style={{ borderTop: i === 0 ? "none" : `1px solid ${C.grisBorde}` }}>
             <button
               type="button"
-              onClick={() => setAbierta(abierto ? null : i)}
+              onClick={() => {
+                if (!abierto) medir("abre_pregunta", { pregunta: f.q });
+                setAbierta(abierto ? null : i);
+              }}
               aria-expanded={abierto}
               style={{
                 width: "100%",
@@ -552,6 +566,7 @@ function FloatingWA() {
       rel="noopener noreferrer"
       aria-label="Escribinos por WhatsApp"
       title="Escribinos por WhatsApp"
+      onClick={() => medir("clic_contacto", { canal: "whatsapp", ubicacion: "flotante" })}
       onMouseEnter={() => setH(true)}
       onMouseLeave={() => setH(false)}
       style={{
@@ -611,7 +626,7 @@ export default function NeriniWeb() {
             <a href="#departamento" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none", whiteSpace: "nowrap" }}>El departamento</a>
             <a href="#sistema" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none", whiteSpace: "nowrap" }}>El sistema</a>
             <a href="#empezamos" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none", whiteSpace: "nowrap" }}>Primeros pasos</a>
-            <Btn href={AGENDA} variant="primary" size="sm">Agendar reunión</Btn>
+            <Btn href={AGENDA} variant="primary" size="sm" ubicacion="nav">Agendar reunión</Btn>
           </div>
         </div>
       </nav>
@@ -632,7 +647,7 @@ export default function NeriniWeb() {
             </p>
           </Reveal>
           <Reveal delay={170}>
-            <Btn href={AGENDA} variant="cuero">Agendá tu reunión</Btn>
+            <Btn href={AGENDA} variant="cuero" ubicacion="hero">Agendá tu reunión</Btn>
           </Reveal>
         </div>
       </section>
@@ -938,7 +953,7 @@ export default function NeriniWeb() {
             </p>
           </Reveal>
           <Reveal delay={150}>
-            <Btn href={AGENDA} variant="inverse">Agendá tu reunión</Btn>
+            <Btn href={AGENDA} variant="inverse" ubicacion="cierre">Agendá tu reunión</Btn>
           </Reveal>
         </div>
       </section>
@@ -951,16 +966,16 @@ export default function NeriniWeb() {
             <div>
               <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".14em", textTransform: "uppercase", color: C.cueroClaro, marginBottom: 14 }}>Contacto</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <a href="mailto:debora@nerini.ar" style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>debora@nerini.ar</a>
-                <a href={WA} target="_blank" rel="noopener noreferrer" style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>WhatsApp · +54 9 11 2241 9299</a>
+                <a href="mailto:debora@nerini.ar" onClick={() => medir("clic_contacto", { canal: "email", ubicacion: "footer" })} style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>debora@nerini.ar</a>
+                <a href={WA} target="_blank" rel="noopener noreferrer" onClick={() => medir("clic_contacto", { canal: "whatsapp", ubicacion: "footer" })} style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>WhatsApp · +54 9 11 2241 9299</a>
               </div>
             </div>
             <div>
               <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".14em", textTransform: "uppercase", color: C.cueroClaro, marginBottom: 14 }}>Perfiles</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 <a href="https://nerini.ar" style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>nerini.ar</a>
-                <a href="https://instagram.com/nerini.marketing" target="_blank" rel="noopener noreferrer" style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>@nerini.marketing</a>
-                <a href="https://linkedin.com/company/nerini" target="_blank" rel="noopener noreferrer" style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>linkedin.com/company/nerini</a>
+                <a href="https://instagram.com/nerini.marketing" target="_blank" rel="noopener noreferrer" onClick={() => medir("clic_perfil", { red: "instagram" })} style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>@nerini.marketing</a>
+                <a href="https://linkedin.com/company/nerini" target="_blank" rel="noopener noreferrer" onClick={() => medir("clic_perfil", { red: "linkedin" })} style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>linkedin.com/company/nerini</a>
               </div>
             </div>
           </div>
