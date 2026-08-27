@@ -483,24 +483,24 @@ const PASOS = [
 
 const PREGUNTAS = [
   {
+    q: "¿Cuál es el beneficio de contratar el departamento completo frente a otras opciones?",
+    a: "Las alternativas habituales son tres: un perfil interno, un proveedor por área o una consultora. Un perfil interno cubre una parte del área y necesita proveedores adicionales para sostener el resto. Los proveedores por área ejecutan cada uno con su criterio, con un reporte distinto por cada uno y el seguimiento a cargo del dueño. Una consultora define el plan y no lo ejecuta. Nuestro servicio incluye la dirección, la ejecución de las cuatro áreas y el sistema que las conecta, con un solo interlocutor responsable por el resultado y todos los canales medidos en un único tablero.",
+  },
+  {
     q: "¿Qué pasa con los proveedores que ya tengo?",
     a: "Redes, pauta y email marketing los ejecuta nuestro equipo, así que esas áreas dejan de estar en manos de tus proveedores actuales. Si hay un compromiso vigente, coordinamos una reunión de traspaso para tomar lo que ya funciona: audiencias, campañas y calendario. El sitio es la excepción: si ya tiene un proveedor a cargo, los cambios se coordinan con él.",
+  },
+  {
+    q: "¿Qué necesitamos de vos todos los meses?",
+    a: "Dos aprobaciones de contenido y una reunión. La reunión mensual es de resultados, y entre reunión y reunión el contacto es directo por WhatsApp. Una sola cosa queda de tu lado: la conversación de venta con cada contacto, que podés identificar con su origen, su historial y su próximo paso.",
   },
   {
     q: "¿En cuánto tiempo se ven resultados?",
     a: "No trabajamos con promesas de resultado en un plazo. Cada área se pone en marcha según el estado en el que está hoy tu marketing, y la pauta se activa cuando el sitio y las redes ya están funcionando. Lo que sí está desde el primer mes es la medición: vas a ver qué entra, por qué canal y a qué costo.",
   },
   {
-    q: "¿Cuál es el beneficio de contratar el departamento completo frente a otras opciones?",
-    a: "Las alternativas habituales son tres: un perfil interno, un proveedor por área o una consultora. Un perfil interno cubre una parte del área y necesita proveedores adicionales para sostener el resto. Los proveedores por área ejecutan cada uno con su criterio, con un reporte distinto por cada uno y el seguimiento a cargo del dueño. Una consultora define el plan y no lo ejecuta. El departamento incluye la dirección, la ejecución de las cuatro áreas y el sistema que las conecta, con un solo interlocutor responsable por el resultado y todos los canales medidos en un único tablero.",
-  },
-  {
     q: "¿Cuál es el costo del servicio?",
-    a: "Un fee mensual único, con todo el alcance incluido desde el primer mes. No hay planes ni módulos que se sumen y no hay costo de arranque aparte. La inversión publicitaria va aparte del fee: la define y la paga tu empresa. El monto está en la propuesta, que se envía después de la reunión inicial.",
-  },
-  {
-    q: "¿Por qué pago el mes completo si la pauta todavía no arrancó?",
-    a: "Los dos primeros meses concentran el trabajo más pesado: diagnóstico, ajuste del sitio, configuración del sistema y armado de los flujos de seguimiento. Ese trabajo no se factura aparte, va absorbido en el fee. La pauta se activa cuando el sitio y las redes están funcionando, porque amplifica lo que ya existe.",
+    a: "Un fee mensual único, sin planes ni módulos que se sumen y sin costo de set up. Cubre los perfiles que hacen falta para sostener el área: dirección de marketing, contenido, diseño, pauta digital y desarrollo del sitio. El monto está en la propuesta, que enviamos después de la reunión inicial.",
   },
 ];
 
