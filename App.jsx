@@ -19,7 +19,9 @@ const FOTO_DEBORA = fotoDebora;
 const WA =
   "https://wa.me/5491122419299?text=Hola%20Debora%2C%20me%20interesa%20saber%20m%C3%A1s%20sobre%20tus%20servicios";
 
-const AGENDA = "https://reuniones.clientify.com/#/nerini/reu?v2=true";
+/* Ruta propia. El destino real vive en vercel.json, no en este archivo.
+   Si el CRM cambia la URL de reserva, se edita ahi y no aca. */
+const AGENDA = "/agenda";
 
 /* Registra un evento en Analytics. Si Analytics no cargó, no hace nada. */
 function medir(nombre, datos = {}) {
