@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/agenda",
+      "destination": "https://reuniones.clientify.com/#/nerini/reu?v2=true",
+      "permanent": false
+    }
+  ]
+}
