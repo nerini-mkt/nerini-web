@@ -1,57 +1,35 @@
 import { useState, useEffect, useRef } from "react";
-import fotoDebora from "./debora.png";
 
-/**
- * NERINI — sitio web
- * Repo: nerini-mkt/nerini-web · Archivo: App.jsx (raiz) · Deploy automatico en Vercel.
- * La foto se importa desde debora.png, en la misma carpeta.
- *
- * Actualizado a la estrategia vigente: Departamento Externo de Marketing,
- * cuatro areas ejecutadas con equipo propio, sistema centralizado.
- *
- * PENDIENTE:
- * - Reemplazar debora.png por una foto sin logo de terceros.
- * - Title, meta description y Open Graph: van en index.html, no en este archivo.
- */
-
-const FOTO_DEBORA = fotoDebora;
+const FOTO_DEBORA = "/debora.png"; // Conservar la foto original en public/debora.png
 
 const WA =
   "https://wa.me/5491122419299?text=Hola%20Debora%2C%20me%20interesa%20saber%20m%C3%A1s%20sobre%20tus%20servicios";
 
-/* Ruta propia. El destino real vive en vercel.json, no en este archivo.
-   Si el CRM cambia la URL de reserva, se edita ahi y no aca. */
-const AGENDA = "/agenda";
-
-/* Registra un evento en Analytics. Si Analytics no cargó, no hace nada. */
-function medir(nombre, datos = {}) {
-  if (typeof window !== "undefined" && typeof window.gtag === "function") {
-    window.gtag("event", nombre, datos);
-  }
-}
-
+/* ── Paleta 2026 (Manual de Marca) ───────────────────
+   Fondo blanco como base. Malva solo en detalles.
+   Evitar superficies oscuras dominantes.            */
 const C = {
-  bordo: "#6B1F2A",
-  bordoHover: "#571821",
-  bordoMedio: "#9B5059",
-  cuero: "#A0714A",
-  cueroTexto: "#8B5F3D",
-  cueroClaro: "#D4B896",
-  beige: "#FAF5EE",
-  negro: "#3A1A1F",
-  grisBorde: "#E8E2D9",
-  grisTexto: "#6B6660",
-  grisClaro: "#A8A39E",
+  bordo:       "#6B1F2A",   // identidad y acentos
+  bordoHover:  "#571821",
+  negro:       "#3A1A1F",   // títulos y lectura
+  blanco:      "#FFFFFF",   // fondo principal
+  grisTexto:   "#6B6660",   // párrafos
+  grisBorde:   "#E8E2D9",   // bordes y separadores (cuero claro)
+  grisClaro:   "#A8A39E",   // captions y terciarios
+  malva:       "#DFD6E1",   // detalles discretos — nuevo 2026
+  malvaOsc:    "#C8BCCC",   // malva más oscuro para bordes
+  cueroClaro:  "#D4B896",   // versión clara para texto sobre bordó
+  beige:       "#FAF5EE",   // texto sobre fondos oscuros
 };
 
 const SANS = "'Raleway','Open Sans',system-ui,-apple-system,sans-serif";
-const LOGO_FONT = "'Arimo','Liberation Sans',Arial,Helvetica,sans-serif";
+
 
 const PAD_X = "clamp(20px, 5vw, 48px)";
-const PAD_Y = "clamp(52px, 6.5vw, 84px)";
+const PAD_Y = "clamp(44px, 5.5vw, 72px)";
 const MAX = 1120;
 
-/* ── fuentes de marca ─────────────────────────────── */
+/* ── fuentes ──────────────────────────────────────── */
 function useBrandFonts() {
   useEffect(() => {
     const href =
@@ -71,18 +49,10 @@ function useInView() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
-      setV(true);
-      return;
-    }
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) { setV(true); return; }
     const obs = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) {
-          setV(true);
-          obs.disconnect();
-        }
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+      ([e]) => { if (e.isIntersecting) { setV(true); obs.disconnect(); } },
+      { threshold: 0.1, rootMargin: "0px 0px -6% 0px" }
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -97,8 +67,8 @@ function Reveal({ children, delay = 0, style = {} }) {
       ref={ref}
       style={{
         opacity: v ? 1 : 0,
-        transform: v ? "none" : "translateY(16px)",
-        transition: `opacity .6s cubic-bezier(.2,0,0,1) ${delay}ms, transform .6s cubic-bezier(.2,0,0,1) ${delay}ms`,
+        transform: v ? "none" : "translateY(14px)",
+        transition: `opacity .55s cubic-bezier(.2,0,0,1) ${delay}ms, transform .55s cubic-bezier(.2,0,0,1) ${delay}ms`,
         ...style,
       }}
     >
@@ -107,883 +77,465 @@ function Reveal({ children, delay = 0, style = {} }) {
   );
 }
 
-/* ── logo (construcción tipográfica del manual) ───── */
-function Logo({ dark = false, size = 21 }) {
+/* ── Diagonal decorativa (reemplaza N-pattern) ────── */
+function DiagonalAccent({ side = "right", color = C.malva, opacity = 1 }) {
+  const isRight = side === "right";
   return (
-    <div style={{ lineHeight: 1, userSelect: "none", display: "inline-block" }}>
-      <div
-        style={{
-          fontFamily: LOGO_FONT,
-          fontWeight: 700,
-          letterSpacing: ".02em",
-          fontSize: size,
-          color: dark ? C.beige : C.bordo,
-        }}
-      >
-        NERINI
-      </div>
-      <div
-        style={{
-          height: Math.max(1, size * 0.045),
-          background: dark ? C.cueroClaro : C.bordo,
-          margin: `${size * 0.1}px 0`,
-        }}
-      />
-      <div
-        style={{
-          fontFamily: SANS,
-          fontWeight: 400,
-          fontSize: size * 0.35,
-          letterSpacing: ".34em",
-          color: dark ? C.cueroClaro : C.cuero,
-        }}
-      >
-        MARKETING
-      </div>
-    </div>
-  );
-}
-
-/* ── patrón N (solo hero y cierre) ─────────────────── */
-function Pattern({ cell = 96, opacity = 0.028, color = C.bordo }) {
-  return (
-    <span
+    <svg
       aria-hidden="true"
       style={{
         position: "absolute",
-        inset: 0,
-        overflow: "hidden",
+        [isRight ? "right" : "left"]: 0,
+        top: 0,
+        bottom: 0,
+        height: "100%",
+        width: "clamp(120px, 18vw, 240px)",
         pointerEvents: "none",
-        display: "grid",
-        gridTemplateColumns: `repeat(auto-fill, ${cell}px)`,
-        gridAutoRows: `${cell}px`,
-        placeItems: "center",
         opacity,
-        color,
-        fontFamily: LOGO_FONT,
-        fontWeight: 700,
-        fontSize: cell * 0.5,
-        lineHeight: 1,
-        userSelect: "none",
       }}
+      preserveAspectRatio="none"
+      viewBox="0 0 240 600"
     >
-      {Array.from({ length: 240 }).map((_, i) => (
-        <span key={i}>N</span>
-      ))}
-    </span>
-  );
-}
-
-/* ── set de iconos de trazo (§07) ─────────────────── */
-const PATHS = {
-  check: <polyline points="4 12.5 9.5 18 20 6" />,
-  action: (
-    <>
-      <line x1="4" y1="12" x2="19" y2="12" />
-      <polyline points="13 6 19 12 13 18" />
-    </>
-  ),
-  focus: (
-    <>
-      <circle cx="12" cy="12" r="8" />
-      <circle cx="12" cy="12" r="3.2" />
-    </>
-  ),
-  modules: (
-    <>
-      <rect x="4" y="4" width="7" height="7" rx="1.2" />
-      <rect x="13" y="4" width="7" height="7" rx="1.2" />
-      <rect x="4" y="13" width="7" height="7" rx="1.2" />
-      <rect x="13" y="13" width="7" height="7" rx="1.2" />
-    </>
-  ),
-  planning: (
-    <>
-      <rect x="4" y="5.5" width="16" height="14.5" rx="1.6" />
-      <line x1="4" y1="10" x2="20" y2="10" />
-      <line x1="8" y1="3.5" x2="8" y2="7" />
-      <line x1="16" y1="3.5" x2="16" y2="7" />
-    </>
-  ),
-  client: (
-    <>
-      <circle cx="12" cy="8" r="3.6" />
-      <path d="M5.5 20a6.5 6.5 0 0 1 13 0" />
-    </>
-  ),
-  coordination: (
-    <>
-      <circle cx="6" cy="6" r="2.4" />
-      <circle cx="18" cy="6" r="2.4" />
-      <circle cx="12" cy="18" r="2.4" />
-      <line x1="7.7" y1="7.7" x2="10.6" y2="16" />
-      <line x1="16.3" y1="7.7" x2="13.4" y2="16" />
-      <line x1="8.4" y1="6" x2="15.6" y2="6" />
-    </>
-  ),
-  site: (
-    <>
-      <rect x="3.5" y="5" width="17" height="14" rx="1.8" />
-      <line x1="3.5" y1="9.5" x2="20.5" y2="9.5" />
-      <line x1="6.4" y1="7.2" x2="6.5" y2="7.2" />
-      <line x1="9.2" y1="7.2" x2="9.3" y2="7.2" />
-    </>
-  ),
-  mail: (
-    <>
-      <rect x="3.5" y="5.5" width="17" height="13" rx="1.8" />
-      <polyline points="4.5 7.5 12 13 19.5 7.5" />
-    </>
-  ),
-};
-
-function Icon({ name = "check", size = 16, color = C.bordo }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke={color}
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      style={{ display: "inline-block", flexShrink: 0 }}
-    >
-      {PATHS[name] || PATHS.check}
+      {/* 3 líneas diagonales paralelas, trazo fino */}
+      <line x1={isRight ? 200 : 40} y1="0" x2={isRight ? 40 : 200} y2="600" stroke={color} strokeWidth="1" />
+      <line x1={isRight ? 220 : 20} y1="0" x2={isRight ? 60 : 220} y2="600" stroke={color} strokeWidth="1" />
+      <line x1={isRight ? 240 : 0}  y1="0" x2={isRight ? 80 : 240} y2="600" stroke={color} strokeWidth="1" />
     </svg>
   );
 }
 
-/* ── iconos de sección (mismo estilo de trazo) ────── */
-const IcoProveedores = () => (
-  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="6" cy="16" r="3.5" />
-    <circle cx="26" cy="7" r="3.5" />
-    <circle cx="26" cy="25" r="3.5" />
-    <line x1="9" y1="15" x2="22.5" y2="9" strokeDasharray="3 2.5" />
-    <line x1="9" y1="17" x2="22.5" y2="23" strokeDasharray="3 2.5" />
-    <line x1="15" y1="9" x2="15" y2="23" strokeDasharray="3 2.5" opacity=".35" />
-  </svg>
-);
-const IcoDuenio = () => (
-  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="16" cy="6" r="3" />
-    <path d="M16 9v8" />
-    <path d="M10 28l6-11 6 11" />
-    <path d="M7 17h5M20 17h5" />
-    <path d="M7 17l3-4M25 17l-3-4" />
-  </svg>
-);
-const IcoMedicion = () => (
-  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="4,24 10,16 15,20 22,10 28,14" />
-    <circle cx="28" cy="8" r="3" />
-    <line x1="26" y1="10" x2="28" y2="13" />
-  </svg>
-);
-const IcoLeads = () => (
-  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="9" r="4" />
-    <path d="M4 26c0-4 3.6-8 8-8h4" />
-    <line x1="22" y1="18" x2="28" y2="18" strokeDasharray="2.5 2" />
-    <line x1="22" y1="22" x2="28" y2="22" strokeDasharray="2.5 2" />
-    <line x1="22" y1="26" x2="28" y2="26" strokeDasharray="2.5 2" />
-  </svg>
-);
-const IcoPresencia = () => (
-  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="5" width="26" height="19" rx="2" />
-    <line x1="3" y1="10.5" x2="29" y2="10.5" />
-    <circle cx="14" cy="17" r="4" />
-    <line x1="17" y1="20" x2="21" y2="24" />
-  </svg>
-);
-const IcoGlobo = () => (
-  <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="18" cy="18" r="13" />
-    <ellipse cx="18" cy="18" rx="5.5" ry="13" />
-    <line x1="5" y1="18" x2="31" y2="18" />
-    <line x1="7.5" y1="11" x2="28.5" y2="11" />
-    <line x1="7.5" y1="25" x2="28.5" y2="25" />
-  </svg>
-);
-const IcoTrend = () => (
-  <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="4,28 12,18 18,22 28,10" />
-    <polyline points="22,10 28,10 28,16" />
-    <line x1="4" y1="28" x2="32" y2="28" opacity=".3" />
-  </svg>
-);
-const IcoLoop = () => (
-  <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M10 18a8 8 0 0 1 16 0" />
-    <polyline points="22,13 26,18 30,13" />
-    <path d="M26 18a8 8 0 0 1-16 0" />
-    <polyline points="14,23 10,18 6,23" />
-  </svg>
-);
+/* ── Logo (construcción tipográfica del manual) ───── */
+function Logo({ dark = false, size = 21 }) {
+  return <img src={dark ? "/nerini-logo-inverso.png" : "/nerini-logo-oficial.png"}
+    alt="NERINI Marketing" style={{ display: "block", width: size * 4.25, height: "auto", objectFit: "contain" }} />;
+}
 
-/* ── botón ────────────────────────────────────────── */
-function Btn({ href = AGENDA, variant = "primary", size = "lg", ubicacion = "", children = "Agendá tu reunión" }) {
-  const [h, setH] = useState(false);
-  const sizes = {
-    sm: { padding: "7px 14px", fontSize: 13 },
-    lg: { padding: "13px 28px", fontSize: 15 },
-  };
-  const skins = {
-    primary: { background: h ? C.bordoHover : C.bordo, color: C.beige, borderColor: C.bordo },
-    secondary: { background: h ? C.beige : "#fff", color: C.bordo, borderColor: C.bordo },
-    inverse: { background: h ? C.cueroClaro : C.beige, color: C.bordo, borderColor: h ? C.cueroClaro : C.beige },
-    cuero: { background: h ? C.cuero : C.cueroTexto, color: C.beige, borderColor: h ? C.cuero : C.cueroTexto },
-  };
-  const registrarClic = () => {
-    if (href === AGENDA) medir("clic_agenda", { ubicacion });
+/* ── Iconos de trazo (lineales, per manual §05) ───── */
+function Icon({ name = "check", size = 16, color = C.bordo }) {
+  const paths = {
+    check:  <polyline points="4 12.5 9.5 18 20 6" />,
+    arrow:  <><line x1="4" y1="12" x2="20" y2="12" /><polyline points="14 6 20 12 14 18" /></>,
+    grid:   <><rect x="4" y="4" width="7" height="7" rx="1" /><rect x="13" y="4" width="7" height="7" rx="1" /><rect x="4" y="13" width="7" height="7" rx="1" /><rect x="13" y="13" width="7" height="7" rx="1" /></>,
+    chart:  <><polyline points="4 18 10 11 15 14 20 7" /><polyline points="16 7 20 7 20 11" /></>,
+    email:  <><rect x="4" y="6" width="16" height="13" rx="1.5" /><polyline points="4 6 12 13 20 6" /></>,
+    redes:  <><circle cx="6" cy="12" r="2.5" /><circle cx="18" cy="5" r="2.5" /><circle cx="18" cy="19" r="2.5" /><line x1="8" y1="11" x2="16" y2="6" /><line x1="8" y1="13" x2="16" y2="18" /></>,
+    pauta:  <><rect x="4" y="4" width="16" height="16" rx="1.5" /><line x1="4" y1="9" x2="20" y2="9" /><line x1="9" y1="4" x2="9" y2="9" /></>,
+    sitio:  <><rect x="4" y="5" width="16" height="14" rx="1.5" /><line x1="4" y1="9" x2="20" y2="9" /><circle cx="7.5" cy="7" r=".8" fill="currentColor" /><circle cx="10.5" cy="7" r=".8" fill="currentColor" /></>,
+    crm:    <><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="3" /><line x1="12" y1="4" x2="12" y2="9" /><line x1="12" y1="15" x2="12" y2="20" /><line x1="4" y1="12" x2="9" y2="12" /><line x1="15" y1="12" x2="20" y2="12" /></>,
+    person: <><circle cx="12" cy="8" r="3.5" /><path d="M5.5 20a6.5 6.5 0 0 1 13 0" /></>,
+    measure:<><polyline points="4 16 9 10 14 13 20 6" /><line x1="4" y1="20" x2="20" y2="20" opacity=".4" /></>,
   };
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      onClick={registrarClic}
-      onMouseEnter={() => setH(true)}
-      onMouseLeave={() => setH(false)}
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        textDecoration: "none",
-        fontFamily: SANS,
-        fontWeight: 600,
-        letterSpacing: ".01em",
-        lineHeight: 1.1,
-        borderRadius: 6,
-        border: "1px solid",
-        transition: "background .18s ease, color .18s ease",
-        ...sizes[size],
-        ...skins[variant],
-      }}
-    >
-      <span style={{ whiteSpace: "nowrap" }}>{children}</span>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
+      stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+      aria-hidden="true" style={{ display: "inline-block", flexShrink: 0 }}>
+      {paths[name] || paths.check}
+    </svg>
+  );
+}
+
+/* ── Botón WA ─────────────────────────────────────── */
+function BtnWA({ variant = "primary", size = "lg", children = "Hablemos por WhatsApp" }) {
+  const [h, setH] = useState(false);
+  const sz = { sm: { padding: "7px 16px", fontSize: 13 }, lg: { padding: "13px 28px", fontSize: 15 } };
+  const sk = {
+    primary: { background: h ? C.bordoHover : C.bordo, color: C.beige, border: `1px solid ${C.bordo}` },
+    secondary: { background: h ? "#f7f2ec" : C.blanco, color: C.bordo, border: `1px solid ${C.bordo}` },
+    inverse: { background: h ? C.blanco : C.beige, color: C.bordo, border: `1px solid ${C.beige}` },
+  };
+  return (
+    <a href={WA} target="_blank" rel="noopener noreferrer"
+      onMouseEnter={() => setH(true)} onMouseLeave={() => setH(false)}
+      style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", textDecoration: "none",
+        fontFamily: SANS, fontWeight: 600, letterSpacing: ".01em", lineHeight: 1.1, borderRadius: 4,
+        transition: "background .18s ease, color .18s ease", ...sz[size], ...sk[variant] }}>
+      {children}
     </a>
   );
 }
 
-/* ── card ─────────────────────────────────────────── */
-function Card({ variant = "plain", children, style = {} }) {
-  const fills = {
-    plain: { background: "#fff", border: `1px solid ${C.grisBorde}` },
-    brand: { background: C.bordo, border: `1px solid ${C.bordo}` },
-  };
-  return (
-    <div
-      style={{
-        borderRadius: 12,
-        padding: 28,
-        height: "100%",
-        boxShadow: variant === "brand" ? "none" : "0 1px 2px rgba(58,26,31,.04)",
-        ...fills[variant],
-        ...style,
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-const eyebrow = {
-  fontSize: 11,
-  fontWeight: 600,
-  letterSpacing: ".14em",
-  textTransform: "uppercase",
-  color: C.cueroTexto,
-};
-const h2 = {
-  fontWeight: 300,
-  fontSize: "clamp(34px, 4.6vw, 52px)",
-  color: C.negro,
-  lineHeight: 1.12,
-  letterSpacing: "-.01em",
-};
-const SECTION_GAP = "clamp(32px, 4vw, 48px)";
-const chip = {
-  display: "flex",
-  alignItems: "center",
-  gap: 10,
-  padding: "10px 12px",
-  background: "#fff",
-  border: `1px solid ${C.grisBorde}`,
-  borderRadius: 6,
-  fontSize: 14,
-  color: C.negro,
-};
-const nota = { fontSize: 13, color: C.grisTexto, lineHeight: 1.6, margin: 0 };
-
 /* ── datos ────────────────────────────────────────── */
 const PROBLEMAS = [
-  { icon: <IcoProveedores />, title: "Canales sin objetivo común", desc: "Redes, pauta y sitio operando cada uno con su propio criterio." },
-  { icon: <IcoMedicion />, title: "Medición por canal, sin visión del conjunto", desc: "Cada plataforma informa sus métricas y ninguna se cruza con la otra." },
-  { icon: <IcoPresencia />, title: "Presencia por debajo de la trayectoria", desc: "Lo que el cliente encuentra al buscar a la empresa no refleja su capacidad real." },
-  { icon: <IcoLeads />, title: "Contactos sin registro ni seguimiento", desc: "Sin canal de origen, historial ni próximo paso definido." },
-  { icon: <IcoDuenio />, title: "Un proveedor distinto por área", desc: "Cada uno con su formato de reporte y su interlocutor, y el dueño coordinando entre todos." },
+  { icon: "redes",   title: "Diferentes proveedores. Diferentes estrategias.", desc: "Cada proveedor ejecuta su área sin una estrategia integral que los coordine." },
+  { icon: "person",  title: "El marketing lo planificás vos.", desc: "La planificación y ejecución dependen de tu disponibilidad permanente." },
+  { icon: "measure", title: "Invertís sin medir el retorno.", desc: "Reportes aislados de cada proveedor, sin un tablero que muestre el resultado conjunto." },
+  { icon: "crm",     title: "Los leads no tienen seguimiento.", desc: "No hay registro de origen ni proceso definido para convertirlos en oportunidades de venta." },
 ];
 
-const DIRECCION = {
-  icon: "focus",
-  title: "Dirección",
-  desc: "Diagnóstico, plan mensual y reunión de resultados. Un solo interlocutor responsable.",
-};
-
-const AREAS = [
-  { icon: "coordination", title: "Redes sociales", desc: "Instagram y LinkedIn: calendario, contenidos, diseño y publicación." },
-  { icon: "action", title: "Pauta digital", desc: "Meta Ads y Google Ads: campañas, audiencias, piezas y optimización mensual." },
-  { icon: "site", title: "Sitio web", desc: "Estructura y textos orientados a convertir, con el formulario conectado al sistema." },
-  { icon: "mail", title: "Email marketing", desc: "Secuencias automáticas, segmentación de la base y envíos periódicos." },
-];
-
-const SISTEMA = {
-  icon: "modules",
-  title: "Sistema centralizado",
-  desc: "Todos los canales en un solo lugar, con seguimiento automatizado y un único tablero.",
-};
-
-const TRABAJAMOS_CON = [
-  "Empresas de servicios sin equipo interno de marketing",
-  "Empresas que ya destinan un presupuesto mensual a marketing",
-  "Empresas que necesitan generar oportunidades de venta de forma sostenida",
-  "Dueños o socios dispuestos a delegar el área completa",
-];
-const NO_TRABAJAMOS_CON = [
-  "Emprendimientos sin presupuesto para marketing",
-  "Comercios minoristas",
-  "Empresas que buscan contratar un área suelta y conservar el resto de sus proveedores",
-];
-
-const DIGITALES = [
-  ["coordination", "Redes sociales"],
-  ["action", "Pauta digital"],
-  ["site", "Sitio web"],
-  ["client", "WhatsApp"],
-];
-const OFFLINE = [
-  ["planning", "Eventos y ferias"],
-  ["check", "Referidos"],
+const CANALES = [
+  { ico: "redes", label: "Redes sociales", sub: "Instagram · LinkedIn" },
+  { ico: "pauta", label: "Pauta digital",  sub: "Meta Ads · Google Ads" },
+  { ico: "sitio", label: "Sitio web",      sub: "Estructura · medición" },
+  { ico: "email", label: "Email marketing",sub: "Envíos · secuencias" },
 ];
 
 const ETAPAS = [
-  { icon: <IcoGlobo />, num: "01", name: "Presencia", desc: "La base digital de la empresa: sitio, Instagram y LinkedIn." },
-  { icon: <IcoTrend />, num: "02", name: "Crecimiento", desc: "Generación continua de demanda con Meta Ads y Google Ads." },
-  { icon: <IcoLoop />, num: "03", name: "Nutrición", desc: "Seguimiento de cada contacto hasta la conversación de venta, con email marketing y flujos automatizados." },
+  { num: "01", name: "Presencia",   desc: "La base digital de la empresa. Presencia y mensajes consistentes donde están los clientes.",     channels: "Sitio web · Instagram · LinkedIn" },
+  { num: "02", name: "Crecimiento", desc: "Generación continua de demanda, sin depender exclusivamente de alcance orgánico.",               channels: "Meta Ads · Google Ads" },
+  { num: "03", name: "Nutrición",   desc: "Seguimiento de cada contacto hasta la conversación de venta.",                                   channels: "Email Marketing" },
 ];
-
-const PASOS = [
-  { num: "01", title: "Reunión inicial", desc: "Media hora de conversación para revisar el estado actual de tu empresa y definir el punto de partida." },
-  { num: "02", title: "Diagnóstico", desc: "Revisión del estado actual: canales, proveedores, medición y contactos." },
-  { num: "03", title: "Puesta en marcha", desc: "Plan de marketing, roadmap y arranque de las primeras áreas." },
-];
-
-const PREGUNTAS = [
-  {
-    q: "¿Cuál es el beneficio de contratar el departamento completo frente a otras opciones?",
-    a: "Las alternativas habituales son tres: un perfil interno, un proveedor por área o una consultora. Un perfil interno cubre una parte del área y necesita proveedores adicionales para sostener el resto. Los proveedores por área ejecutan cada uno con su criterio, con un reporte distinto por cada uno y el seguimiento a cargo del dueño. Una consultora define el plan y no lo ejecuta. Nuestro servicio incluye la dirección, la ejecución de las cuatro áreas y el sistema que las conecta, con un solo interlocutor responsable por el resultado y todos los canales medidos en un único tablero.",
-  },
-  {
-    q: "¿Qué pasa con los proveedores que ya tengo?",
-    a: "Redes, pauta y email marketing los ejecuta nuestro equipo, así que esas áreas dejan de estar en manos de tus proveedores actuales. Si hay un compromiso vigente, coordinamos una reunión de traspaso para tomar lo que ya funciona: audiencias, campañas y calendario. El sitio es la excepción: si ya tiene un proveedor a cargo, los cambios se coordinan con él.",
-  },
-  {
-    q: "¿Qué necesitamos de vos todos los meses?",
-    a: "Dos aprobaciones de contenido y una reunión. La reunión mensual es de resultados, y entre reunión y reunión el contacto es directo por WhatsApp. Una sola cosa queda de tu lado: la conversación de venta con cada contacto, que podés identificar con su origen, su historial y su próximo paso.",
-  },
-  {
-    q: "¿En cuánto tiempo se ven resultados?",
-    a: "No trabajamos con promesas de resultado en un plazo. Cada área se pone en marcha según el estado en el que está hoy tu marketing, y la pauta se activa cuando el sitio y las redes ya están funcionando. Lo que sí está desde el primer mes es la medición: vas a ver qué entra, por qué canal y a qué costo.",
-  },
-  {
-    q: "¿Cuál es el costo del servicio?",
-    a: "Un fee mensual único, sin planes ni módulos que se sumen y sin costo de set up. Cubre los perfiles que hacen falta para sostener el área: dirección de marketing, contenido, diseño, pauta digital y desarrollo del sitio. El monto está en la propuesta, que enviamos después de la reunión inicial.",
-  },
-];
-
-/* ── preguntas desplegables ───────────────────────── */
-function Preguntas() {
-  const [abierta, setAbierta] = useState(null);
-  return (
-    <div style={{ background: "#fff", border: `1px solid ${C.grisBorde}`, borderRadius: 12, overflow: "hidden", boxShadow: "0 1px 2px rgba(58,26,31,.04)" }}>
-      {PREGUNTAS.map((f, i) => {
-        const abierto = abierta === i;
-        return (
-          <div key={f.q} style={{ borderTop: i === 0 ? "none" : `1px solid ${C.grisBorde}` }}>
-            <button
-              type="button"
-              onClick={() => {
-                if (!abierto) medir("abre_pregunta", { pregunta: f.q });
-                setAbierta(abierto ? null : i);
-              }}
-              aria-expanded={abierto}
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                gap: 20,
-                padding: "clamp(20px, 2.4vw, 26px)",
-                background: "none",
-                border: "none",
-                textAlign: "left",
-                cursor: "pointer",
-                fontFamily: SANS,
-              }}
-            >
-              <span style={{ fontWeight: 600, fontSize: 17, color: abierto ? C.bordo : C.negro, lineHeight: 1.4, transition: "color .18s ease" }}>{f.q}</span>
-              <span
-                aria-hidden="true"
-                style={{ display: "inline-flex", flexShrink: 0, transform: abierto ? "rotate(180deg)" : "none", transition: "transform .2s ease" }}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={C.bordo} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="6 9.5 12 15.5 18 9.5" />
-                </svg>
-              </span>
-            </button>
-            {abierto && (
-              <div style={{ padding: "0 clamp(20px, 2.4vw, 26px) clamp(22px, 2.6vw, 28px)" }}>
-                <p style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7, margin: 0, maxWidth: "64em" }}>{f.a}</p>
-              </div>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
 
 /* ── whatsapp flotante ────────────────────────────── */
 function FloatingWA() {
   const [h, setH] = useState(false);
   return (
-    <a
-      href={WA}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Escribinos por WhatsApp"
-      title="Escribinos por WhatsApp"
-      onClick={() => medir("clic_contacto", { canal: "whatsapp", ubicacion: "flotante" })}
-      onMouseEnter={() => setH(true)}
-      onMouseLeave={() => setH(false)}
-      style={{
-        position: "fixed",
-        right: "clamp(16px, 3vw, 28px)",
-        bottom: "clamp(16px, 3vw, 28px)",
-        zIndex: 90,
-        width: 54,
-        height: 54,
-        borderRadius: "50%",
-        background: h ? C.cueroTexto : C.cuero,
-        color: C.beige,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        boxShadow: "0 6px 20px rgba(58,26,31,.24)",
+    <a href={WA} target="_blank" rel="noopener noreferrer" aria-label="Escribinos por WhatsApp"
+      onMouseEnter={() => setH(true)} onMouseLeave={() => setH(false)}
+      style={{ position: "fixed", right: "clamp(16px, 3vw, 28px)", bottom: "clamp(16px, 3vw, 28px)", zIndex: 90,
+        width: 52, height: 52, borderRadius: "50%",
+        background: h ? C.bordoHover : C.bordo, color: C.beige,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        boxShadow: "0 4px 16px rgba(107,31,42,.30)",
         transform: h ? "translateY(-2px)" : "none",
-        transition: "background .18s ease, transform .18s ease",
-      }}
-    >
-      <svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+        transition: "background .18s ease, transform .18s ease" }}>
+      <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884a9.82 9.82 0 0 1 6.988 2.896 9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.8 11.8 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.9 11.9 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 0 0-3.48-8.413" />
       </svg>
     </a>
   );
 }
 
-/* ── página ───────────────────────────────────────── */
+/* ════════════════════════════════════════════════════
+   PÁGINA
+   ════════════════════════════════════════════════════ */
 export default function NeriniWeb() {
   useBrandFonts();
 
   return (
-    <div style={{ fontFamily: SANS, color: C.negro, background: "#fff", overflowX: "hidden", textWrap: "pretty" }}>
-      {/* NAV */}
-      <style>{`
-        @media (max-width: 760px){ .nerini-nav-links > a { display: none; } }
-        .nerini-areas { display: grid; grid-template-columns: repeat(4, 1fr); }
-        .nerini-areas > div { border-right: 1px solid ${C.grisBorde}; }
-        .nerini-areas > div:last-child { border-right: none; }
-        @media (max-width: 900px){
-          .nerini-areas { grid-template-columns: repeat(2, 1fr); }
-          .nerini-areas > div:nth-child(2n) { border-right: none; }
-          .nerini-areas > div:nth-child(-n+2) { border-bottom: 1px solid ${C.grisBorde}; }
-        }
-        @media (max-width: 560px){
-          .nerini-areas { grid-template-columns: 1fr; }
-          .nerini-areas > div { border-right: none; border-bottom: 1px solid ${C.grisBorde}; }
-          .nerini-areas > div:last-child { border-bottom: none; }
-        }
-      `}</style>
-      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#fff", borderBottom: `1px solid ${C.grisBorde}` }}>
-        <div style={{ maxWidth: MAX, margin: "0 auto", padding: `0 ${PAD_X}`, minHeight: 68, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24 }}>
-          <a href="#top" style={{ display: "inline-flex", textDecoration: "none", color: "inherit" }}>
-            <Logo size={21} />
+    <div style={{ fontFamily: SANS, color: C.negro, background: C.blanco, overflowX: "hidden", textWrap: "pretty" }}>
+
+      {/* ── NAV ─────────────────────────────────────── */}
+      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: C.blanco, borderBottom: `1px solid ${C.grisBorde}` }}>
+        <div style={{ maxWidth: MAX, margin: "0 auto", padding: `0 ${PAD_X}`, minHeight: 64, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24 }}>
+          <a href="#top" style={{ display: "inline-flex", color: "inherit", textDecoration: "none" }}>
+            <Logo size={20} />
           </a>
-          <div className="nerini-nav-links" style={{ display: "flex", alignItems: "center", gap: "clamp(14px, 2.6vw, 28px)" }}>
-            <a href="#departamento" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none", whiteSpace: "nowrap" }}>El departamento</a>
-            <a href="#sistema" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none", whiteSpace: "nowrap" }}>El sistema</a>
-            <a href="#empezamos" style={{ fontSize: 14, fontWeight: 500, color: C.cueroTexto, textDecoration: "none", whiteSpace: "nowrap" }}>Primeros pasos</a>
-            <Btn href={AGENDA} variant="primary" size="sm" ubicacion="nav">Agendar reunión</Btn>
+          <div style={{ display: "flex", alignItems: "center", gap: "clamp(16px, 3vw, 32px)" }}>
+            <a href="#quien" style={{ fontSize: 13, fontWeight: 500, color: C.grisTexto, textDecoration: "none", letterSpacing: ".01em" }}>Quién dirige</a>
+            <a href="#sistema" style={{ fontSize: 13, fontWeight: 500, color: C.grisTexto, textDecoration: "none", letterSpacing: ".01em" }}>El sistema</a>
+            <BtnWA variant="secondary" size="sm">WhatsApp</BtnWA>
           </div>
         </div>
       </nav>
 
-      {/* HERO */}
-      <section id="top" style={{ position: "relative", background: "#fff", minHeight: "min(62vh, 620px)", display: "flex", alignItems: "center", padding: `clamp(100px, 11vh, 132px) ${PAD_X} clamp(48px, 6vh, 72px)`, overflow: "hidden" }}>
-        <Pattern opacity={0.11} color={C.cueroClaro} />
-        <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(100deg, #fff 0%, #fff 46%, rgba(255,255,255,0) 78%)" }} />
+      {/* ── HERO ────────────────────────────────────── */}
+      <section id="top" style={{ position: "relative", background: C.blanco, minHeight: "min(64vh, 640px)", display: "flex", alignItems: "center", padding: `clamp(100px, 11vh, 136px) ${PAD_X} clamp(48px, 6vh, 80px)`, overflow: "hidden" }}>
+        {/* Diagonal decorativa en malva */}
+        <DiagonalAccent side="right" color={C.malva} opacity={1} />
+
         <div style={{ position: "relative", maxWidth: MAX, margin: "0 auto", width: "100%" }}>
+          {/* Eyebrow */}
           <Reveal>
-            <h1 style={{ fontWeight: 300, fontSize: "clamp(38px, min(5.2vw, 8.4vh), 64px)", lineHeight: 1.08, letterSpacing: "-.02em", color: C.negro, margin: "0 0 26px" }}>
-              El departamento<br />de marketing que<br />tu empresa no tiene
+            <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".18em", textTransform: "uppercase", color: C.bordo, marginBottom: 24 }}>
+              ESTRATEGIA · EJECUCIÓN · MEDICIÓN
+            </div>
+          </Reveal>
+
+          {/* Título principal */}
+          <Reveal delay={60}>
+            <h1 style={{ fontWeight: 300, fontSize: "clamp(36px, min(5.2vw, 8vh), 62px)", lineHeight: 1.08, letterSpacing: "-.02em", color: C.negro, margin: "0 0 28px", maxWidth: "14em" }}>
+              Departamento Externo<br />de Marketing
             </h1>
           </Reveal>
-          <Reveal delay={90}>
-            <p style={{ fontStyle: "italic", fontWeight: 300, fontSize: "clamp(17px, 1.7vw, 20px)", color: C.grisTexto, lineHeight: 1.55, margin: "0 0 32px", maxWidth: "32em" }}>
-              Ayudamos a empresas de servicios sin equipo interno a tener todas las áreas del marketing ejecutadas por un solo equipo, con un sistema que centraliza, automatiza y mide todos los canales.
+
+          <Reveal delay={130}>
+            <p style={{ fontSize: "clamp(16px, 1.6vw, 19px)", color: C.grisTexto, lineHeight: 1.7, margin: "0 0 36px", maxWidth: "34em", fontWeight: 300 }}>
+              Somos el Departamento Externo de Marketing de empresas de servicios sin equipo interno. Dirigimos la estrategia y ejecutamos redes, pauta, sitio y email marketing con nuestro equipo, bajo un mismo sistema de seguimiento y medición.
             </p>
           </Reveal>
-          <Reveal delay={170}>
-            <Btn href={AGENDA} variant="cuero" ubicacion="hero">Agendá tu reunión</Btn>
+
+          <Reveal delay={200}>
+            <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+              <BtnWA />
+              <span style={{ fontSize: 13, color: C.grisClaro }}>Para empresas de servicios sin equipo interno.</span>
+            </div>
           </Reveal>
         </div>
       </section>
 
-      {/* PROBLEMA */}
-      <section style={{ background: "#fff", padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}` }}>
+      {/* ── ¿TE ESTÁ PASANDO ESTO? ───────────────────── */}
+      <section style={{ background: C.blanco, padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}` }}>
         <div style={{ maxWidth: MAX, margin: "0 auto" }}>
           <Reveal>
-            <h2 style={{ ...h2, margin: `0 0 ${SECTION_GAP}` }}>Marketing sin dirección</h2>
+            <h2 style={{ fontWeight: 300, fontSize: "clamp(30px, 4vw, 48px)", color: C.negro, lineHeight: 1.12, letterSpacing: "-.01em", margin: `0 0 clamp(28px, 3.5vw, 44px)` }}>
+              ¿Te está pasando esto?
+            </h2>
           </Reveal>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 20 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 1, background: C.grisBorde }}>
             {PROBLEMAS.map((item, i) => (
-              <Reveal key={item.title} delay={i * 70}>
-                <Card variant="plain">
-                  <div style={{ color: C.cuero, marginBottom: 20 }}>{item.icon}</div>
-                  <div style={{ fontWeight: 600, fontSize: 17, color: C.negro, lineHeight: 1.35, marginBottom: 10 }}>{item.title}</div>
-                  <div style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7 }}>{item.desc}</div>
-                </Card>
+              <Reveal key={i} delay={i * 60}>
+                <div style={{ background: C.blanco, padding: "clamp(24px, 3vw, 36px)" }}>
+                  <div style={{ marginBottom: 18, color: C.bordo }}>
+                    <Icon name={item.icon} size={28} color={C.bordo} />
+                  </div>
+                  <div style={{ fontWeight: 600, fontSize: 16, color: C.negro, lineHeight: 1.4, marginBottom: 10 }}>{item.title}</div>
+                  <div style={{ fontSize: 14, color: C.grisTexto, lineHeight: 1.75 }}>{item.desc}</div>
+                </div>
               </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* EL DEPARTAMENTO */}
-      <section id="departamento" style={{ background: "#fff", padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}`, scrollMarginTop: 68 }}>
+      {/* ── QUIÉN DIRIGE ────────────────────────────── */}
+      <section id="quien" style={{ background: C.blanco, padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}`, scrollMarginTop: 64 }}>
         <div style={{ maxWidth: MAX, margin: "0 auto" }}>
-          <Reveal style={{ marginBottom: SECTION_GAP }}>
-            <h2 style={{ ...h2, margin: "0 0 20px" }}>Departamento Externo de Marketing</h2>
-            <p style={{ fontSize: 17, fontStyle: "italic", fontWeight: 300, color: C.grisTexto, lineHeight: 1.6, margin: 0 }}>
-              Todas las áreas del marketing de tu empresa, ejecutadas por un solo equipo y conectadas a un solo sistema.
-            </p>
-          </Reveal>
-
           <Reveal>
-            <div style={{ background: "#fff", border: `1px solid ${C.grisBorde}`, borderRadius: 12, overflow: "hidden", boxShadow: "0 1px 2px rgba(58,26,31,.04)" }}>
-              <div style={{ display: "flex", alignItems: "flex-start", gap: 16, padding: "clamp(20px, 2.4vw, 26px)", borderBottom: `1px solid ${C.grisBorde}` }}>
-                <span style={{ marginTop: 3 }}>
-                  <Icon name={DIRECCION.icon} size={22} />
-                </span>
-                <div>
-                  <div style={{ fontWeight: 600, fontSize: 17, color: C.negro, marginBottom: 8 }}>{DIRECCION.title}</div>
-                  <div style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7 }}>{DIRECCION.desc}</div>
-                </div>
-              </div>
-
-              <div className="nerini-areas">
-                {AREAS.map((a) => (
-                  <div key={a.title} style={{ padding: "clamp(20px, 2.4vw, 26px)" }}>
-                    <div style={{ marginBottom: 14 }}>
-                      <Icon name={a.icon} size={22} />
-                    </div>
-                    <div style={{ fontWeight: 600, fontSize: 17, color: C.negro, marginBottom: 8 }}>{a.title}</div>
-                    <div style={{ fontSize: 15, color: C.grisTexto, lineHeight: 1.65 }}>{a.desc}</div>
-                  </div>
-                ))}
-              </div>
-
-              <div style={{ display: "flex", alignItems: "flex-start", gap: 16, padding: "clamp(20px, 2.4vw, 26px)", borderTop: `1px solid ${C.grisBorde}` }}>
-                <span style={{ marginTop: 3 }}>
-                  <Icon name={SISTEMA.icon} size={22} />
-                </span>
-                <div>
-                  <div style={{ fontWeight: 600, fontSize: 17, color: C.negro, marginBottom: 8 }}>{SISTEMA.title}</div>
-                  <div style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7 }}>{SISTEMA.desc}</div>
-                </div>
-              </div>
+            <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".18em", textTransform: "uppercase", color: C.grisTexto, marginBottom: 16 }}>
+              QUIÉN DIRIGE
             </div>
-          </Reveal>
-          <Reveal>
-            <p style={{ ...nota, marginTop: 16 }}>
-              La inversión en pauta no está contemplada en el fee. La gestión comercial y el cierre quedan a cargo de la empresa.
-            </p>
+            <h2 style={{ fontWeight: 300, fontSize: "clamp(30px, 4vw, 48px)", color: C.negro, lineHeight: 1.12, letterSpacing: "-.01em", margin: `0 0 clamp(32px, 4vw, 52px)` }}>
+              Directora de Marketing
+            </h2>
           </Reveal>
 
-          {/* EJECUCIÓN PROPIA */}
-          <Reveal>
-            <div style={{ background: "#fff", border: `1px solid ${C.grisBorde}`, borderLeft: `3px solid ${C.bordo}`, borderRadius: 12, padding: "clamp(24px, 3vw, 32px)", marginTop: "clamp(28px, 3.5vw, 40px)" }}>
-              <div style={{ fontWeight: 600, fontSize: 19, color: C.negro, marginBottom: 12 }}>Ejecución propia</div>
-              <p style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7, margin: 0, maxWidth: "46em" }}>
-                Redes, pauta y email marketing los ejecuta nuestro equipo. No dirigimos proveedores externos en esas áreas: el sistema requiere que quien ejecuta trabaje adentro de la misma plataforma y con la misma medición. Si tu sitio ya tiene proveedor, los cambios se coordinan con él.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal>
-            <div style={{ borderTop: `1px solid ${C.grisBorde}`, margin: "clamp(40px, 5vw, 56px) 0" }} />
-          </Reveal>
-
-          {/* DIRECCIÓN */}
-          <Reveal>
-            <h3 id="quien" style={{ fontWeight: 300, fontSize: "clamp(22px, 2.6vw, 30px)", color: C.bordo, lineHeight: 1.2, margin: "0 0 22px", scrollMarginTop: 68 }}>Directora de Marketing</h3>
-          </Reveal>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "clamp(32px, 4.5vw, 64px)", alignItems: "flex-start" }}>
-            <Reveal style={{ flex: "1 1 240px", maxWidth: 300, minWidth: 220 }}>
-              <div style={{ width: "100%", aspectRatio: "1 / 1", borderRadius: 8, overflow: "hidden", background: C.beige, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                {FOTO_DEBORA ? (
-                  <img src={FOTO_DEBORA} alt="Debora Nerini" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-                ) : (
-                  <span style={{ fontSize: 12, color: C.grisClaro }}>Foto de Debora</span>
-                )}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "clamp(32px, 5vw, 72px)", alignItems: "flex-start" }}>
+            {/* Foto */}
+            <Reveal style={{ flex: "0 0 auto" }}>
+              <div style={{ width: "clamp(200px, 22vw, 280px)", aspectRatio: "1 / 1", border: `1px solid ${C.grisBorde}`, overflow: "hidden", background: C.blanco }}>
+                {FOTO_DEBORA
+                  ? <img src={FOTO_DEBORA} alt="Debora Nerini" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                  : <span style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, color: C.grisClaro }}>Foto de Debora</span>
+                }
               </div>
             </Reveal>
 
-            <div style={{ flex: "1 1 420px", minWidth: 300 }}>
+            {/* Texto */}
+            <div style={{ flex: "1 1 360px", minWidth: 280 }}>
               <Reveal>
-                <div style={{ fontWeight: 600, fontSize: 20, color: C.cuero, marginBottom: 18 }}>Debora Nerini</div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px 18px", fontSize: 13, color: C.grisTexto, marginBottom: 26 }}>
-                  <span>Lic. en Comercialización (UADE)</span>
-                  <span style={{ color: C.grisBorde }}>·</span>
-                  <span>Especialización en Marketing Digital (UBA)</span>
-                  <span style={{ color: C.grisBorde }}>·</span>
-                  <span>15 años en marketing y negocios en grandes empresas</span>
+                <div style={{ marginBottom: 6 }}>
+                  <span style={{ fontWeight: 300, fontSize: "clamp(22px, 2.6vw, 30px)", color: C.negro }}>Debora Nerini</span>
                 </div>
-                <div style={{ borderTop: `1px solid ${C.grisBorde}`, marginBottom: 26 }} />
+                <div style={{ fontSize: 13, fontWeight: 600, letterSpacing: ".1em", textTransform: "uppercase", color: C.bordo, marginBottom: 20 }}>
+                  Directora de Marketing
+                </div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 12px", fontSize: 13, color: C.grisTexto, marginBottom: 24, lineHeight: 1.6 }}>
+                  <span>Lic. en Comercialización</span>
+                  <span style={{ color: C.grisBorde }}>·</span>
+                  <span>Especialización en Marketing Digital</span>
+                  <span style={{ color: C.grisBorde }}>·</span>
+                  <span>15 años en grandes empresas</span>
+                </div>
+                <div style={{ height: 1, background: C.grisBorde, marginBottom: 24 }} />
               </Reveal>
+
               <Reveal delay={80}>
-                <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: "40em" }}>
-                  <p style={{ fontSize: 17, color: C.grisTexto, lineHeight: 1.8, margin: 0 }}>
-                    Defino la estrategia, dirijo al equipo que ejecuta y respondo por el resultado.
-                  </p>
-                  <p style={{ fontSize: 17, color: C.grisTexto, lineHeight: 1.8, margin: 0 }}>
-                    El marketing pasa a funcionar como un sistema ordenado y constante, sin depender de tu seguimiento.
-                  </p>
-                </div>
+                <p style={{ fontSize: "clamp(15px, 1.5vw, 17px)", color: C.grisTexto, lineHeight: 1.8, margin: "0 0 18px", maxWidth: "38em" }}>
+                  Dirijo el marketing de cada empresa: defino el plan, coordino las áreas con nuestro equipo de especialistas y respondo por el resultado.
+                </p>
+                <p style={{ fontSize: "clamp(15px, 1.5vw, 17px)", color: C.grisTexto, lineHeight: 1.8, margin: 0, maxWidth: "38em" }}>
+                  El marketing pasa a funcionar como un sistema ordenado y constante, sin depender de la disponibilidad del dueño.
+                </p>
               </Reveal>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CON QUÉ EMPRESAS TRABAJAMOS */}
-      <section style={{ background: "#fff", padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}` }}>
+      {/* ── EL SISTEMA ──────────────────────────────── */}
+      <section id="sistema" style={{ background: C.blanco, padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}`, scrollMarginTop: 64 }}>
         <div style={{ maxWidth: MAX, margin: "0 auto" }}>
-          <Reveal>
-            <h2 style={{ ...h2, margin: `0 0 ${SECTION_GAP}` }}>Con qué empresas trabajamos</h2>
-          </Reveal>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "clamp(32px, 4.5vw, 56px)" }}>
-            <Reveal>
-              <div style={{ fontSize: 11, letterSpacing: ".14em", fontWeight: 600, color: C.cueroTexto, textTransform: "uppercase", marginBottom: 16 }}>Trabajamos con</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                {TRABAJAMOS_CON.map((t) => (
-                  <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: 12, fontSize: 16, color: C.grisTexto, lineHeight: 1.55 }}>
-                    <span style={{ width: 5, height: 5, borderRadius: "50%", background: C.bordo, flexShrink: 0, marginTop: 9 }} />
-                    <span>{t}</span>
-                  </div>
-                ))}
-              </div>
-            </Reveal>
-            <Reveal delay={70}>
-              <div style={{ fontSize: 11, letterSpacing: ".14em", fontWeight: 600, color: C.cueroTexto, textTransform: "uppercase", marginBottom: 16 }}>No trabajamos con</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                {NO_TRABAJAMOS_CON.map((t) => (
-                  <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: 12, fontSize: 16, color: C.grisTexto, lineHeight: 1.55 }}>
-                    <span style={{ width: 5, height: 5, borderRadius: "50%", background: C.grisClaro, flexShrink: 0, marginTop: 9 }} />
-                    <span>{t}</span>
-                  </div>
-                ))}
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
 
-      {/* EL SISTEMA */}
-      <section id="sistema" style={{ background: "#fff", padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}`, scrollMarginTop: 68 }}>
-        <div style={{ maxWidth: MAX, margin: "0 auto" }}>
-          <Reveal style={{ marginBottom: SECTION_GAP }}>
-            <h2 style={{ ...h2, margin: "0 0 20px" }}>El sistema</h2>
-            <p style={{ fontSize: 17, fontStyle: "italic", fontWeight: 300, color: C.grisTexto, lineHeight: 1.6, margin: 0 }}>
-              Todos los canales conectados a un solo lugar. Cada contacto entra con su origen, recibe respuesta y avanza por flujos de seguimiento.
+          <Reveal style={{ marginBottom: "clamp(32px, 4vw, 52px)" }}>
+            <h2 style={{ fontWeight: 300, fontSize: "clamp(30px, 4vw, 48px)", color: C.negro, lineHeight: 1.12, letterSpacing: "-.01em", margin: "0 0 16px" }}>
+              El sistema
+            </h2>
+            <p style={{ fontSize: "clamp(15px, 1.5vw, 17px)", color: C.grisTexto, lineHeight: 1.75, margin: 0, maxWidth: "40em", fontWeight: 300 }}>
+              Estructuramos el servicio en etapas para asegurar que funcione. Analizamos la situación de cada empresa y corregimos lo necesario antes de arrancar.
             </p>
           </Reveal>
 
+          {/* Diagrama: Dirección de Marketing → canales → CRM */}
           <Reveal>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 22 }}>
-              {ETAPAS.map((s, i) => (
-                <div key={s.num} style={{ gridColumn: `${i + 1} / 4`, gridRow: i + 1, borderRadius: 8, background: C.bordo, padding: "16px 20px" }}>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: C.cueroClaro, letterSpacing: ".14em", marginBottom: 6 }}>{s.num}</div>
-                  <div style={{ fontWeight: 600, fontSize: 18, color: C.beige, marginBottom: 6 }}>{s.name}</div>
-                  <p style={{ fontSize: 14, color: C.cueroClaro, lineHeight: 1.55, margin: 0 }}>{s.desc}</p>
+            {/* Bloque superior: Dirección de Marketing */}
+            <div style={{ background: C.blanco, border: `1px solid ${C.grisBorde}`, borderLeft: `4px solid ${C.bordo}`, padding: "18px 28px", marginBottom: 1 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".18em", textTransform: "uppercase", color: C.bordo, marginBottom: 4 }}>
+                LA BASE TRANSVERSAL
+              </div>
+              <div style={{ fontWeight: 600, fontSize: 18, color: C.negro, letterSpacing: ".01em" }}>
+                Dirección de Marketing
+              </div>
+            </div>
+
+            {/* Línea vertical */}
+            <div style={{ display: "flex", justifyContent: "center", padding: "0" }}>
+              <div style={{ width: 1, height: 20, background: C.grisBorde }} />
+            </div>
+
+            {/* 4 canales */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 1, background: C.grisBorde, marginBottom: 1 }}>
+              {CANALES.map((c, i) => (
+                <div key={i} style={{ background: C.blanco, padding: "20px 22px" }}>
+                  <div style={{ marginBottom: 12, color: C.bordo }}>
+                    <Icon name={c.ico} size={22} color={C.bordo} />
+                  </div>
+                  <div style={{ fontWeight: 600, fontSize: 14, color: C.negro, marginBottom: 4 }}>{c.label}</div>
+                  <div style={{ fontSize: 12, color: C.grisTexto }}>{c.sub}</div>
                 </div>
               ))}
             </div>
-            <div style={{ textAlign: "right", fontSize: 12, color: C.cueroTexto, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 22 }}>Conversión de venta →</div>
-          </Reveal>
 
-          <Reveal>
-            <div style={{ borderTop: `1px solid ${C.grisBorde}`, margin: "clamp(40px, 5vw, 56px) 0" }} />
-          </Reveal>
-
-          <Reveal>
-            <h3 style={{ fontWeight: 300, fontSize: "clamp(22px, 2.6vw, 30px)", color: C.bordo, lineHeight: 1.2, margin: "0 0 10px" }}>Gestión de Leads</h3>
-            <p style={{ fontSize: 16, fontStyle: "italic", fontWeight: 300, color: C.grisTexto, lineHeight: 1.6, margin: `0 0 ${SECTION_GAP}` }}>Un solo sistema, del primer clic al cierre.</p>
-          </Reveal>
-          <Reveal>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "20px 40px" }}>
-              <div>
-                <div style={{ ...eyebrow, marginBottom: 10 }}>Canales digitales</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  {DIGITALES.map(([ico, label]) => (
-                    <div key={label} style={chip}>
-                      <Icon name={ico} />
-                      {label}
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <div style={{ ...eyebrow, marginBottom: 10 }}>Canales offline</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  {OFFLINE.map(([ico, label]) => (
-                    <div key={label} style={chip}>
-                      <Icon name={ico} />
-                      {label}
-                    </div>
-                  ))}
-                </div>
-              </div>
+            {/* Línea vertical */}
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <div style={{ width: 1, height: 20, background: C.grisBorde }} />
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, padding: "18px 0" }}>
-              <span style={{ width: 1, height: 20, background: C.grisBorde }} />
-              <span style={{ display: "inline-flex", transform: "rotate(90deg)" }}>
-                <Icon name="action" size={22} />
-              </span>
-            </div>
-
-            <Card variant="brand">
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "28px 48px", alignItems: "flex-start", justifyContent: "space-between" }}>
-                <div style={{ flex: "0 1 260px" }}>
-                  <div style={{ fontWeight: 300, fontSize: 26, color: C.beige, lineHeight: 1.15, marginBottom: 8 }}>Marketing Centralizado</div>
-                  <div style={{ fontSize: 11, letterSpacing: ".14em", fontWeight: 600, color: C.cueroClaro, textTransform: "uppercase" }}>Todo en un CRM</div>
-                </div>
-                <div style={{ flex: "1 1 420px" }}>
-                  <p style={{ fontSize: 15, color: C.beige, lineHeight: 1.6, margin: 0 }}>Todos los canales quedan conectados en un mismo sistema, con respuesta automatizada, historial de contacto por lead y tratamiento automatizado de cada oportunidad.</p>
-                </div>
+            {/* Sistema Centralizado */}
+            <div style={{ background: C.blanco, border: `1px solid ${C.grisBorde}`, padding: "20px 28px" }}>
+              <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".18em", textTransform: "uppercase", color: C.grisTexto, marginBottom: 4 }}>
+                SISTEMA CENTRALIZADO
               </div>
-            </Card>
+              <div style={{ fontSize: 14, color: C.negro, lineHeight: 1.6 }}>
+                Contactos · automatizaciones · seguimiento · medición
+              </div>
+            </div>
           </Reveal>
+
+          {/* Separador */}
+          <div style={{ height: 1, background: C.grisBorde, margin: "clamp(40px, 5vw, 64px) 0" }} />
+
+          {/* Etapas: Presencia / Crecimiento / Nutrición */}
+          <Reveal style={{ marginBottom: "clamp(24px, 3vw, 36px)" }}>
+            <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".18em", textTransform: "uppercase", color: C.grisTexto, marginBottom: 12 }}>
+              PUESTA EN MARCHA
+            </div>
+            <div style={{ fontSize: 13, color: C.bordo, fontWeight: 600, letterSpacing: ".06em" }}>
+              01 Presencia &nbsp;/&nbsp; 02 Crecimiento &nbsp;/&nbsp; 03 Nutrición
+            </div>
+          </Reveal>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 1, background: C.grisBorde }}>
+            {ETAPAS.map((s, i) => (
+              <Reveal key={s.num} delay={i * 60}>
+                <div style={{ background: C.blanco, padding: "clamp(24px, 3vw, 36px)" }}>
+                  <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".14em", color: C.bordo, marginBottom: 12 }}>{s.num}</div>
+                  <div style={{ fontWeight: 600, fontSize: 20, color: C.negro, marginBottom: 12, lineHeight: 1.2 }}>{s.name}</div>
+                  <p style={{ fontSize: 14, color: C.grisTexto, lineHeight: 1.75, margin: "0 0 20px" }}>{s.desc}</p>
+                  <div style={{ fontSize: 12, color: C.grisTexto, letterSpacing: ".04em", borderTop: `1px solid ${C.grisBorde}`, paddingTop: 14 }}>{s.channels}</div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* PRIMEROS PASOS */}
-      <section id="empezamos" style={{ background: "#fff", padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}`, scrollMarginTop: 68 }}>
+      {/* ── GESTIÓN DE LEADS ────────────────────────── */}
+      <section style={{ background: C.blanco, padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}` }}>
         <div style={{ maxWidth: MAX, margin: "0 auto" }}>
           <Reveal>
-            <h2 style={{ ...h2, margin: "0 0 clamp(28px, 3.5vw, 40px)" }}>Primeros pasos</h2>
+            <h2 style={{ fontWeight: 300, fontSize: "clamp(30px, 4vw, 48px)", color: C.negro, lineHeight: 1.12, letterSpacing: "-.01em", margin: `0 0 clamp(16px, 2vw, 24px)` }}>
+              Gestión de leads
+            </h2>
           </Reveal>
-          <Reveal>
-            <div style={{ background: "#fff", border: `1px solid ${C.grisBorde}`, borderLeft: `3px solid ${C.bordo}`, borderRadius: 12, padding: "clamp(24px, 3vw, 32px)", marginBottom: 16 }}>
-              <div style={{ fontSize: 11, fontWeight: 600, color: C.cueroTexto, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 20 }}>Punto de partida</div>
-              <div style={{ position: "relative", marginBottom: 20 }}>
-                <div style={{ position: "absolute", top: 6, left: 6, right: 6, height: 1, background: C.grisBorde }} />
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20, position: "relative" }}>
-                  {PASOS.map((p) => (
-                    <div key={p.num} style={{ paddingTop: 26, position: "relative" }}>
-                      <span style={{ position: "absolute", top: 0, left: 0, width: 12, height: 12, borderRadius: "50%", background: C.bordo }} />
-                      <div style={{ fontSize: 11, fontWeight: 600, color: C.cueroTexto, letterSpacing: ".14em", marginBottom: 10 }}>{p.num}</div>
-                      <div style={{ fontWeight: 600, fontSize: 19, color: C.negro, marginBottom: 10 }}>{p.title}</div>
-                      <div style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7 }}>{p.desc}</div>
+          <Reveal delay={60}>
+            <p style={{ fontSize: "clamp(15px, 1.5vw, 17px)", color: C.grisTexto, lineHeight: 1.8, margin: `0 0 clamp(28px, 3.5vw, 44px)`, maxWidth: "46em", fontWeight: 300 }}>
+              Integramos todos los canales de comunicación de tu empresa en un CRM, para que cada contacto cuente con registro de origen y seguimiento activo hasta convertirse en cliente.
+            </p>
+          </Reveal>
+
+          <Reveal delay={120}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 1, background: C.grisBorde, marginBottom: 1 }}>
+              {/* Canales digitales */}
+              <div style={{ background: C.blanco, padding: "clamp(24px, 3vw, 36px)" }}>
+                <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".14em", textTransform: "uppercase", color: C.grisTexto, marginBottom: 16 }}>
+                  Canales digitales
+                </div>
+                {["Redes sociales", "Pauta digital", "Sitio web", "WhatsApp"].map(l => (
+                  <div key={l} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 0", borderBottom: `1px solid ${C.grisBorde}`, fontSize: 14, color: C.negro }}>
+                    <Icon name="check" size={14} color={C.bordo} />
+                    {l}
+                  </div>
+                ))}
+              </div>
+              {/* Canales offline */}
+              <div style={{ background: C.blanco, padding: "clamp(24px, 3vw, 36px)" }}>
+                <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".14em", textTransform: "uppercase", color: C.grisTexto, marginBottom: 16 }}>
+                  Canales offline
+                </div>
+                {["Eventos y ferias", "Referidos"].map(l => (
+                  <div key={l} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 0", borderBottom: `1px solid ${C.grisBorde}`, fontSize: 14, color: C.negro }}>
+                    <Icon name="check" size={14} color={C.bordo} />
+                    {l}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Flecha */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "4px 0" }}>
+              <div style={{ width: 1, height: 24, background: C.grisBorde }} />
+            </div>
+
+            {/* CRM */}
+            <div style={{ background: C.blanco, border: `1px solid ${C.grisBorde}`, padding: "clamp(24px, 3vw, 36px)" }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "24px 48px", alignItems: "flex-start", justifyContent: "space-between" }}>
+                <div>
+                  <div style={{ fontWeight: 300, fontSize: "clamp(22px, 2.4vw, 28px)", color: C.negro, lineHeight: 1.2, marginBottom: 6 }}>
+                    Sistema Centralizado
+                  </div>
+                  <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".14em", color: C.bordo, textTransform: "uppercase" }}>
+                    Todo en un CRM
+                  </div>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  {["Registro de origen de cada contacto.", "Historial de puntos de contacto.", "Seguimiento activo de leads fríos."].map(t => (
+                    <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: 10, fontSize: 14, color: C.grisTexto, lineHeight: 1.5 }}>
+                      <Icon name="check" size={14} color={C.bordo} />
+                      {t}
                     </div>
                   ))}
                 </div>
               </div>
-              <p style={{ ...nota, margin: 0 }}>El diagnóstico y la puesta en marcha están incluidos en el servicio. No hay costo de arranque aparte.</p>
             </div>
-          </Reveal>
-          <Reveal>
-            <div style={{ background: "#fff", border: `1px solid ${C.grisBorde}`, borderLeft: `3px solid ${C.bordo}`, borderRadius: 12, padding: "clamp(24px, 3vw, 32px)" }}>
-              <div style={{ fontSize: 11, fontWeight: 600, color: C.cueroTexto, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 20 }}>Gestión mensual</div>
-              <div style={{ fontWeight: 600, fontSize: 19, color: C.negro, marginBottom: 10 }}>El mes de trabajo</div>
-              <div style={{ fontSize: 16, color: C.grisTexto, lineHeight: 1.7 }}>Ejecución de las cuatro áreas, medición en un único tablero y reunión mensual de resultados.</div>
+
+            {/* Tablero */}
+            <div style={{ background: C.blanco, border: `1px solid ${C.grisBorde}`, padding: "clamp(20px, 2.5vw, 28px)", marginTop: 1 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+                <Icon name="chart" size={20} color={C.bordo} />
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: 15, color: C.negro }}>Tablero de medición</div>
+                  <div style={{ fontSize: 14, color: C.grisTexto, marginTop: 3, lineHeight: 1.6 }}>
+                    Seguimiento de redes sociales, sitio web, pauta digital, email marketing y medición comercial.
+                  </div>
+                </div>
+              </div>
             </div>
           </Reveal>
         </div>
       </section>
 
-      {/* PREGUNTAS FRECUENTES */}
-      <section id="preguntas" style={{ background: "#fff", padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}`, scrollMarginTop: 68 }}>
-        <div style={{ maxWidth: MAX, margin: "0 auto" }}>
+      {/* ── CTA FINAL ───────────────────────────────── */}
+      <section style={{ position: "relative", background: C.bordo, padding: `clamp(52px, 6.5vw, 88px) ${PAD_X}`, overflow: "hidden" }}>
+        <DiagonalAccent side="right" color="rgba(223,214,225,0.18)" opacity={1} />
+        <div style={{ position: "relative", maxWidth: 820, margin: "0 auto" }}>
           <Reveal>
-            <h2 style={{ ...h2, margin: `0 0 ${SECTION_GAP}` }}>Preguntas frecuentes</h2>
-          </Reveal>
-          <Reveal>
-            <Preguntas />
-          </Reveal>
-        </div>
-      </section>
-
-      {/* CIERRE */}
-      <section style={{ position: "relative", background: C.bordo, padding: `clamp(52px, 6.5vw, 84px) ${PAD_X}`, overflow: "hidden" }}>
-        <Pattern opacity={0.045} color={C.cueroClaro} />
-        <div style={{ position: "relative", maxWidth: 900, margin: "0 auto" }}>
-          <Reveal>
-            <h2 style={{ fontWeight: 300, fontSize: "clamp(34px, 4.6vw, 52px)", color: C.beige, lineHeight: 1.12, letterSpacing: "-.01em", margin: "0 0 22px" }}>
-              Reunión inicial
+            <h2 style={{ fontWeight: 300, fontSize: "clamp(30px, 4.2vw, 50px)", color: C.beige, lineHeight: 1.12, letterSpacing: "-.01em", margin: "0 0 20px" }}>
+              ¿Querés tener un equipo externo de marketing?
             </h2>
           </Reveal>
           <Reveal delay={80}>
-            <p style={{ fontStyle: "italic", fontWeight: 300, fontSize: "clamp(17px, 1.7vw, 20px)", color: C.cueroClaro, lineHeight: 1.5, margin: "0 0 36px" }}>
-              Media hora de conversación para revisar el estado actual de tu empresa y definir el punto de partida.
+            <p style={{ fontStyle: "italic", fontWeight: 300, fontSize: "clamp(16px, 1.6vw, 19px)", color: C.cueroClaro, lineHeight: 1.5, margin: "0 0 36px" }}>
+              Agendemos una reunión y te cuento cómo podemos trabajar.
             </p>
           </Reveal>
           <Reveal delay={150}>
-            <Btn href={AGENDA} variant="inverse" ubicacion="cierre">Agendá tu reunión</Btn>
+            <BtnWA variant="inverse" />
           </Reveal>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer style={{ background: C.negro, padding: `clamp(40px, 6vw, 56px) ${PAD_X} 28px` }}>
-        <div style={{ maxWidth: MAX, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "32px 56px", marginBottom: 40 }}>
-          <Logo dark size={24} />
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "28px 56px" }}>
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".14em", textTransform: "uppercase", color: C.cueroClaro, marginBottom: 14 }}>Contacto</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <a href="mailto:debora@nerini.ar" onClick={() => medir("clic_contacto", { canal: "email", ubicacion: "footer" })} style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>debora@nerini.ar</a>
-                <a href={WA} target="_blank" rel="noopener noreferrer" onClick={() => medir("clic_contacto", { canal: "whatsapp", ubicacion: "footer" })} style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>WhatsApp · +54 9 11 2241 9299</a>
-              </div>
-            </div>
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".14em", textTransform: "uppercase", color: C.cueroClaro, marginBottom: 14 }}>Perfiles</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <a href="https://nerini.ar" style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>nerini.ar</a>
-                <a href="https://instagram.com/nerini.marketing" target="_blank" rel="noopener noreferrer" onClick={() => medir("clic_perfil", { red: "instagram" })} style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>@nerini.marketing</a>
-                <a href="https://linkedin.com/company/nerini" target="_blank" rel="noopener noreferrer" onClick={() => medir("clic_perfil", { red: "linkedin" })} style={{ fontSize: 15, color: C.beige, textDecoration: "none" }}>linkedin.com/company/nerini</a>
-              </div>
-            </div>
+      {/* ── FOOTER ──────────────────────────────────── */}
+      <footer style={{ background: C.negro, padding: `clamp(40px, 5vw, 56px) ${PAD_X} 28px`, borderTop: `1px solid ${C.grisBorde}` }}>
+        <div style={{ maxWidth: MAX, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 32, marginBottom: 36 }}>
+          <Logo dark size={22} />
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            <a href="mailto:debora@nerini.ar" style={{ fontSize: 14, color: C.beige, textDecoration: "none" }}>debora@nerini.ar</a>
+            <a href="https://nerini.ar" style={{ fontSize: 14, color: C.cueroClaro, textDecoration: "none" }}>nerini.ar</a>
           </div>
         </div>
-        <div style={{ maxWidth: MAX, margin: "0 auto", borderTop: "1px solid rgba(232,226,217,.14)", paddingTop: 24, textAlign: "center", fontSize: 12, color: C.grisClaro, opacity: 0.6 }}>
-          © 2026 NERINI. Todos los derechos reservados.
+        <div style={{ maxWidth: MAX, margin: "0 auto", borderTop: "1px solid rgba(255,255,255,.12)", paddingTop: 20, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+          <span style={{ fontSize: 11, color: C.cueroClaro, opacity: 0.7 }}>© 2026 NERINI. Todos los derechos reservados.</span>
+          <span style={{ fontSize: 11, color: C.cueroClaro, opacity: 0.6, letterSpacing: ".08em" }}>DEPARTAMENTO EXTERNO DE MARKETING</span>
         </div>
       </footer>
 
