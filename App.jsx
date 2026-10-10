@@ -23,27 +23,29 @@ function Icon({name, size=26}) {
 function Brand({inverse=false}) { return <img className="brand-img" src={inverse?'/nerini-logo-inverso.png':'/nerini-logo-oficial.png'} alt="NERINI Marketing" />; }
 
 function ServiceWheel(){
-  return <div className="wheel-wrap" aria-label="Servicio integral de NERINI: Presencia, Crecimiento y Nutrición, con redes sociales, pauta digital, sitio web, email marketing y CRM centralizado">
-    <div className="wheel-ring">
-      <svg className="wheel-label-svg" viewBox="0 0 600 600" aria-hidden="true">
-        <defs>
-          <path id="nerini-presencia" d="M 100,487 A 265,265 0 0,1 100,113" />
-          <path id="nerini-crecimiento" d="M 363,43 A 265,265 0 0,1 558,340" />
-          <path id="nerini-nutricion" d="M 184,538 A 265,265 0 0,0 416,538" />
-        </defs>
-        <text><textPath href="#nerini-presencia" startOffset="50%" textAnchor="middle">PRESENCIA</textPath></text>
-        <text><textPath href="#nerini-crecimiento" startOffset="50%" textAnchor="middle">CRECIMIENTO</textPath></text>
-        <text><textPath href="#nerini-nutricion" startOffset="50%" textAnchor="middle">NUTRICIÓN</textPath></text>
-      </svg>
-      <div className="wheel-interior">
-        <div className="wheel-quadrant"><strong>Redes<br/>sociales</strong><small>Instagram · LinkedIn</small></div>
-        <div className="wheel-quadrant"><strong>Pauta<br/>digital</strong><small>Meta Ads · Google Ads</small></div>
-        <div className="wheel-quadrant"><strong>Sitio<br/>web</strong><small>Estructura · medición</small></div>
-        <div className="wheel-quadrant"><strong>Email<br/>marketing</strong><small>Envíos · secuencias</small></div>
-      </div>
-      <div className="wheel-crm"><b>CRM</b><span>Sistema centralizado</span><small>Clientify</small></div>
+  // Arcos SVG independientes: el texto sigue la curva y no se recorta con CSS.
+  return <div className="wheel-wrap"><div className="wheel-ring" role="img" aria-label="Servicio integral: Presencia, Crecimiento y Nutrición; redes sociales, pauta digital, sitio web, email marketing y CRM centralizado">
+    <svg className="wheel-arcs" viewBox="0 0 600 600" aria-hidden="true">
+      <defs>
+        <path id="arc-presencia" d="M 307 43 A 257 257 0 0 0 119 483" />
+        <path id="arc-crecimiento" d="M 321 44 A 257 257 0 0 1 553 346" />
+        <path id="arc-nutricion" d="M 547 367 A 257 257 0 0 1 146 506" />
+      </defs>
+      <path d="M 307 43 A 257 257 0 0 0 119 483" fill="none" stroke="#6B1F2A" strokeWidth="59" />
+      <path d="M 321 44 A 257 257 0 0 1 553 346" fill="none" stroke="#A0714A" strokeWidth="59" />
+      <path d="M 547 367 A 257 257 0 0 1 146 506" fill="none" stroke="#C9BFBA" strokeWidth="59" />
+      <text><textPath href="#arc-presencia" startOffset="53%" textAnchor="middle">PRESENCIA</textPath></text>
+      <text><textPath href="#arc-crecimiento" startOffset="48%" textAnchor="middle">CRECIMIENTO</textPath></text>
+      <text><textPath href="#arc-nutricion" startOffset="50%" textAnchor="middle">NUTRICIÓN</textPath></text>
+    </svg>
+    <div className="wheel-interior">
+      <div className="wheel-quadrant"><strong>Redes<br/>sociales</strong><small>Instagram · LinkedIn</small></div>
+      <div className="wheel-quadrant"><strong>Pauta<br/>digital</strong><small>Meta Ads · Google Ads</small></div>
+      <div className="wheel-quadrant"><strong>Sitio<br/>web</strong><small>Estructura · medición</small></div>
+      <div className="wheel-quadrant"><strong>Email<br/>marketing</strong><small>Envíos · secuencias</small></div>
     </div>
-  </div>;
+    <div className="wheel-crm"><b>CRM</b><span>Sistema centralizado</span><small>Clientify</small></div>
+  </div></div>;
 }
 
 export default function NeriniWeb(){
@@ -150,6 +152,55 @@ export default function NeriniWeb(){
       @media(max-width:900px){.hero-photo{width:38%;opacity:.32}.hero{min-height:500px}.hero .lead{max-width:570px}.footer-feature-grid{gap:35px}}
       @media(max-width:700px){.hero-photo{position:relative;order:2;width:100%;height:235px;clip-path:none;opacity:1;background-position:center 40%}.hero{display:flex;flex-direction:column;align-items:stretch;padding:0}.hero .container{padding-top:70px;padding-bottom:65px;order:1}.hero h1{font-size:clamp(41px,9vw,58px)}.hero .lead{font-size:16px}.section{padding:70px 0}.service-section{padding:78px 0}.wheel-label-svg text{font-size:16px;letter-spacing:2px}.bio-layout{grid-template-columns:1fr;gap:22px}.portrait-wrap{width:190px}.footer-feature{background:#F1ECF2;padding:65px 0}.footer-feature-grid{grid-template-columns:1fr;gap:40px}.footer-cta{border-left:0;border-top:1px solid #C8BCCC;padding:35px 0 0}.footer-bottom .footer-inner{align-items:flex-start}.footer-message h2{font-size:clamp(36px,8vw,46px)}}
       @media(max-width:440px){.wheel-label-svg text{font-size:15px;letter-spacing:1px}.hero-actions{gap:15px}.problem{padding:26px 0!important}}
+      /* Entrega revisada, composición responsive */
+      .nerini-site{overflow-x:clip}.container{width:min(1180px,calc(100% - 76px))}
+      .section{padding:104px 0}.section-top{margin-bottom:38px}.nav-inner{min-height:80px}.brand-img{width:145px}
+      .hero{position:relative;min-height:610px;padding:110px 0 105px;background:white}
+      .hero .container{position:relative;z-index:2}.hero h1{font-size:clamp(47px,5.05vw,72px);max-width:610px;margin:24px 0}
+      .hero .lead{max-width:550px;font-size:17px;line-height:1.72}
+      .hero-photo{position:absolute;right:0;top:0;bottom:0;width:45%;background:url('/equipo-referencia.jpg') center/cover no-repeat;clip-path:polygon(12% 0,100% 0,100% 100%,0 100%);filter:saturate(.78)}
+      .hero-rule{display:none}.hero-top{max-width:550px}.hero-actions{margin-top:28px}
+      .problems-heading{grid-template-columns:1.3fr .7fr;gap:65px;align-items:end;margin-bottom:48px}
+      .problems-heading h2{font-size:clamp(37px,3.9vw,52px)}.problem-grid{border-top:1px solid var(--linea);border-bottom:1px solid var(--linea)}
+      .problem{padding:34px 30px 34px}.problem h3{font-size:17px}.problem p{font-size:14px;line-height:1.7}.problem svg{margin-bottom:22px}
+      .service-section{padding:110px 0}.service-section .section-top{margin-bottom:46px}
+      .wheel-wrap{margin:0 auto}.wheel-ring{width:min(560px,calc(100vw - 44px));background:none;border-radius:0;isolation:auto}
+      .wheel-ring:before{display:none}.wheel-arcs{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0;overflow:visible}
+      .wheel-arcs text{font:700 15px 'Raleway',Arial,sans-serif;letter-spacing:3px;fill:white}
+      .wheel-interior{inset:13%;border:1px solid var(--linea);z-index:1}
+      .wheel-quadrant strong{font-size:clamp(15px,2vw,24px)}.wheel-quadrant small{font-size:clamp(8px,.9vw,11px)}
+      .wheel-crm{z-index:2;width:25%}.wheel-crm span{font-size:clamp(7px,.75vw,10px)}
+      #seguimiento .section-top{max-width:850px}.tracking-layout{margin-top:42px}.tracking-card{padding:32px}.tracking-card h3{font-size:17px}
+      .tracking-bar{margin-top:22px;padding:26px 30px}.tracking-bar strong{font-size:17px}
+      #quien{padding:108px 0 118px}.bio-layout{max-width:1000px;grid-template-columns:220px minmax(0,1fr);gap:64px}
+      .portrait-wrap{width:220px}.bio-heading{font-size:clamp(42px,4vw,55px)}.bio-credentials{font-size:15px}.bio-text{font-size:16px}
+      .footer{border-top:0}.footer-feature{background:#F0EAF1;padding:96px 0 92px}
+      .footer-feature-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:85px;align-items:center}
+      .footer-message h2{font-size:clamp(40px,4.25vw,60px);line-height:1.13;margin:19px 0 20px;max-width:610px}
+      .footer-message p{font-size:17px;color:var(--gris);margin:0 0 26px}
+      .footer-message .eyebrow{color:#8B5F3D}.footer-cta{border-left:1px solid #C8BCCC;padding-left:65px}
+      .footer-cta h2{font-size:clamp(30px,2.9vw,41px);line-height:1.2;margin:0 0 14px}
+      .footer-cta p{font-size:15px;color:var(--gris);margin:0 0 25px}
+      .footer-contact{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+      .footer-contact a{font-size:15px;color:var(--tinta);overflow-wrap:anywhere}
+      .footer-bottom{background:#fff;padding:28px 0}.footer-bottom .brand-img{width:125px}.footer-bottom .copyright{margin:0}
+      @media(max-width:980px){.hero-photo{width:39%;opacity:.6}.hero h1{max-width:570px}.hero .lead{max-width:510px}.footer-feature-grid{gap:45px}.footer-cta{padding-left:35px}}
+      @media(max-width:700px){.container{width:min(100% - 40px,580px)}.section{padding:76px 0}
+      .hero{display:flex;flex-direction:column;min-height:0;padding:0}.hero .container{order:1;padding-top:78px;padding-bottom:63px}
+      .hero-photo{position:relative;order:2;width:100%;height:275px;opacity:1;clip-path:none;background-position:center 40%}
+      .hero h1{font-size:clamp(42px,10vw,58px);max-width:100%}.hero .lead{font-size:16px;max-width:100%}
+      .problems-heading{grid-template-columns:1fr;gap:14px;margin-bottom:22px}.problems-heading h2{font-size:clamp(34px,8vw,44px)}.problems-aside{font-size:15px}
+      .problem-grid{grid-template-columns:1fr 1fr}.problem{padding:25px 15px!important;border-right:1px solid var(--linea);border-bottom:1px solid var(--linea)}
+      .problem:nth-child(2n){border-right:0}.problem:nth-last-child(-n+2){border-bottom:0}.problem h3{font-size:15px}.problem p{font-size:13px}
+      .service-section{padding:78px 0}.wheel-ring{width:min(100%,480px)}.wheel-arcs text{font-size:14px;letter-spacing:2.2px}
+      .wheel-quadrant{padding:5px 0;gap:4px}.wheel-quadrant strong{font-size:clamp(13px,4vw,20px)}.wheel-quadrant small{font-size:clamp(7px,1.8vw,9px)}
+      .wheel-crm b{font-size:clamp(20px,5vw,28px)}.wheel-crm small{font-size:clamp(9px,2.6vw,13px)}.wheel-crm span{font-size:clamp(6px,1.6vw,8px)}
+      .tracking-layout{grid-template-columns:1fr;gap:16px}.tracking-bar{flex-direction:column;align-items:flex-start;gap:10px}
+      #quien{padding:78px 0 90px}.bio-layout{grid-template-columns:1fr;gap:26px}.portrait-wrap{width:190px}
+      .footer-feature{padding:72px 0;background:#F0EAF1}.footer-feature-grid{grid-template-columns:1fr;gap:40px}
+      .footer-cta{border-left:0;border-top:1px solid #C8BCCC;padding:38px 0 0}.footer-message h2{font-size:clamp(38px,9vw,52px)}
+      .footer-inner{align-items:flex-start;gap:18px}.footer-bottom{padding:25px 0}}
+      @media(max-width:430px){.wheel-arcs text{font-size:15px;letter-spacing:1.1px}.problem-grid{grid-template-columns:1fr}.problem{padding:20px 0!important;border-right:0!important}.problem:nth-child(3){border-bottom:1px solid var(--linea)}.wheel-quadrant strong{font-size:14px}.wheel-quadrant small{font-size:7px}.hero-actions{gap:12px}}
       @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
     `}</style>
     <header className="nav"><div className="container nav-inner"><a href="#inicio" aria-label="NERINI inicio"><Brand/></a><button className="menu-toggle" aria-expanded={open} aria-label="Abrir menú" onClick={()=>setOpen(!open)}>☰</button><nav className={'nav-links'+(open?' open':'')}><a href="#servicio" onClick={()=>setOpen(false)}>Servicio integral</a><a href="#seguimiento" onClick={()=>setOpen(false)}>Seguimiento</a><a href="#quien" onClick={()=>setOpen(false)}>Quién dirige</a><a className="button button-outline" href={AGENDA} target="_blank" rel="noreferrer">Agendemos una llamada</a></nav></div></header>
