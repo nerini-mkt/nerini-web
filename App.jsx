@@ -1,545 +1,119 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useState } from 'react';
 
-const FOTO_DEBORA = "/debora.png"; // Conservar la foto original en public/debora.png
+const WA = 'https://wa.me/5491122419299?text=Hola%20Debora%2C%20me%20interesa%20saber%20m%C3%A1s%20sobre%20tus%20servicios';
+const AGENDA = 'https://nerini.ar/agenda';
 
-const WA =
-  "https://wa.me/5491122419299?text=Hola%20Debora%2C%20me%20interesa%20saber%20m%C3%A1s%20sobre%20tus%20servicios";
-
-/* ── Paleta 2026 (Manual de Marca) ───────────────────
-   Fondo blanco como base. Malva solo en detalles.
-   Evitar superficies oscuras dominantes.            */
-const C = {
-  bordo:       "#6B1F2A",   // identidad y acentos
-  bordoHover:  "#571821",
-  negro:       "#3A1A1F",   // títulos y lectura
-  blanco:      "#FFFFFF",   // fondo principal
-  grisTexto:   "#6B6660",   // párrafos
-  grisBorde:   "#E8E2D9",   // bordes y separadores (cuero claro)
-  grisClaro:   "#A8A39E",   // captions y terciarios
-  malva:       "#DFD6E1",   // detalles discretos — nuevo 2026
-  malvaOsc:    "#C8BCCC",   // malva más oscuro para bordes
-  cueroClaro:  "#D4B896",   // versión clara para texto sobre bordó
-  beige:       "#FAF5EE",   // texto sobre fondos oscuros
-};
-
-const SANS = "'Raleway','Open Sans',system-ui,-apple-system,sans-serif";
-
-
-const PAD_X = "clamp(20px, 5vw, 48px)";
-const PAD_Y = "clamp(44px, 5.5vw, 72px)";
-const MAX = 1120;
-
-/* ── fuentes ──────────────────────────────────────── */
-function useBrandFonts() {
-  useEffect(() => {
-    const href =
-      "https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Arimo:wght@700&display=swap";
-    if (document.querySelector(`link[href="${href}"]`)) return;
-    const l = document.createElement("link");
-    l.rel = "stylesheet";
-    l.href = href;
-    document.head.appendChild(l);
-  }, []);
-}
-
-/* ── reveal on scroll ─────────────────────────────── */
-function useInView() {
-  const ref = useRef(null);
-  const [v, setV] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) { setV(true); return; }
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setV(true); obs.disconnect(); } },
-      { threshold: 0.1, rootMargin: "0px 0px -6% 0px" }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-  return [ref, v];
-}
-
-function Reveal({ children, delay = 0, style = {} }) {
-  const [ref, v] = useInView();
-  return (
-    <div
-      ref={ref}
-      style={{
-        opacity: v ? 1 : 0,
-        transform: v ? "none" : "translateY(14px)",
-        transition: `opacity .55s cubic-bezier(.2,0,0,1) ${delay}ms, transform .55s cubic-bezier(.2,0,0,1) ${delay}ms`,
-        ...style,
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-/* ── Diagonal decorativa (reemplaza N-pattern) ────── */
-function DiagonalAccent({ side = "right", color = C.malva, opacity = 1 }) {
-  const isRight = side === "right";
-  return (
-    <svg
-      aria-hidden="true"
-      style={{
-        position: "absolute",
-        [isRight ? "right" : "left"]: 0,
-        top: 0,
-        bottom: 0,
-        height: "100%",
-        width: "clamp(120px, 18vw, 240px)",
-        pointerEvents: "none",
-        opacity,
-      }}
-      preserveAspectRatio="none"
-      viewBox="0 0 240 600"
-    >
-      {/* 3 líneas diagonales paralelas, trazo fino */}
-      <line x1={isRight ? 200 : 40} y1="0" x2={isRight ? 40 : 200} y2="600" stroke={color} strokeWidth="1" />
-      <line x1={isRight ? 220 : 20} y1="0" x2={isRight ? 60 : 220} y2="600" stroke={color} strokeWidth="1" />
-      <line x1={isRight ? 240 : 0}  y1="0" x2={isRight ? 80 : 240} y2="600" stroke={color} strokeWidth="1" />
-    </svg>
-  );
-}
-
-/* ── Logo (construcción tipográfica del manual) ───── */
-function Logo({ dark = false, size = 21 }) {
-  return <img src={dark ? "/nerini-logo-inverso.png" : "/nerini-logo-oficial.png"}
-    alt="NERINI Marketing" style={{ display: "block", width: size * 4.25, height: "auto", objectFit: "contain" }} />;
-}
-
-/* ── Iconos de trazo (lineales, per manual §05) ───── */
-function Icon({ name = "check", size = 16, color = C.bordo }) {
-  const paths = {
-    check:  <polyline points="4 12.5 9.5 18 20 6" />,
-    arrow:  <><line x1="4" y1="12" x2="20" y2="12" /><polyline points="14 6 20 12 14 18" /></>,
-    grid:   <><rect x="4" y="4" width="7" height="7" rx="1" /><rect x="13" y="4" width="7" height="7" rx="1" /><rect x="4" y="13" width="7" height="7" rx="1" /><rect x="13" y="13" width="7" height="7" rx="1" /></>,
-    chart:  <><polyline points="4 18 10 11 15 14 20 7" /><polyline points="16 7 20 7 20 11" /></>,
-    email:  <><rect x="4" y="6" width="16" height="13" rx="1.5" /><polyline points="4 6 12 13 20 6" /></>,
-    redes:  <><circle cx="6" cy="12" r="2.5" /><circle cx="18" cy="5" r="2.5" /><circle cx="18" cy="19" r="2.5" /><line x1="8" y1="11" x2="16" y2="6" /><line x1="8" y1="13" x2="16" y2="18" /></>,
-    pauta:  <><rect x="4" y="4" width="16" height="16" rx="1.5" /><line x1="4" y1="9" x2="20" y2="9" /><line x1="9" y1="4" x2="9" y2="9" /></>,
-    sitio:  <><rect x="4" y="5" width="16" height="14" rx="1.5" /><line x1="4" y1="9" x2="20" y2="9" /><circle cx="7.5" cy="7" r=".8" fill="currentColor" /><circle cx="10.5" cy="7" r=".8" fill="currentColor" /></>,
-    crm:    <><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="3" /><line x1="12" y1="4" x2="12" y2="9" /><line x1="12" y1="15" x2="12" y2="20" /><line x1="4" y1="12" x2="9" y2="12" /><line x1="15" y1="12" x2="20" y2="12" /></>,
-    person: <><circle cx="12" cy="8" r="3.5" /><path d="M5.5 20a6.5 6.5 0 0 1 13 0" /></>,
-    measure:<><polyline points="4 16 9 10 14 13 20 6" /><line x1="4" y1="20" x2="20" y2="20" opacity=".4" /></>,
+const problemas = [
+  { icon:'network', titulo:'Diferentes proveedores. Diferentes estrategias.', detalle:'Cada proveedor ejecuta su área sin una estrategia integral que los coordine.' },
+  { icon:'person', titulo:'El marketing lo planificás vos.', detalle:'La planificación y ejecución dependen de tu disponibilidad permanente.' },
+  { icon:'chart', titulo:'Invertís sin medir el retorno.', detalle:'Reportes aislados de cada proveedor, sin un tablero que muestre el resultado conjunto.' },
+  { icon:'target', titulo:'Los leads no tienen seguimiento.', detalle:'No hay registro de origen ni proceso definido para convertirlos en oportunidades de venta.' },
+];
+const etapas = [
+  { n:'01', title:'Presencia', content:'Sitio web · Instagram · LinkedIn' },
+  { n:'02', title:'Crecimiento', content:'Meta Ads · Google Ads' },
+  { n:'03', title:'Nutrición', content:'Email marketing · flujos de seguimiento' },
+];
+function Icon({name, size=26}) {
+  const base = {width:size,height:size,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:1.5,strokeLinecap:'round',strokeLinejoin:'round','aria-hidden':true};
+  const shapes = {
+    network:<><circle cx="5" cy="12" r="2.5"/><circle cx="18" cy="5" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M7.3 10.9L15.7 6.2M7.3 13.1l8.4 4.7"/></>,
+    person:<><circle cx="12" cy="7" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></>,
+    chart:<><path d="M3 20h18M4 16l5-6 5 3 6-8"/></>,
+    target:<><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v18M3 12h18"/></>,
+    arrow:<><path d="M4 12h16m-6-6 6 6-6 6"/></>,
   };
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-      stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
-      aria-hidden="true" style={{ display: "inline-block", flexShrink: 0 }}>
-      {paths[name] || paths.check}
-    </svg>
-  );
+  return <svg {...base}>{shapes[name] || shapes.arrow}</svg>;
 }
+function Brand({inverse=false}) { return <img className="brand-img" src={inverse?'/nerini-logo-inverso.png':'/nerini-logo-oficial.png'} alt="NERINI Marketing" />; }
 
-/* ── Botón WA ─────────────────────────────────────── */
-function BtnWA({ variant = "primary", size = "lg", children = "Hablemos por WhatsApp" }) {
-  const [h, setH] = useState(false);
-  const sz = { sm: { padding: "7px 16px", fontSize: 13 }, lg: { padding: "13px 28px", fontSize: 15 } };
-  const sk = {
-    primary: { background: h ? C.bordoHover : C.bordo, color: C.beige, border: `1px solid ${C.bordo}` },
-    secondary: { background: h ? "#f7f2ec" : C.blanco, color: C.bordo, border: `1px solid ${C.bordo}` },
-    inverse: { background: h ? C.blanco : C.beige, color: C.bordo, border: `1px solid ${C.beige}` },
-  };
-  return (
-    <a href={WA} target="_blank" rel="noopener noreferrer"
-      onMouseEnter={() => setH(true)} onMouseLeave={() => setH(false)}
-      style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", textDecoration: "none",
-        fontFamily: SANS, fontWeight: 600, letterSpacing: ".01em", lineHeight: 1.1, borderRadius: 4,
-        transition: "background .18s ease, color .18s ease", ...sz[size], ...sk[variant] }}>
-      {children}
-    </a>
-  );
-}
-
-/* ── datos ────────────────────────────────────────── */
-const PROBLEMAS = [
-  { icon: "redes",   title: "Diferentes proveedores. Diferentes estrategias.", desc: "Cada proveedor ejecuta su área sin una estrategia integral que los coordine." },
-  { icon: "person",  title: "El marketing lo planificás vos.", desc: "La planificación y ejecución dependen de tu disponibilidad permanente." },
-  { icon: "measure", title: "Invertís sin medir el retorno.", desc: "Reportes aislados de cada proveedor, sin un tablero que muestre el resultado conjunto." },
-  { icon: "crm",     title: "Los leads no tienen seguimiento.", desc: "No hay registro de origen ni proceso definido para convertirlos en oportunidades de venta." },
-];
-
-const CANALES = [
-  { ico: "redes", label: "Redes sociales", sub: "Instagram · LinkedIn" },
-  { ico: "pauta", label: "Pauta digital",  sub: "Meta Ads · Google Ads" },
-  { ico: "sitio", label: "Sitio web",      sub: "Estructura · medición" },
-  { ico: "email", label: "Email marketing",sub: "Envíos · secuencias" },
-];
-
-const ETAPAS = [
-  { num: "01", name: "Presencia",   desc: "La base digital de la empresa. Presencia y mensajes consistentes donde están los clientes.",     channels: "Sitio web · Instagram · LinkedIn" },
-  { num: "02", name: "Crecimiento", desc: "Generación continua de demanda, sin depender exclusivamente de alcance orgánico.",               channels: "Meta Ads · Google Ads" },
-  { num: "03", name: "Nutrición",   desc: "Seguimiento de cada contacto hasta la conversación de venta.",                                   channels: "Email Marketing" },
-];
-
-/* ── whatsapp flotante ────────────────────────────── */
-function FloatingWA() {
-  const [h, setH] = useState(false);
-  return (
-    <a href={WA} target="_blank" rel="noopener noreferrer" aria-label="Escribinos por WhatsApp"
-      onMouseEnter={() => setH(true)} onMouseLeave={() => setH(false)}
-      style={{ position: "fixed", right: "clamp(16px, 3vw, 28px)", bottom: "clamp(16px, 3vw, 28px)", zIndex: 90,
-        width: 52, height: 52, borderRadius: "50%",
-        background: h ? C.bordoHover : C.bordo, color: C.beige,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        boxShadow: "0 4px 16px rgba(107,31,42,.30)",
-        transform: h ? "translateY(-2px)" : "none",
-        transition: "background .18s ease, transform .18s ease" }}>
-      <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884a9.82 9.82 0 0 1 6.988 2.896 9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.8 11.8 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.9 11.9 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 0 0-3.48-8.413" />
+function ServiceWheel(){
+  return <div className="wheel-wrap" aria-label="Servicio integral: presencia, crecimiento y nutrición, con redes, pauta, sitio, email y CRM transversal">
+    <div className="wheel-ring">
+      <svg className="wheel-arcs" viewBox="0 0 600 600" aria-hidden="true">
+        <path d="M93 492 A258 258 0 0 1 300 42" stroke="#6B1F2A" strokeWidth="42" fill="none" />
+        <path d="M302 42 A258 258 0 0 1 544 388" stroke="#A0714A" strokeWidth="42" fill="none" />
+        <path d="M544 390 A258 258 0 0 1 95 495" stroke="#C9BFBA" strokeWidth="42" fill="none" />
+        <path id="presencia-path" d="M105 478 A244 244 0 0 1 288 57" fill="none" />
+        <path id="crecimiento-path" d="M320 58 A244 244 0 0 1 536 370" fill="none" />
+        <path id="nutricion-path" d="M505 443 A244 244 0 0 1 118 474" fill="none" />
+        <text className="arc-type"><textPath href="#presencia-path" startOffset="27%">PRESENCIA</textPath></text>
+        <text className="arc-type"><textPath href="#crecimiento-path" startOffset="18%">CRECIMIENTO</textPath></text>
+        <text className="arc-type"><textPath href="#nutricion-path" startOffset="27%">NUTRICIÓN</textPath></text>
       </svg>
-    </a>
-  );
+      <div className="wheel-interior">
+        <div className="wheel-quadrant"><strong>Redes<br/>sociales</strong><small>Instagram + LinkedIn</small></div>
+        <div className="wheel-quadrant"><strong>Pauta<br/>digital</strong><small>Meta Ads + Google Ads</small></div>
+        <div className="wheel-quadrant"><strong>Sitio<br/>web</strong><small>Estructura + medición</small></div>
+        <div className="wheel-quadrant"><strong>Email<br/>marketing</strong><small>Envíos + secuencias</small></div>
+      </div>
+      <div className="wheel-crm"><b>CRM</b><span>Sistema centralizado</span><small>Clientify</small></div>
+    </div>
+  </div>;
 }
 
-/* ════════════════════════════════════════════════════
-   PÁGINA
-   ════════════════════════════════════════════════════ */
-export default function NeriniWeb() {
-  useBrandFonts();
-
-  return (
-    <div style={{ fontFamily: SANS, color: C.negro, background: C.blanco, overflowX: "hidden", textWrap: "pretty" }}>
-
-      {/* ── NAV ─────────────────────────────────────── */}
-      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: C.blanco, borderBottom: `1px solid ${C.grisBorde}` }}>
-        <div style={{ maxWidth: MAX, margin: "0 auto", padding: `0 ${PAD_X}`, minHeight: 64, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24 }}>
-          <a href="#top" style={{ display: "inline-flex", color: "inherit", textDecoration: "none" }}>
-            <Logo size={20} />
-          </a>
-          <div style={{ display: "flex", alignItems: "center", gap: "clamp(16px, 3vw, 32px)" }}>
-            <a href="#quien" style={{ fontSize: 13, fontWeight: 500, color: C.grisTexto, textDecoration: "none", letterSpacing: ".01em" }}>Quién dirige</a>
-            <a href="#sistema" style={{ fontSize: 13, fontWeight: 500, color: C.grisTexto, textDecoration: "none", letterSpacing: ".01em" }}>El sistema</a>
-            <BtnWA variant="secondary" size="sm">WhatsApp</BtnWA>
-          </div>
-        </div>
-      </nav>
-
-      {/* ── HERO ────────────────────────────────────── */}
-      <section id="top" style={{ position: "relative", background: C.blanco, minHeight: "min(64vh, 640px)", display: "flex", alignItems: "center", padding: `clamp(100px, 11vh, 136px) ${PAD_X} clamp(48px, 6vh, 80px)`, overflow: "hidden" }}>
-        {/* Diagonal decorativa en malva */}
-        <DiagonalAccent side="right" color={C.malva} opacity={1} />
-
-        <div style={{ position: "relative", maxWidth: MAX, margin: "0 auto", width: "100%" }}>
-          {/* Eyebrow */}
-          <Reveal>
-            <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".18em", textTransform: "uppercase", color: C.bordo, marginBottom: 24 }}>
-              ESTRATEGIA · EJECUCIÓN · MEDICIÓN
-            </div>
-          </Reveal>
-
-          {/* Título principal */}
-          <Reveal delay={60}>
-            <h1 style={{ fontWeight: 300, fontSize: "clamp(36px, min(5.2vw, 8vh), 62px)", lineHeight: 1.08, letterSpacing: "-.02em", color: C.negro, margin: "0 0 28px", maxWidth: "14em" }}>
-              Departamento Externo<br />de Marketing
-            </h1>
-          </Reveal>
-
-          <Reveal delay={130}>
-            <p style={{ fontSize: "clamp(16px, 1.6vw, 19px)", color: C.grisTexto, lineHeight: 1.7, margin: "0 0 36px", maxWidth: "34em", fontWeight: 300 }}>
-              Somos el Departamento Externo de Marketing de empresas de servicios sin equipo interno. Dirigimos la estrategia y ejecutamos redes, pauta, sitio y email marketing con nuestro equipo, bajo un mismo sistema de seguimiento y medición.
-            </p>
-          </Reveal>
-
-          <Reveal delay={200}>
-            <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
-              <BtnWA />
-              <span style={{ fontSize: 13, color: C.grisClaro }}>Para empresas de servicios sin equipo interno.</span>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ── ¿TE ESTÁ PASANDO ESTO? ───────────────────── */}
-      <section style={{ background: C.blanco, padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}` }}>
-        <div style={{ maxWidth: MAX, margin: "0 auto" }}>
-          <Reveal>
-            <h2 style={{ fontWeight: 300, fontSize: "clamp(30px, 4vw, 48px)", color: C.negro, lineHeight: 1.12, letterSpacing: "-.01em", margin: `0 0 clamp(28px, 3.5vw, 44px)` }}>
-              ¿Te está pasando esto?
-            </h2>
-          </Reveal>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 1, background: C.grisBorde }}>
-            {PROBLEMAS.map((item, i) => (
-              <Reveal key={i} delay={i * 60}>
-                <div style={{ background: C.blanco, padding: "clamp(24px, 3vw, 36px)" }}>
-                  <div style={{ marginBottom: 18, color: C.bordo }}>
-                    <Icon name={item.icon} size={28} color={C.bordo} />
-                  </div>
-                  <div style={{ fontWeight: 600, fontSize: 16, color: C.negro, lineHeight: 1.4, marginBottom: 10 }}>{item.title}</div>
-                  <div style={{ fontSize: 14, color: C.grisTexto, lineHeight: 1.75 }}>{item.desc}</div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── QUIÉN DIRIGE ────────────────────────────── */}
-      <section id="quien" style={{ background: C.blanco, padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}`, scrollMarginTop: 64 }}>
-        <div style={{ maxWidth: MAX, margin: "0 auto" }}>
-          <Reveal>
-            <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".18em", textTransform: "uppercase", color: C.grisTexto, marginBottom: 16 }}>
-              QUIÉN DIRIGE
-            </div>
-            <h2 style={{ fontWeight: 300, fontSize: "clamp(30px, 4vw, 48px)", color: C.negro, lineHeight: 1.12, letterSpacing: "-.01em", margin: `0 0 clamp(32px, 4vw, 52px)` }}>
-              Directora de Marketing
-            </h2>
-          </Reveal>
-
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "clamp(32px, 5vw, 72px)", alignItems: "flex-start" }}>
-            {/* Foto */}
-            <Reveal style={{ flex: "0 0 auto" }}>
-              <div style={{ width: "clamp(200px, 22vw, 280px)", aspectRatio: "1 / 1", border: `1px solid ${C.grisBorde}`, overflow: "hidden", background: C.blanco }}>
-                {FOTO_DEBORA
-                  ? <img src={FOTO_DEBORA} alt="Debora Nerini" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-                  : <span style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, color: C.grisClaro }}>Foto de Debora</span>
-                }
-              </div>
-            </Reveal>
-
-            {/* Texto */}
-            <div style={{ flex: "1 1 360px", minWidth: 280 }}>
-              <Reveal>
-                <div style={{ marginBottom: 6 }}>
-                  <span style={{ fontWeight: 300, fontSize: "clamp(22px, 2.6vw, 30px)", color: C.negro }}>Debora Nerini</span>
-                </div>
-                <div style={{ fontSize: 13, fontWeight: 600, letterSpacing: ".1em", textTransform: "uppercase", color: C.bordo, marginBottom: 20 }}>
-                  Directora de Marketing
-                </div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 12px", fontSize: 13, color: C.grisTexto, marginBottom: 24, lineHeight: 1.6 }}>
-                  <span>Lic. en Comercialización</span>
-                  <span style={{ color: C.grisBorde }}>·</span>
-                  <span>Especialización en Marketing Digital</span>
-                  <span style={{ color: C.grisBorde }}>·</span>
-                  <span>15 años en grandes empresas</span>
-                </div>
-                <div style={{ height: 1, background: C.grisBorde, marginBottom: 24 }} />
-              </Reveal>
-
-              <Reveal delay={80}>
-                <p style={{ fontSize: "clamp(15px, 1.5vw, 17px)", color: C.grisTexto, lineHeight: 1.8, margin: "0 0 18px", maxWidth: "38em" }}>
-                  Dirijo el marketing de cada empresa: defino el plan, coordino las áreas con nuestro equipo de especialistas y respondo por el resultado.
-                </p>
-                <p style={{ fontSize: "clamp(15px, 1.5vw, 17px)", color: C.grisTexto, lineHeight: 1.8, margin: 0, maxWidth: "38em" }}>
-                  El marketing pasa a funcionar como un sistema ordenado y constante, sin depender de la disponibilidad del dueño.
-                </p>
-              </Reveal>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── EL SISTEMA ──────────────────────────────── */}
-      <section id="sistema" style={{ background: C.blanco, padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}`, scrollMarginTop: 64 }}>
-        <div style={{ maxWidth: MAX, margin: "0 auto" }}>
-
-          <Reveal style={{ marginBottom: "clamp(32px, 4vw, 52px)" }}>
-            <h2 style={{ fontWeight: 300, fontSize: "clamp(30px, 4vw, 48px)", color: C.negro, lineHeight: 1.12, letterSpacing: "-.01em", margin: "0 0 16px" }}>
-              El sistema
-            </h2>
-            <p style={{ fontSize: "clamp(15px, 1.5vw, 17px)", color: C.grisTexto, lineHeight: 1.75, margin: 0, maxWidth: "40em", fontWeight: 300 }}>
-              Estructuramos el servicio en etapas para asegurar que funcione. Analizamos la situación de cada empresa y corregimos lo necesario antes de arrancar.
-            </p>
-          </Reveal>
-
-          {/* Diagrama: Dirección de Marketing → canales → CRM */}
-          <Reveal>
-            {/* Bloque superior: Dirección de Marketing */}
-            <div style={{ background: C.blanco, border: `1px solid ${C.grisBorde}`, borderLeft: `4px solid ${C.bordo}`, padding: "18px 28px", marginBottom: 1 }}>
-              <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".18em", textTransform: "uppercase", color: C.bordo, marginBottom: 4 }}>
-                LA BASE TRANSVERSAL
-              </div>
-              <div style={{ fontWeight: 600, fontSize: 18, color: C.negro, letterSpacing: ".01em" }}>
-                Dirección de Marketing
-              </div>
-            </div>
-
-            {/* Línea vertical */}
-            <div style={{ display: "flex", justifyContent: "center", padding: "0" }}>
-              <div style={{ width: 1, height: 20, background: C.grisBorde }} />
-            </div>
-
-            {/* 4 canales */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 1, background: C.grisBorde, marginBottom: 1 }}>
-              {CANALES.map((c, i) => (
-                <div key={i} style={{ background: C.blanco, padding: "20px 22px" }}>
-                  <div style={{ marginBottom: 12, color: C.bordo }}>
-                    <Icon name={c.ico} size={22} color={C.bordo} />
-                  </div>
-                  <div style={{ fontWeight: 600, fontSize: 14, color: C.negro, marginBottom: 4 }}>{c.label}</div>
-                  <div style={{ fontSize: 12, color: C.grisTexto }}>{c.sub}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* Línea vertical */}
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <div style={{ width: 1, height: 20, background: C.grisBorde }} />
-            </div>
-
-            {/* Sistema Centralizado */}
-            <div style={{ background: C.blanco, border: `1px solid ${C.grisBorde}`, padding: "20px 28px" }}>
-              <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".18em", textTransform: "uppercase", color: C.grisTexto, marginBottom: 4 }}>
-                SISTEMA CENTRALIZADO
-              </div>
-              <div style={{ fontSize: 14, color: C.negro, lineHeight: 1.6 }}>
-                Contactos · automatizaciones · seguimiento · medición
-              </div>
-            </div>
-          </Reveal>
-
-          {/* Separador */}
-          <div style={{ height: 1, background: C.grisBorde, margin: "clamp(40px, 5vw, 64px) 0" }} />
-
-          {/* Etapas: Presencia / Crecimiento / Nutrición */}
-          <Reveal style={{ marginBottom: "clamp(24px, 3vw, 36px)" }}>
-            <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".18em", textTransform: "uppercase", color: C.grisTexto, marginBottom: 12 }}>
-              PUESTA EN MARCHA
-            </div>
-            <div style={{ fontSize: 13, color: C.bordo, fontWeight: 600, letterSpacing: ".06em" }}>
-              01 Presencia &nbsp;/&nbsp; 02 Crecimiento &nbsp;/&nbsp; 03 Nutrición
-            </div>
-          </Reveal>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 1, background: C.grisBorde }}>
-            {ETAPAS.map((s, i) => (
-              <Reveal key={s.num} delay={i * 60}>
-                <div style={{ background: C.blanco, padding: "clamp(24px, 3vw, 36px)" }}>
-                  <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".14em", color: C.bordo, marginBottom: 12 }}>{s.num}</div>
-                  <div style={{ fontWeight: 600, fontSize: 20, color: C.negro, marginBottom: 12, lineHeight: 1.2 }}>{s.name}</div>
-                  <p style={{ fontSize: 14, color: C.grisTexto, lineHeight: 1.75, margin: "0 0 20px" }}>{s.desc}</p>
-                  <div style={{ fontSize: 12, color: C.grisTexto, letterSpacing: ".04em", borderTop: `1px solid ${C.grisBorde}`, paddingTop: 14 }}>{s.channels}</div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── GESTIÓN DE LEADS ────────────────────────── */}
-      <section style={{ background: C.blanco, padding: `${PAD_Y} ${PAD_X}`, borderTop: `1px solid ${C.grisBorde}` }}>
-        <div style={{ maxWidth: MAX, margin: "0 auto" }}>
-          <Reveal>
-            <h2 style={{ fontWeight: 300, fontSize: "clamp(30px, 4vw, 48px)", color: C.negro, lineHeight: 1.12, letterSpacing: "-.01em", margin: `0 0 clamp(16px, 2vw, 24px)` }}>
-              Gestión de leads
-            </h2>
-          </Reveal>
-          <Reveal delay={60}>
-            <p style={{ fontSize: "clamp(15px, 1.5vw, 17px)", color: C.grisTexto, lineHeight: 1.8, margin: `0 0 clamp(28px, 3.5vw, 44px)`, maxWidth: "46em", fontWeight: 300 }}>
-              Integramos todos los canales de comunicación de tu empresa en un CRM, para que cada contacto cuente con registro de origen y seguimiento activo hasta convertirse en cliente.
-            </p>
-          </Reveal>
-
-          <Reveal delay={120}>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 1, background: C.grisBorde, marginBottom: 1 }}>
-              {/* Canales digitales */}
-              <div style={{ background: C.blanco, padding: "clamp(24px, 3vw, 36px)" }}>
-                <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".14em", textTransform: "uppercase", color: C.grisTexto, marginBottom: 16 }}>
-                  Canales digitales
-                </div>
-                {["Redes sociales", "Pauta digital", "Sitio web", "WhatsApp"].map(l => (
-                  <div key={l} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 0", borderBottom: `1px solid ${C.grisBorde}`, fontSize: 14, color: C.negro }}>
-                    <Icon name="check" size={14} color={C.bordo} />
-                    {l}
-                  </div>
-                ))}
-              </div>
-              {/* Canales offline */}
-              <div style={{ background: C.blanco, padding: "clamp(24px, 3vw, 36px)" }}>
-                <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".14em", textTransform: "uppercase", color: C.grisTexto, marginBottom: 16 }}>
-                  Canales offline
-                </div>
-                {["Eventos y ferias", "Referidos"].map(l => (
-                  <div key={l} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 0", borderBottom: `1px solid ${C.grisBorde}`, fontSize: 14, color: C.negro }}>
-                    <Icon name="check" size={14} color={C.bordo} />
-                    {l}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Flecha */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "4px 0" }}>
-              <div style={{ width: 1, height: 24, background: C.grisBorde }} />
-            </div>
-
-            {/* CRM */}
-            <div style={{ background: C.blanco, border: `1px solid ${C.grisBorde}`, padding: "clamp(24px, 3vw, 36px)" }}>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "24px 48px", alignItems: "flex-start", justifyContent: "space-between" }}>
-                <div>
-                  <div style={{ fontWeight: 300, fontSize: "clamp(22px, 2.4vw, 28px)", color: C.negro, lineHeight: 1.2, marginBottom: 6 }}>
-                    Sistema Centralizado
-                  </div>
-                  <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".14em", color: C.bordo, textTransform: "uppercase" }}>
-                    Todo en un CRM
-                  </div>
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                  {["Registro de origen de cada contacto.", "Historial de puntos de contacto.", "Seguimiento activo de leads fríos."].map(t => (
-                    <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: 10, fontSize: 14, color: C.grisTexto, lineHeight: 1.5 }}>
-                      <Icon name="check" size={14} color={C.bordo} />
-                      {t}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Tablero */}
-            <div style={{ background: C.blanco, border: `1px solid ${C.grisBorde}`, padding: "clamp(20px, 2.5vw, 28px)", marginTop: 1 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
-                <Icon name="chart" size={20} color={C.bordo} />
-                <div>
-                  <div style={{ fontWeight: 600, fontSize: 15, color: C.negro }}>Tablero de medición</div>
-                  <div style={{ fontSize: 14, color: C.grisTexto, marginTop: 3, lineHeight: 1.6 }}>
-                    Seguimiento de redes sociales, sitio web, pauta digital, email marketing y medición comercial.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ── CTA FINAL ───────────────────────────────── */}
-      <section style={{ position: "relative", background: C.bordo, padding: `clamp(52px, 6.5vw, 88px) ${PAD_X}`, overflow: "hidden" }}>
-        <DiagonalAccent side="right" color="rgba(223,214,225,0.18)" opacity={1} />
-        <div style={{ position: "relative", maxWidth: 820, margin: "0 auto" }}>
-          <Reveal>
-            <h2 style={{ fontWeight: 300, fontSize: "clamp(30px, 4.2vw, 50px)", color: C.beige, lineHeight: 1.12, letterSpacing: "-.01em", margin: "0 0 20px" }}>
-              ¿Querés tener un equipo externo de marketing?
-            </h2>
-          </Reveal>
-          <Reveal delay={80}>
-            <p style={{ fontStyle: "italic", fontWeight: 300, fontSize: "clamp(16px, 1.6vw, 19px)", color: C.cueroClaro, lineHeight: 1.5, margin: "0 0 36px" }}>
-              Agendemos una reunión y te cuento cómo podemos trabajar.
-            </p>
-          </Reveal>
-          <Reveal delay={150}>
-            <BtnWA variant="inverse" />
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ── FOOTER ──────────────────────────────────── */}
-      <footer style={{ background: C.negro, padding: `clamp(40px, 5vw, 56px) ${PAD_X} 28px`, borderTop: `1px solid ${C.grisBorde}` }}>
-        <div style={{ maxWidth: MAX, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 32, marginBottom: 36 }}>
-          <Logo dark size={22} />
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            <a href="mailto:debora@nerini.ar" style={{ fontSize: 14, color: C.beige, textDecoration: "none" }}>debora@nerini.ar</a>
-            <a href="https://nerini.ar" style={{ fontSize: 14, color: C.cueroClaro, textDecoration: "none" }}>nerini.ar</a>
-          </div>
-        </div>
-        <div style={{ maxWidth: MAX, margin: "0 auto", borderTop: "1px solid rgba(255,255,255,.12)", paddingTop: 20, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
-          <span style={{ fontSize: 11, color: C.cueroClaro, opacity: 0.7 }}>© 2026 NERINI. Todos los derechos reservados.</span>
-          <span style={{ fontSize: 11, color: C.cueroClaro, opacity: 0.6, letterSpacing: ".08em" }}>DEPARTAMENTO EXTERNO DE MARKETING</span>
-        </div>
-      </footer>
-
-      <FloatingWA />
-    </div>
-  );
+export default function NeriniWeb(){
+  const [open,setOpen] = useState(false);
+  useEffect(()=>{ document.title='NERINI | Departamento Externo de Marketing'; },[]);
+  return <div className="nerini-site" id="inicio">
+    <style>{`
+      @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap');
+      :root{--bordo:#6B1F2A;--tinta:#3A1A1F;--cuero:#A0714A;--gris:#6B6660;--linea:#E8E2D9;--malva:#DFD6E1;--blanco:#fff}
+      *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0}button,a{font:inherit}
+      .nerini-site{font-family:'DM Sans',Arial,sans-serif;color:var(--tinta);background:#fff;line-height:1.55;overflow:hidden}
+      .nerini-site a{text-decoration:none}.container{width:min(1160px,calc(100% - 64px));margin:auto}
+      .nav{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.97);border-bottom:1px solid var(--linea)}
+      .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:28px;min-height:92px}
+      .brand-img{width:180px;max-width:100%;height:auto;display:block}
+      .nav-links{display:flex;align-items:center;gap:30px}.nav-links>a:not(.button){font-size:13px;color:var(--tinta)}
+      .button{display:inline-flex;align-items:center;justify-content:center;gap:12px;background:var(--bordo);color:white;padding:13px 24px;border:1px solid var(--bordo);font-size:13px;font-weight:600;transition:background .2s}
+      .button:hover{background:#541821}.button-outline{background:white;color:var(--bordo)}.button-outline:hover{background:#faf5f2}
+      .menu-toggle{display:none;background:none;border:0;color:var(--bordo);font-size:25px;cursor:pointer}
+      .section{padding:86px 0;border-bottom:1px solid var(--linea);scroll-margin-top:92px}.eyebrow{color:var(--cuero);font-size:11px;font-weight:700;letter-spacing:.19em;text-transform:uppercase}
+      h1,h2,h3,p{margin-top:0}h1,h2,.serif{font-family:'Playfair Display',Georgia,serif;font-weight:500;letter-spacing:-.035em}
+      h1{font-size:clamp(43px,5.7vw,78px);line-height:1.15;color:var(--bordo);max-width:1000px;margin:28px 0}
+      h2{font-size:clamp(36px,4vw,54px);line-height:1.18;color:var(--bordo);margin:0 0 22px}
+      .lead{font-family:'DM Sans',sans-serif;font-size:clamp(17px,1.7vw,21px);line-height:1.7;color:var(--gris);max-width:900px}
+      .hero{padding:76px 0 84px;position:relative}.hero .container{position:relative}.hero .lead{max-width:890px}
+      .hero-top{display:flex;justify-content:space-between;align-items:center;gap:20px}.hero-rule{width:54px;height:1px;background:var(--malva);transform:rotate(-52deg)}
+      .hero-actions{display:flex;align-items:center;gap:23px;flex-wrap:wrap;margin-top:32px}.quiet{font-size:13px;color:var(--gris)}
+      .section-top{max-width:860px;margin-bottom:42px}.section-top h2{margin-top:12px}
+      .problem-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--linea);border-bottom:1px solid var(--linea)}
+      .problem{padding:32px 24px 36px;border-right:1px solid var(--linea);min-width:0}.problem:first-child{padding-left:0}.problem:last-child{border-right:0}
+      .problem svg{color:var(--cuero);margin-bottom:21px}.problem h3{font-size:18px;line-height:1.4;font-weight:600;margin:0 0 14px}.problem p{font-size:14px;line-height:1.75;color:var(--gris);margin:0}
+      .service-section{text-align:center}.service-section .section-top{margin-left:auto;margin-right:auto}.service-section .lead{margin:0 auto}
+      .wheel-wrap{display:flex;justify-content:center;max-width:680px;margin:40px auto 10px}.wheel-ring{width:min(610px,100%);aspect-ratio:1;position:relative}
+      .wheel-arcs{position:absolute;inset:0;width:100%;height:100%;overflow:visible}.arc-type{fill:#fff;letter-spacing:4px;font-size:17px;font-family:'DM Sans',sans-serif}
+      .wheel-interior{position:absolute;inset:13%;border:1px solid var(--linea);border-radius:50%;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;background:white}
+      .wheel-quadrant{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:26px 9px;gap:9px}.wheel-quadrant:nth-child(odd){border-right:1px solid var(--linea)}.wheel-quadrant:nth-child(-n+2){border-bottom:1px solid var(--linea)}
+      .wheel-quadrant strong{font-family:'Playfair Display',Georgia,serif;font-size:clamp(16px,2.8vw,28px);line-height:1.08;font-weight:500;color:var(--bordo)}.wheel-quadrant:nth-child(2) strong,.wheel-quadrant:nth-child(3) strong{color:var(--cuero)}
+      .wheel-quadrant small{font-size:clamp(8px,1.3vw,12px);color:var(--gris)}
+      .wheel-crm{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:27%;aspect-ratio:1;border-radius:50%;background:white;border:1px solid var(--malva);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px}
+      .wheel-crm b{font-family:'Playfair Display',Georgia,serif;font-size:clamp(18px,3.2vw,35px);font-weight:500}.wheel-crm span{font-size:clamp(7px,1vw,11px);line-height:1.25;color:var(--gris)}.wheel-crm small{font-weight:700;color:var(--bordo);font-size:clamp(10px,1.6vw,18px)}
+      .stages{border-top:1px solid var(--linea);display:grid;grid-template-columns:repeat(3,1fr);margin-top:50px;text-align:left}.stage{padding:25px 28px;border-right:1px solid var(--linea)}.stage:last-child{border-right:0}.stage:first-child{padding-left:0}.stage-number{font-size:12px;letter-spacing:.1em;color:var(--cuero)}.stage h3{font-size:19px;font-weight:600;margin:12px 0 4px}.stage p{font-size:13px;color:var(--gris);margin:0}
+      .bio-layout{display:grid;grid-template-columns:minmax(260px,360px) 1fr;gap:65px;align-items:center}.portrait-wrap{position:relative}.portrait-wrap:after{content:'';position:absolute;width:78%;height:1px;background:var(--malva);bottom:-19px;right:-16px}
+      .portrait{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center 30%;display:block}
+      .bio-heading{font-family:'Playfair Display',Georgia,serif;color:var(--bordo);font-size:clamp(38px,4vw,58px);margin:0 0 2px;font-weight:500}.bio-role{font-family:'Playfair Display',Georgia,serif;font-size:27px;color:var(--cuero);margin:0 0 24px}
+      .bio-credentials{font-size:15px;color:var(--gris);padding-top:18px;border-top:1px solid var(--linea);margin-bottom:22px}.bio-text{max-width:600px;color:var(--gris);font-size:16px;line-height:1.8}
+      .tracking-layout{display:grid;grid-template-columns:1fr 1fr;gap:28px}.tracking-card{border:1px solid var(--linea);padding:28px}.tracking-card h3{font-size:16px;margin:0 0 18px}.tracking-card ul{margin:0;padding:0;list-style:none}.tracking-card li{padding:10px 0;border-top:1px solid var(--linea);color:var(--gris);font-size:14px}
+      .tracking-bar{margin-top:20px;padding:28px 30px;background:#fff;border:1px solid var(--linea);border-left:4px solid var(--bordo);display:flex;justify-content:space-between;gap:25px;align-items:center}.tracking-bar strong{font-size:19px;font-weight:600}.tracking-bar span{font-size:14px;color:var(--gris)}
+      .contact{padding:75px 0;background:var(--bordo);color:white}.contact h2{color:#fff}.contact p{color:#FAF5EE;font-size:18px;margin-bottom:25px}.contact .button{background:#fff;color:var(--bordo);border-color:#fff}.contact .button:hover{background:#FAF5EE}
+      .footer{background:#fff;padding:32px 0;border-top:1px solid var(--linea)}.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:30px;flex-wrap:wrap}.footer-contact{display:flex;gap:25px;flex-wrap:wrap}.footer-contact a{color:var(--gris);font-size:13px}.copyright{font-size:11px;color:var(--gris);margin-top:22px}
+      .wa-float{position:fixed;right:22px;bottom:22px;z-index:30;background:var(--bordo);color:white;width:52px;height:52px;display:flex;align-items:center;justify-content:center;border-radius:50%;box-shadow:0 4px 20px #6b1f2a30;font-size:20px;font-weight:700}
+      @media(max-width:850px){.container{width:min(100% - 40px,1160px)}.nav-inner{min-height:74px}.brand-img{width:145px}.menu-toggle{display:block}.nav-links{display:none;position:absolute;top:73px;left:0;right:0;background:#fff;padding:22px 20px;border-bottom:1px solid var(--linea);flex-direction:column;align-items:flex-start}.nav-links.open{display:flex}.hero{padding:70px 0}.problem-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.problem:nth-child(2){border-right:0}.problem:nth-child(-n+2){border-bottom:1px solid var(--linea)}.problem:nth-child(3){padding-left:0}.bio-layout{gap:38px;grid-template-columns:270px 1fr}.bio-role{font-size:22px}}
+      @media(max-width:570px){.container{width:calc(100% - 36px)}.section{padding:58px 0}.hero{padding:57px 0 63px}.hero-top{align-items:flex-start}.hero .eyebrow{font-size:10px}h1{font-size:43px}.lead{font-size:16px}.problem-grid{grid-template-columns:1fr}.problem{padding:25px 0!important;border-right:0;border-bottom:1px solid var(--linea)}.problem:last-child{border-bottom:0}.wheel-wrap{margin:32px auto 0}.wheel-quadrant{padding:18px 3px;gap:3px}.wheel-quadrant strong{font-size:clamp(13px,4.1vw,21px)}.wheel-quadrant small{font-size:clamp(7px,2vw,10px);max-width:95%}.arc-type{font-size:20px;letter-spacing:3px}.stages{grid-template-columns:1fr;margin-top:32px}.stage{border-right:0;border-bottom:1px solid var(--linea);padding:17px 0}.bio-layout{grid-template-columns:1fr}.portrait-wrap{width:min(100%,390px)}.bio-role{font-size:23px}.tracking-layout{grid-template-columns:1fr;gap:14px}.tracking-bar{flex-direction:column;align-items:flex-start}.footer-contact{flex-direction:column;gap:8px}.hero-actions{align-items:flex-start}}
+      @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+    `}</style>
+    <header className="nav"><div className="container nav-inner"><a href="#inicio" aria-label="NERINI inicio"><Brand/></a><button className="menu-toggle" aria-expanded={open} aria-label="Abrir menú" onClick={()=>setOpen(!open)}>☰</button><nav className={'nav-links'+(open?' open':'')}><a href="#servicio" onClick={()=>setOpen(false)}>Servicio integral</a><a href="#quien" onClick={()=>setOpen(false)}>Quién dirige</a><a href="#seguimiento" onClick={()=>setOpen(false)}>Seguimiento</a><a className="button button-outline" href={AGENDA} target="_blank" rel="noreferrer">Agendemos una llamada</a></nav></div></header>
+    <main>
+      <section className="hero"><div className="container"><div className="hero-top"><span className="eyebrow">ESTRATEGIA · EJECUCIÓN · MEDICIÓN</span><span className="hero-rule" aria-hidden="true"/></div><h1>Departamento Externo de Marketing</h1><p className="lead">Somos el Departamento Externo de Marketing de empresas de servicios sin equipo interno. Dirigimos la estrategia y ejecutamos redes, pauta, sitio y email marketing con nuestro equipo, bajo un mismo sistema de seguimiento y medición.</p><div className="hero-actions"><a className="button" href={AGENDA} target="_blank" rel="noreferrer">Coordinemos una llamada <Icon name="arrow" size={17}/></a><span className="quiet">Un equipo. Una dirección. Un sistema.</span></div></div></section>
+      <section className="section" id="problemas"><div className="container"><div className="section-top"><div className="eyebrow">PUNTO DE PARTIDA</div><h2>Situaciones frecuentes</h2></div><div className="problem-grid">{problemas.map(p=><article className="problem" key={p.titulo}><Icon name={p.icon}/><h3>{p.titulo}</h3><p>{p.detalle}</p></article>)}</div></div></section>
+      <section className="section service-section" id="servicio"><div className="container"><div className="section-top"><span className="eyebrow">UN SOLO DEPARTAMENTO</span><h2>Servicio integral</h2><p className="lead">Redes, pauta, sitio y email marketing bajo una misma dirección. Un sistema centralizado conecta los canales, registra cada contacto y permite hacer seguimiento y medir.</p></div><ServiceWheel/><div className="stages" aria-label="Etapas de puesta en marcha">{etapas.map(e=><div className="stage" key={e.n}><span className="stage-number">{e.n}</span><h3>{e.title}</h3><p>{e.content}</p></div>)}</div></div></section>
+      <section className="section" id="quien"><div className="container bio-layout"><div className="portrait-wrap"><img className="portrait" src="/debora.png" alt="Fotografía de Debora Nerini"/></div><div><span className="eyebrow">QUIÉN DIRIGE</span><h2 className="bio-heading">Debora Nerini</h2><p className="bio-role">Directora de Marketing</p><p className="bio-credentials">Lic. en Comercialización (UADE) · Especialización en Marketing Digital (UBA) · 15 años en marketing y negocios en grandes empresas.</p><p className="bio-text">Dirijo el marketing de cada empresa: defino el plan, coordino las áreas con nuestro equipo de especialistas y respondo por el resultado.</p><p className="bio-text">El marketing pasa a funcionar como un sistema ordenado y constante, sin depender de la disponibilidad del dueño.</p></div></div></section>
+      <section className="section" id="seguimiento"><div className="container"><div className="section-top"><span className="eyebrow">SISTEMA CENTRALIZADO</span><h2>Seguimiento y medición</h2><p className="lead">Integramos los canales de comunicación para que cada contacto tenga registro de origen, historial y seguimiento comercial.</p></div><div className="tracking-layout"><div className="tracking-card"><h3>Canales digitales</h3><ul>{['Redes sociales','Pauta digital','Sitio web','WhatsApp'].map(t=><li key={t}>{t}</li>)}</ul></div><div className="tracking-card"><h3>Canales offline</h3><ul>{['Eventos y ferias','Referidos'].map(t=><li key={t}>{t}</li>)}</ul></div></div><div className="tracking-bar"><strong>CRM · Sistema centralizado</strong><span>Registro de origen · automatizaciones · seguimiento · tablero de medición</span></div></div></section>
+      <section className="contact" id="contacto"><div className="container"><span className="eyebrow" style={{color:'#D4B896'}}>SIGUIENTE PASO</span><h2>Coordinemos una llamada</h2><p>Conversemos sobre el marketing de tu empresa y cómo podemos trabajar.</p><a href={AGENDA} className="button" target="_blank" rel="noreferrer">Ir a la agenda <Icon name="arrow" size={17}/></a></div></section>
+    </main>
+    <footer className="footer"><div className="container"><div className="footer-inner"><Brand/><div className="footer-contact"><a href="mailto:debora@nerini.ar">debora@nerini.ar</a><a href="https://nerini.ar">nerini.ar</a><a href={WA} target="_blank" rel="noreferrer">WhatsApp +54 9 11 2241 9299</a></div></div><div className="copyright">© 2026 NERINI · Departamento Externo de Marketing</div></div></footer>
+    <a className="wa-float" href={WA} target="_blank" rel="noreferrer" aria-label="Contacto por WhatsApp">✆</a>
+  </div>;
 }
