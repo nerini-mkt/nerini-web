@@ -9,11 +9,6 @@ const problemas = [
   { icon:'chart', titulo:'Invertís sin medir el retorno.', detalle:'Reportes aislados de cada proveedor, sin un tablero que muestre el resultado conjunto.' },
   { icon:'target', titulo:'Los leads no tienen seguimiento.', detalle:'No hay registro de origen ni proceso definido para convertirlos en oportunidades de venta.' },
 ];
-const etapas = [
-  { n:'01', title:'Presencia', content:'Sitio web · Instagram · LinkedIn' },
-  { n:'02', title:'Crecimiento', content:'Meta Ads · Google Ads' },
-  { n:'03', title:'Nutrición', content:'Email marketing · flujos de seguimiento' },
-];
 function Icon({name, size=26}) {
   const base = {width:size,height:size,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:1.5,strokeLinecap:'round',strokeLinejoin:'round','aria-hidden':true};
   const shapes = {
@@ -30,9 +25,16 @@ function Brand({inverse=false}) { return <img className="brand-img" src={inverse
 function ServiceWheel(){
   return <div className="wheel-wrap" aria-label="Servicio integral de NERINI: Presencia, Crecimiento y Nutrición, con redes sociales, pauta digital, sitio web, email marketing y CRM centralizado">
     <div className="wheel-ring">
-      <div className="wheel-arc-label label-presencia">PRESENCIA</div>
-      <div className="wheel-arc-label label-crecimiento">CRECIMIENTO</div>
-      <div className="wheel-arc-label label-nutricion">NUTRICIÓN</div>
+      <svg className="wheel-label-svg" viewBox="0 0 600 600" aria-hidden="true">
+        <defs>
+          <path id="nerini-presencia" d="M 100,487 A 265,265 0 0,1 100,113" />
+          <path id="nerini-crecimiento" d="M 363,43 A 265,265 0 0,1 558,340" />
+          <path id="nerini-nutricion" d="M 184,538 A 265,265 0 0,0 416,538" />
+        </defs>
+        <text><textPath href="#nerini-presencia" startOffset="50%" textAnchor="middle">PRESENCIA</textPath></text>
+        <text><textPath href="#nerini-crecimiento" startOffset="50%" textAnchor="middle">CRECIMIENTO</textPath></text>
+        <text><textPath href="#nerini-nutricion" startOffset="50%" textAnchor="middle">NUTRICIÓN</textPath></text>
+      </svg>
       <div className="wheel-interior">
         <div className="wheel-quadrant"><strong>Redes<br/>sociales</strong><small>Instagram · LinkedIn</small></div>
         <div className="wheel-quadrant"><strong>Pauta<br/>digital</strong><small>Meta Ads · Google Ads</small></div>
@@ -120,18 +122,52 @@ export default function NeriniWeb(){
       @media(max-width:850px){.problems-heading{grid-template-columns:1fr;gap:0}.problems-aside{display:none}.footer-main{gap:38px}}
       @media(max-width:850px){.container{width:min(100% - 40px,1160px)}.nav-inner{min-height:74px}.brand-img{width:145px}.menu-toggle{display:block}.nav-links{display:none;position:absolute;top:73px;left:0;right:0;background:#fff;padding:22px 20px;border-bottom:1px solid var(--linea);flex-direction:column;align-items:flex-start}.nav-links.open{display:flex}.hero{padding:70px 0}.problem-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.problem:nth-child(2){border-right:0}.problem:nth-child(-n+2){border-bottom:1px solid var(--linea)}.problem:nth-child(3){padding-left:0}.bio-layout{gap:30px;grid-template-columns:190px minmax(0,1fr)}.bio-role{font-size:22px}}
       @media(max-width:570px){.container{width:calc(100% - 36px)}.section{padding:58px 0}.hero{padding:57px 0 63px}.hero-top{align-items:flex-start}.hero .eyebrow{font-size:10px}h1{font-size:43px}.lead{font-size:16px}.problem-grid{grid-template-columns:1fr}.problem{padding:25px 0!important;border-right:0;border-bottom:1px solid var(--linea)}.problem:last-child{border-bottom:0}.wheel-wrap{margin:32px auto 0}.wheel-quadrant{padding:18px 3px;gap:3px}.wheel-quadrant strong{font-size:clamp(13px,4.1vw,21px)}.wheel-quadrant small{font-size:clamp(7px,2vw,10px);max-width:95%}.arc-type{font-size:20px;letter-spacing:3px}.stages{grid-template-columns:1fr;margin-top:32px}.stage{border-right:0;border-bottom:1px solid var(--linea);padding:17px 0}.bio-layout{grid-template-columns:1fr}.portrait-wrap{width:min(100%,240px)}.footer-main{grid-template-columns:1fr;gap:25px}.wheel-arc-label{font-size:9px;letter-spacing:.08em}.label-presencia{left:1%}.label-crecimiento{right:1%;top:17%}.label-nutricion{bottom:3%}.bio-role{font-size:23px}.tracking-layout{grid-template-columns:1fr;gap:14px}.tracking-bar{flex-direction:column;align-items:flex-start}.footer-contact{flex-direction:column;gap:8px}.hero-actions{align-items:flex-start}}
+
+      /* Identidad editorial aprobada: más aire, composición real y sin etapas */
+      .section{padding:clamp(82px,9vw,126px) 0}
+      .hero{min-height:550px;display:flex;align-items:center;padding:90px 0;background:#fff;position:relative}
+      .hero .container{z-index:2}.hero h1{max-width:650px;font-size:clamp(46px,5.1vw,70px)}
+      .hero .lead{max-width:600px;font-size:17px}.hero-top{max-width:590px}
+      .hero-photo{position:absolute;top:0;right:0;bottom:0;width:43%;background-image:url('/equipo-referencia.jpg');background-position:center;background-size:cover;clip-path:polygon(17% 0,100% 0,100% 100%,0 100%);filter:saturate(.72)}
+      .hero-photo:after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.08)}
+      .problem-grid{margin-top:44px}.problems-heading{margin-bottom:38px}.problem{padding:28px 30px 26px}
+      .service-section{padding-top:106px;padding-bottom:116px}.service-section .wheel-wrap{margin-top:58px}
+      .wheel-ring{width:min(550px,90vw)}
+      .wheel-label-svg{position:absolute;inset:0;width:100%;height:100%;z-index:4;overflow:visible;pointer-events:none}
+      .wheel-label-svg text{fill:#fff;font-family:'Raleway',Arial,sans-serif;font-size:16px;font-weight:700;letter-spacing:3px}
+      .label-presencia,.label-crecimiento,.label-nutricion{display:none}
+      .tracking-layout{margin-top:48px}.tracking-card{padding:35px}.tracking-bar{padding:30px 34px}
+      #quien{padding:104px 0 120px}.bio-layout{max-width:1000px;grid-template-columns:215px minmax(0,1fr);gap:74px}
+      .footer{border-top:0}.footer-feature{background:linear-gradient(116deg,#E9E0E9 0%,#F4F0F4 47%,#fff 47.2%,#fff 100%);padding:90px 0 86px}
+      .footer-feature-grid{display:grid;grid-template-columns:1.18fr .82fr;gap:clamp(38px,7vw,110px);align-items:center}
+      .footer-message h2{font-size:clamp(38px,4.1vw,58px);line-height:1.17;margin:18px 0 21px;max-width:620px}
+      .footer-message p{color:var(--gris);font-size:17px;margin-bottom:24px}
+      .footer-message .eyebrow{color:#8B5F3D}.footer-cta{border-left:1px solid #C8BCCC;padding-left:clamp(25px,4vw,65px)}
+      .footer-cta h2{font-size:clamp(30px,3vw,43px)}.footer-cta p{font-size:14px}
+      .footer-contact{gap:16px}.footer-contact a{font-size:15px;overflow-wrap:anywhere}
+      .footer-bottom{padding:24px 0;background:#fff}.footer-bottom .brand-img{width:125px}
+      .footer-bottom a{font-size:13px;color:var(--gris)}
+      @media(max-width:900px){.hero-photo{width:38%;opacity:.32}.hero{min-height:500px}.hero .lead{max-width:570px}.footer-feature-grid{gap:35px}}
+      @media(max-width:700px){.hero-photo{position:relative;order:2;width:100%;height:235px;clip-path:none;opacity:1;background-position:center 40%}.hero{display:flex;flex-direction:column;align-items:stretch;padding:0}.hero .container{padding-top:70px;padding-bottom:65px;order:1}.hero h1{font-size:clamp(41px,9vw,58px)}.hero .lead{font-size:16px}.section{padding:70px 0}.service-section{padding:78px 0}.wheel-label-svg text{font-size:16px;letter-spacing:2px}.bio-layout{grid-template-columns:1fr;gap:22px}.portrait-wrap{width:190px}.footer-feature{background:#F1ECF2;padding:65px 0}.footer-feature-grid{grid-template-columns:1fr;gap:40px}.footer-cta{border-left:0;border-top:1px solid #C8BCCC;padding:35px 0 0}.footer-bottom .footer-inner{align-items:flex-start}.footer-message h2{font-size:clamp(36px,8vw,46px)}}
+      @media(max-width:440px){.wheel-label-svg text{font-size:15px;letter-spacing:1px}.hero-actions{gap:15px}.problem{padding:26px 0!important}}
       @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
     `}</style>
-    <header className="nav"><div className="container nav-inner"><a href="#inicio" aria-label="NERINI inicio"><Brand/></a><button className="menu-toggle" aria-expanded={open} aria-label="Abrir menú" onClick={()=>setOpen(!open)}>☰</button><nav className={'nav-links'+(open?' open':'')}><a href="#servicio" onClick={()=>setOpen(false)}>Servicio integral</a><a href="#quien" onClick={()=>setOpen(false)}>Quién dirige</a><a href="#seguimiento" onClick={()=>setOpen(false)}>Seguimiento</a><a className="button button-outline" href={AGENDA} target="_blank" rel="noreferrer">Agendemos una llamada</a></nav></div></header>
+    <header className="nav"><div className="container nav-inner"><a href="#inicio" aria-label="NERINI inicio"><Brand/></a><button className="menu-toggle" aria-expanded={open} aria-label="Abrir menú" onClick={()=>setOpen(!open)}>☰</button><nav className={'nav-links'+(open?' open':'')}><a href="#servicio" onClick={()=>setOpen(false)}>Servicio integral</a><a href="#seguimiento" onClick={()=>setOpen(false)}>Seguimiento</a><a href="#quien" onClick={()=>setOpen(false)}>Quién dirige</a><a className="button button-outline" href={AGENDA} target="_blank" rel="noreferrer">Agendemos una llamada</a></nav></div></header>
     <main>
-      <section className="hero"><div className="container"><div className="hero-top"><span className="eyebrow">ESTRATEGIA · EJECUCIÓN · MEDICIÓN</span><span className="hero-rule" aria-hidden="true"/></div><h1>Departamento Externo de Marketing</h1><p className="lead">Somos el Departamento Externo de Marketing de empresas de servicios sin equipo interno. Dirigimos la estrategia y ejecutamos redes, pauta, sitio y email marketing con nuestro equipo, bajo un mismo sistema de seguimiento y medición.</p><div className="hero-actions"><a className="button" href={AGENDA} target="_blank" rel="noreferrer">Coordinemos una llamada <Icon name="arrow" size={17}/></a><span className="quiet">Un equipo. Una dirección. Un sistema.</span></div></div></section>
+      <section className="hero"><div className="hero-photo" role="img" aria-label="Equipo de trabajo reunido en una mesa"/><div className="container"><div className="hero-top"><span className="eyebrow">ESTRATEGIA · EJECUCIÓN · MEDICIÓN</span><span className="hero-rule" aria-hidden="true"/></div><h1>Departamento Externo de Marketing</h1><p className="lead">Somos el Departamento Externo de Marketing de empresas de servicios sin equipo interno. Dirigimos la estrategia y ejecutamos redes, pauta, sitio y email marketing con nuestro equipo, bajo un mismo sistema de seguimiento y medición.</p><div className="hero-actions"><a className="button" href={AGENDA} target="_blank" rel="noreferrer">Coordinemos una llamada <Icon name="arrow" size={17}/></a><span className="quiet">Un equipo. Una dirección. Un sistema.</span></div></div></section>
       <section className="section" id="problemas"><div className="container"><div className="problems-heading"><div><span className="eyebrow">¿TE ESTÁ PASANDO ESTO?</span><h2>Cuatro problemas, un mismo resultado: oportunidades que se pierden.</h2></div><p className="problems-aside">Sin una dirección integral, el marketing se vuelve fragmentado y difícil de medir.</p></div><div className="problem-grid">{problemas.map(p=><article className="problem" key={p.titulo}><Icon name={p.icon}/><h3>{p.titulo}</h3><p>{p.detalle}</p></article>)}</div></div></section>
-      <section className="section service-section" id="servicio"><div className="container"><div className="section-top"><span className="eyebrow">UN SOLO DEPARTAMENTO</span><h2>Servicio integral</h2><p className="lead">Redes, pauta, sitio y email marketing bajo una misma dirección. Un sistema centralizado conecta los canales, registra cada contacto y permite hacer seguimiento y medir.</p></div><ServiceWheel/><div className="stages" aria-label="Etapas de puesta en marcha">{etapas.map(e=><div className="stage" key={e.n}><span className="stage-number">{e.n}</span><h3>{e.title}</h3><p>{e.content}</p></div>)}</div></div></section>
-      <section className="section" id="quien"><div className="container bio-layout"><div className="portrait-wrap"><img className="portrait" src="/debora.png" alt="Fotografía original de Debora Nerini" loading="lazy" decoding="async"/></div><div><span className="eyebrow">QUIÉN DIRIGE</span><h2 className="bio-heading">Debora Nerini</h2><p className="bio-role">Directora de Marketing</p><p className="bio-credentials">Lic. en Comercialización (UADE) · Especialización en Marketing Digital (UBA) · 15 años en marketing y negocios en grandes empresas.</p><p className="bio-text">Dirijo el marketing de cada empresa: defino el plan, coordino las áreas con nuestro equipo de especialistas y respondo por el resultado.</p></div></div></section>
+      <section className="section service-section" id="servicio"><div className="container"><div className="section-top"><span className="eyebrow">UN SOLO DEPARTAMENTO</span><h2>Servicio integral</h2><p className="lead">Redes, pauta, sitio y email marketing bajo una misma dirección. Un sistema centralizado conecta los canales, registra cada contacto y permite hacer seguimiento y medir.</p></div><ServiceWheel/></div></section>
       <section className="section" id="seguimiento"><div className="container"><div className="section-top"><span className="eyebrow">SISTEMA CENTRALIZADO</span><h2>Seguimiento y medición</h2><p className="lead">Integramos los canales de comunicación para que cada contacto tenga registro de origen, historial y seguimiento comercial.</p></div><div className="tracking-layout"><div className="tracking-card"><h3>Canales digitales</h3><ul>{['Redes sociales','Pauta digital','Sitio web','WhatsApp'].map(t=><li key={t}>{t}</li>)}</ul></div><div className="tracking-card"><h3>Canales offline</h3><ul>{['Eventos y ferias','Referidos'].map(t=><li key={t}>{t}</li>)}</ul></div></div><div className="tracking-bar"><strong>CRM · Sistema centralizado</strong><span>Registro de origen · automatizaciones · seguimiento · tablero de medición</span></div></div></section>
-      <section className="final-cta"><div className="container"><span className="eyebrow">MARKETING CON DIRECCIÓN · EJECUCIÓN · MEDICIÓN</span><h2>Hagamos que el marketing impulse tu negocio.</h2></div></section>
+      <section className="section" id="quien"><div className="container bio-layout"><div className="portrait-wrap"><img className="portrait" src="/debora.png" alt="Fotografía original de Debora Nerini" loading="lazy" decoding="async"/></div><div><span className="eyebrow">QUIÉN DIRIGE</span><h2 className="bio-heading">Debora Nerini</h2><p className="bio-role">Directora de Marketing</p><p className="bio-credentials">Lic. en Comercialización (UADE) · Especialización en Marketing Digital (UBA) · 15 años en marketing y negocios en grandes empresas.</p><p className="bio-text">Dirijo el marketing de cada empresa: defino el plan, coordino las áreas con nuestro equipo de especialistas y respondo por el resultado.</p></div></div></section>
+
     </main>
-    <footer className="footer" id="contacto"><div className="container"><div className="footer-main"><div><span className="eyebrow">SIGUIENTE PASO</span><div style={{marginTop:24,marginBottom:22}}><Brand/></div><p className="lead" style={{fontSize:17,maxWidth:420}}>Departamento Externo de Marketing para empresas de servicios sin equipo interno.</p></div><div className="footer-cta"><h2>Coordinemos una llamada</h2><p>Conversemos sobre tus objetivos y cómo podemos trabajar.</p><div className="footer-contact"><a href={AGENDA} target="_blank" rel="noreferrer">nerini.ar/agenda ↗</a><a href="mailto:debora@nerini.ar">debora@nerini.ar</a><a href={WA} target="_blank" rel="noreferrer">+54 9 11 2241 9299</a></div><div style={{marginTop:26}}><a className="button" href={AGENDA} target="_blank" rel="noreferrer">Agendar una llamada <Icon name="arrow" size={16}/></a></div></div></div></div><div className="footer-bottom"><div className="container footer-inner"><div className="copyright">© 2026 NERINI · Departamento Externo de Marketing</div><a style={{fontSize:13,color:'var(--gris)'}} href="https://nerini.ar">nerini.ar</a></div></div></footer>
+    <footer className="footer" id="contacto">
+      <div className="footer-feature"><div className="container footer-feature-grid">
+        <div className="footer-message"><span className="eyebrow">MARKETING CON DIRECCIÓN · EJECUCIÓN · MEDICIÓN</span><h2>Hagamos que el marketing impulse tu negocio.</h2><p>Conversemos sobre el marketing de tu empresa.</p><a className="button" href={AGENDA} target="_blank" rel="noreferrer">Agendemos una llamada <Icon name="arrow" size={17}/></a></div>
+        <div className="footer-cta"><h2>Coordinemos una llamada</h2><p>Un equipo. Una dirección. Un sistema.</p><div className="footer-contact"><a href={AGENDA} target="_blank" rel="noreferrer">nerini.ar/agenda ↗</a><a href="mailto:debora@nerini.ar">debora@nerini.ar</a><a href={WA} target="_blank" rel="noreferrer">+54 9 11 2241 9299</a></div></div>
+      </div></div>
+      <div className="footer-bottom"><div className="container footer-inner"><Brand/><span className="copyright">© 2026 NERINI · Departamento Externo de Marketing</span><a href="https://nerini.ar" rel="noreferrer">nerini.ar</a></div></div>
+    </footer>
     <a className="wa-float" href={WA} target="_blank" rel="noreferrer" aria-label="Contacto por WhatsApp">✆</a>
   </div>;
 }
