@@ -60,52 +60,71 @@ function ServiceWheel() {
     <div className="wheel-wrap" role="img" aria-label="Servicio integral con Presencia, Crecimiento y Nutrición; redes sociales, pauta digital, sitio web, email marketing y CRM centralizado con Clientify.">
       <svg className="service-wheel-svg" viewBox="0 0 700 700" aria-hidden="true">
         <defs>
-          <path id="arc-presencia" d="M 170 510 A 250 250 0 0 1 305 92" />
-          <path id="arc-crecimiento" d="M 340 92 A 250 250 0 0 1 565 320" />
-          <path id="arc-nutricion" d="M 195 545 A 250 250 0 0 0 535 380" />
+          {/*
+            Puntos exactos sobre círculo r=250 centrado en (350,350):
+              A (350, 100)  → 270° (tope)
+              B (567, 475)  →  30° (abajo-der)
+              C (133, 475)  → 150° (abajo-izq)
+            Tres arcos de 120° exactos, sentido horario (sweep=1), sin huecos.
+
+            textPath usa dirección que hace el texto legible:
+              presencia   C→A horario   (sube izquierda)
+              crecimiento A→B horario   (baja derecha)
+              nutrición   C→B antihorario (izq→der por el arco inferior)
+          */}
+          <path id="arc-presencia"   d="M 133 475 A 250 250 0 0 1 350 100" />
+          <path id="arc-crecimiento" d="M 350 100 A 250 250 0 0 1 567 475" />
+          <path id="arc-nutricion"   d="M 133 475 A 250 250 0 0 0 567 475" />
           <clipPath id="wheel-clip">
             <circle cx="350" cy="350" r="214" />
           </clipPath>
         </defs>
 
-        <path d="M 170 510 A 250 250 0 0 1 305 92" fill="none" stroke="#6B1F2A" strokeWidth="66" />
-        <path d="M 340 92 A 250 250 0 0 1 565 320" fill="none" stroke="#A0714A" strokeWidth="66" />
-        <path d="M 195 545 A 250 250 0 0 0 535 380" fill="none" stroke="#C9BFBA" strokeWidth="66" />
+        {/* Anillo exterior: 3 × 120° horario, sin huecos */}
+        <path d="M 133 475 A 250 250 0 0 1 350 100" fill="none" stroke="#6B1F2A" strokeWidth="66" />
+        <path d="M 350 100 A 250 250 0 0 1 567 475" fill="none" stroke="#A0714A" strokeWidth="66" />
+        <path d="M 567 475 A 250 250 0 0 1 133 475" fill="none" stroke="#C9BFBA" strokeWidth="66" />
 
-        <text className="wheel-arc-label"><textPath href="#arc-presencia" startOffset="51%" textAnchor="middle">PRESENCIA</textPath></text>
-        <text className="wheel-arc-label"><textPath href="#arc-crecimiento" startOffset="58%" textAnchor="middle">CRECIMIENTO</textPath></text>
-        <text className="wheel-arc-label"><textPath href="#arc-nutricion" startOffset="50%" textAnchor="middle">NUTRICIÓN</textPath></text>
+        <text className="wheel-arc-label"><textPath href="#arc-presencia"   startOffset="50%" textAnchor="middle">PRESENCIA</textPath></text>
+        <text className="wheel-arc-label"><textPath href="#arc-crecimiento" startOffset="50%" textAnchor="middle">CRECIMIENTO</textPath></text>
+        <text className="wheel-arc-label"><textPath href="#arc-nutricion"   startOffset="50%" textAnchor="middle">NUTRICIÓN</textPath></text>
 
+        {/* Círculo interior blanco */}
         <circle cx="350" cy="350" r="214" fill="#fff" stroke="#E8E2D9" strokeWidth="1.2" />
         <g clipPath="url(#wheel-clip)">
           <line x1="350" y1="136" x2="350" y2="564" stroke="#E8E2D9" strokeWidth="1.2" />
           <line x1="136" y1="350" x2="564" y2="350" stroke="#E8E2D9" strokeWidth="1.2" />
         </g>
 
-        <text x="250" y="236" textAnchor="middle" className="wheel-title presence">
+        {/* Superior izquierdo */}
+        <text x="250" y="218" textAnchor="middle" className="wheel-title presence">
           <tspan x="250" dy="0">Redes</tspan>
-          <tspan x="250" dy="44">sociales</tspan>
+          <tspan x="250" dy="36">sociales</tspan>
         </text>
-        <text x="250" y="297" textAnchor="middle" className="wheel-sub">Instagram · LinkedIn</text>
+        <text x="250" y="272" textAnchor="middle" className="wheel-sub">Instagram · LinkedIn</text>
 
-        <text x="455" y="236" textAnchor="middle" className="wheel-title growth">
+        {/* Superior derecho */}
+        <text x="455" y="218" textAnchor="middle" className="wheel-title growth">
           <tspan x="455" dy="0">Pauta</tspan>
-          <tspan x="455" dy="44">digital</tspan>
+          <tspan x="455" dy="36">digital</tspan>
         </text>
-        <text x="455" y="297" textAnchor="middle" className="wheel-sub">Meta Ads · Google Ads</text>
+        <text x="455" y="272" textAnchor="middle" className="wheel-sub">Meta Ads · Google Ads</text>
 
-        <text x="248" y="468" textAnchor="middle" className="wheel-title presence">
+        {/* Inferior izquierdo */}
+        <text x="248" y="440" textAnchor="middle" className="wheel-title presence">
           <tspan x="248" dy="0">Sitio</tspan>
-          <tspan x="248" dy="44">web</tspan>
+          <tspan x="248" dy="36">web</tspan>
         </text>
-        <text x="248" y="529" textAnchor="middle" className="wheel-sub">Estructura · medición</text>
+        <text x="248" y="494" textAnchor="middle" className="wheel-sub">Estructura · medición</text>
 
-        <text x="458" y="468" textAnchor="middle" className="wheel-title nurture">
+        {/* Inferior derecho */}
+        <text x="458" y="440" textAnchor="middle" className="wheel-title nurture">
           <tspan x="458" dy="0">Email</tspan>
-          <tspan x="458" dy="44">marketing</tspan>
+          <tspan x="458" dy="36">marketing</tspan>
         </text>
-        <text x="458" y="529" textAnchor="middle" className="wheel-sub">Envíos · secuencias</text>
+        <text x="458" y="494" textAnchor="middle" className="wheel-sub">Envíos · secuencias</text>
 
+        {/* CRM central */}
         <circle cx="350" cy="350" r="88" fill="#fff" stroke="#DFD6E1" strokeWidth="1.2" />
         <text x="350" y="330" textAnchor="middle" className="wheel-crm-main">CRM</text>
         <text x="350" y="367" textAnchor="middle" className="wheel-crm-sub">
