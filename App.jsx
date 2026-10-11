@@ -126,9 +126,9 @@ function ServiceWheel() {
 
         {/* CRM central — r=55 (proporción del one-pager) */}
         <circle cx="350" cy="350" r="55" fill="#fff" stroke="#DFD6E1" strokeWidth="1.2" />
-        <text x="350" y="339" textAnchor="middle" className="wheel-crm-main">CRM</text>
-        <text x="350" y="353" textAnchor="middle" className="wheel-crm-partner">Partner oficial de</text>
-        <image href="/clientify.png" x="316" y="358" width="68" height="18" preserveAspectRatio="xMidYMid meet" />
+        <text x="350" y="336" textAnchor="middle" className="wheel-crm-main">CRM</text>
+        <text x="350" y="350" textAnchor="middle" className="wheel-crm-partner">Partner oficial de</text>
+        <text x="350" y="366" textAnchor="middle" className="wheel-crm-clientify">Clientify</text>
       </svg>
     </div>
   );
@@ -202,6 +202,7 @@ export default function NeriniWeb() {
         .wheel-sub{fill:#6B6660;font-family:'Raleway',Arial,sans-serif;font-size:12px}
         .wheel-crm-main{fill:#6B1F2A;font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:500}
         .wheel-crm-partner{fill:#8E7F79;font-family:'Raleway',Arial,sans-serif;font-size:9px;letter-spacing:0}
+        .wheel-crm-clientify{fill:#1664FF;font-family:'Raleway',Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.4px}
 
         #quien .bio-layout{max-width:1000px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:64px;align-items:center}
         .portrait-wrap{width:220px;aspect-ratio:1;border-radius:50%;overflow:hidden;background:#fff}.portrait{width:100%;height:100%;object-fit:cover;object-position:center 29%;display:block}
