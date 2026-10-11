@@ -1,50 +1,672 @@
 import { useEffect, useState } from 'react';
 
-const AGENDA = 'https://nerini.ar/agenda';
 const WA = 'https://wa.me/5491122419299?text=Hola%20Debora%2C%20me%20interesa%20saber%20m%C3%A1s%20sobre%20tus%20servicios';
+const AGENDA = 'https://nerini.ar/agenda';
+
 const problemas = [
-  { icon:'network', titulo:'Diferentes proveedores. Diferentes estrategias.', detalle:'Cada proveedor ejecuta su área sin una estrategia integral que los coordine.' },
-  { icon:'person', titulo:'El marketing lo planificás vos.', detalle:'La planificación y ejecución dependen de tu disponibilidad permanente.' },
-  { icon:'chart', titulo:'Invertís sin medir el retorno.', detalle:'Reportes aislados de cada proveedor, sin un tablero que muestre el resultado conjunto.' },
-  { icon:'target', titulo:'Los leads no tienen seguimiento.', detalle:'No hay registro de origen ni proceso definido para convertirlos en oportunidades de venta.' },
+  {
+    icon: 'network',
+    titulo: 'Diferentes proveedores. Diferentes estrategias.',
+    detalle: 'Cada proveedor ejecuta su área sin una estrategia integral que los coordine.'
+  },
+  {
+    icon: 'person',
+    titulo: 'El marketing lo planificás vos.',
+    detalle: 'La planificación y ejecución dependen de tu disponibilidad permanente.'
+  },
+  {
+    icon: 'chart',
+    titulo: 'Invertís sin medir el retorno.',
+    detalle: 'Reportes aislados de cada proveedor, sin un tablero que muestre el resultado conjunto.'
+  },
+  {
+    icon: 'target',
+    titulo: 'Los leads no tienen seguimiento.',
+    detalle: 'No hay registro de origen ni proceso definido para convertirlos en oportunidades de venta.'
+  }
 ];
-function Icon({name,size=22}){
- const paths={network:<><circle cx="5" cy="12" r="2.5"/><circle cx="18" cy="5" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M7.3 10.9 15.7 6.2M7.3 13.1l8.4 4.7"/></>,person:<><circle cx="12" cy="7" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></>,chart:<path d="M3 20h18M4 16l5-6 5 3 6-8"/>,target:<><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v18M3 12h18"/></>,arrow:<path d="M4 12h16m-6-6 6 6-6 6"/>};
- return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name]||paths.arrow}</svg>;
+
+function Icon({ name, size = 24 }) {
+  const base = {
+    width: size,
+    height: size,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 1.6,
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
+    'aria-hidden': true
+  };
+
+  const shapes = {
+    network: <><circle cx="5" cy="12" r="2.4"/><circle cx="18" cy="5" r="2.4"/><circle cx="18" cy="19" r="2.4"/><path d="M7.2 11l8.4-4.8M7.2 13l8.4 4.8"/></>,
+    person: <><circle cx="12" cy="7" r="3.2"/><path d="M5.4 20.5c.8-3.5 3.4-5.5 6.6-5.5s5.8 2 6.6 5.5"/></>,
+    chart: <><path d="M3 20h18"/><path d="M5 15l4.2-5 4.2 3 5.6-7"/></>,
+    target: <><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.8"/><path d="M12 3.5v17M3.5 12h17"/></>,
+    arrow: <><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></>
+  };
+
+  return <svg {...base}>{shapes[name] || shapes.arrow}</svg>;
 }
-function Brand(){return <img className="brand-img" src="/nerini-logo-oficial.png" alt="NERINI Marketing"/>;}
-const point=(deg,r=247)=>{const a=(deg-90)*Math.PI/180;return [300+r*Math.cos(a),300+r*Math.sin(a)];};
-function arc(start,end){const p=point(start),q=point(end);return `M ${p[0]} ${p[1]} A 247 247 0 ${end-start>180?1:0} 1 ${q[0]} ${q[1]}`;}
-function ServiceWheel(){return <div className="wheel-wrap"><div className="wheel-ring" role="img" aria-label="Servicio integral: Presencia, Crecimiento y Nutrición. Redes sociales, pauta digital, sitio web y email marketing, con CRM centralizado.">
- <svg className="wheel-arcs" viewBox="0 0 600 600" aria-hidden="true">
-  <path d={arc(206,359.5)} fill="none" stroke="#6B1F2A" strokeWidth="54"/>
-  <path d={arc(.5,110)} fill="none" stroke="#A0714A" strokeWidth="54"/>
-  <path d={arc(111,205)} fill="none" stroke="#C9BFBA" strokeWidth="54"/>
-  <text x="76" y="307" textAnchor="middle" transform="rotate(-90 76 307)">PRESENCIA</text>
-  <text x="493" y="154" textAnchor="middle" transform="rotate(48 493 154)">CRECIMIENTO</text>
-  <text x="300" y="540" textAnchor="middle">NUTRICIÓN</text>
- </svg>
- <div className="wheel-interior">
-  <div className="wheel-quadrant"><strong>Redes<br/>sociales</strong><small>Instagram · LinkedIn</small></div>
-  <div className="wheel-quadrant"><strong>Pauta<br/>digital</strong><small>Meta Ads · Google Ads</small></div>
-  <div className="wheel-quadrant"><strong>Sitio<br/>web</strong><small>Estructura · medición</small></div>
-  <div className="wheel-quadrant"><strong>Email<br/>marketing</strong><small>Envíos · secuencias</small></div>
- </div><div className="wheel-crm"><b>CRM</b><span>Sistema centralizado</span><small>Clientify</small></div></div></div>}
-const STYLES = "\n@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500&display=swap');\n:root{--wine:#6B1F2A;--ink:#3A1A1F;--leather:#A0714A;--text:#6B6660;--line:#E8E2D9;--mauve:#DFD6E1;--surface:#fff}\n*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:white}a{color:inherit}button,a{font:inherit}\n.nerini-site{color:var(--ink);font-family:Raleway,'Open Sans',Arial,sans-serif;line-height:1.55;overflow-x:clip}\n.nerini-site a{text-decoration:none}.nerini-site p,.nerini-site h1,.nerini-site h2,.nerini-site h3{margin-top:0}\n.container{width:min(1180px,calc(100% - 88px));margin-inline:auto}\n.nav{height:83px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.985);position:sticky;top:0;z-index:50}\n.nav-inner{height:100%;display:flex;align-items:center;justify-content:space-between;gap:26px}.brand-img{width:148px;max-height:62px;object-fit:contain;display:block}\n.nav-links{display:flex;align-items:center;gap:30px}.nav-links>a:not(.button){font-size:14px;white-space:nowrap}.nav-links>a:hover{color:var(--wine)}\n.button{display:inline-flex;gap:11px;align-items:center;justify-content:center;padding:13px 23px;border-radius:4px;background:var(--wine);color:#fff!important;font-size:14px;font-weight:600;border:1px solid var(--wine);min-height:44px}\n.button:hover{background:#541821}.button-outline{color:var(--wine)!important;background:#fff}.button-outline:hover{background:#fbf8f7}\n.menu-toggle{display:none;background:none;border:0;color:var(--wine);font-size:29px;cursor:pointer}\n.section{padding:clamp(88px,9vw,126px) 0;border-bottom:1px solid var(--line);scroll-margin-top:82px}\n.eyebrow{color:#8B5F3D;font-size:12px;letter-spacing:.15em;font-weight:700;text-transform:uppercase}\nh1,h2,.serif,.bio-role,.wheel-quadrant strong,.wheel-crm b{font-family:'Playfair Display',Georgia,serif;font-weight:400;letter-spacing:-.028em}\nh1,h2{color:var(--wine)}h1{font-size:clamp(47px,5vw,75px);line-height:1.1;margin:25px 0 25px}h2{font-size:clamp(36px,3.8vw,54px);line-height:1.17;margin:13px 0 22px}\n.lead{font-size:clamp(16px,1.25vw,19px);color:var(--text);line-height:1.75}.quiet{font-size:14px;color:var(--text)}\n.hero{min-height:610px;position:relative;display:flex;align-items:center;padding:80px 0;overflow:hidden}\n.hero .container{position:relative;z-index:2}.hero-copy{max-width:55%}.hero h1{max-width:700px}.hero .lead{max-width:620px}\n.hero-photo{position:absolute;inset:0 0 0 auto;width:44%;background:#f6f3f1 url('/equipo-referencia.jpg') center/cover no-repeat;clip-path:polygon(16% 0,100% 0,100% 100%,0 100%)}\n.hero-actions{display:flex;align-items:center;flex-wrap:wrap;gap:18px;margin-top:30px}\n.problems-heading{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(230px,.6fr);gap:65px;align-items:end;margin-bottom:52px}\n.problems-heading h2{max-width:780px}.problems-aside{font-size:16px;color:var(--text);line-height:1.8;border-left:1px solid var(--mauve);padding-left:23px}\n.problem-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}.problem{min-width:0;padding:8px 29px 12px;border-right:1px solid var(--line)}.problem:first-child{padding-left:0}.problem:last-child{border-right:0}\n.problem svg{color:var(--leather);margin-bottom:20px}.problem h3{font-size:17px;line-height:1.42;font-weight:600;margin:0 0 13px}.problem p{font-size:14px;line-height:1.75;color:var(--text);margin:0}\n.service-section{text-align:center}.section-top{max-width:840px;margin:0 auto 44px}.service-section .section-top .lead{max-width:800px;margin:0 auto}\n.wheel-wrap{width:min(620px,100%);margin:35px auto 0}.wheel-ring{position:relative;width:100%;aspect-ratio:1}.wheel-arcs{position:absolute;inset:0;width:100%;height:100%;overflow:visible}\n.wheel-arcs text{fill:#fff;font:600 19px Raleway,Arial,sans-serif;letter-spacing:3px}\n.wheel-interior{position:absolute;inset:17%;border-radius:50%;border:1px solid var(--line);overflow:hidden;display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(2,1fr);background:#fff}\n.wheel-quadrant{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px 4px}\n.wheel-quadrant:nth-child(odd){border-right:1px solid var(--line)}.wheel-quadrant:nth-child(-n+2){border-bottom:1px solid var(--line)}\n.wheel-quadrant strong{font-size:clamp(17px,2.15vw,29px);line-height:1.1;color:var(--wine)}.wheel-quadrant:nth-child(2) strong,.wheel-quadrant:nth-child(3) strong{color:var(--leather)}\n.wheel-quadrant small{font-size:clamp(9px,.83vw,12px);line-height:1.25;color:var(--text)}\n.wheel-crm{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:23%;aspect-ratio:1;border-radius:50%;background:white;border:1px solid var(--mauve);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px}\n.wheel-crm b{font-size:clamp(22px,3vw,37px)}.wheel-crm span{font-size:clamp(8px,.8vw,11px);color:var(--text)}.wheel-crm small{color:var(--wine);font-size:clamp(12px,1.4vw,17px);font-weight:700}\n#seguimiento .section-top{margin:0 0 36px;max-width:850px}.tracking-layout{display:grid;grid-template-columns:1fr 1fr;gap:24px}.tracking-card{padding:30px 34px;border:1px solid var(--line)}\n.tracking-card h3{font-size:17px;font-weight:600;margin:0 0 16px}.tracking-card ul{padding:0;margin:0;list-style:none}.tracking-card li{border-top:1px solid var(--line);color:var(--text);font-size:15px;padding:11px 0}\n.tracking-bar{display:flex;align-items:center;justify-content:space-between;gap:20px;border:1px solid var(--line);border-left:3px solid var(--wine);padding:25px 31px;margin-top:18px}\n.tracking-bar strong{font-size:17px}.tracking-bar span{font-size:14px;color:var(--text)}\n.bio-layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:70px;align-items:center;max-width:1030px}\n.portrait-wrap{width:230px;aspect-ratio:1;border-radius:50%;overflow:hidden}.portrait{width:100%;height:100%;object-fit:cover;object-position:center 26%}\n.bio-heading{font-size:clamp(41px,4vw,60px);margin:6px 0 0}.bio-role{color:var(--leather);font-size:clamp(24px,2.25vw,31px);margin:0 0 19px}.bio-credentials{padding-top:17px;border-top:1px solid var(--line);color:var(--text);font-size:15px;line-height:1.7;margin:0 0 15px}.bio-text{color:var(--text);font-size:16px;line-height:1.8}\n.footer-feature{background:linear-gradient(115deg,#F4F0F5 0%,#F4F0F5 49%,white 49.1%);padding:clamp(80px,8vw,116px) 0}\n.footer-feature-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(55px,7vw,105px);align-items:center}\n.footer-message h2{font-size:clamp(40px,4.4vw,62px);line-height:1.13;margin:15px 0 22px;max-width:640px}.footer-message p{font-size:17px;color:var(--text);margin:0 0 23px}\n.footer-cta{padding-left:clamp(30px,4vw,70px);border-left:1px solid #C8BCCC}.footer-cta h2{font-size:clamp(31px,3vw,43px);margin:0 0 15px}.footer-cta p{font-size:15px;color:var(--text);margin:0 0 24px}\n.footer-contact{display:flex;flex-direction:column;gap:16px}.footer-contact a{font-size:16px;overflow-wrap:anywhere}.footer-contact a:hover{text-decoration:underline;color:var(--wine)}\n.footer-bottom{padding:26px 0;background:white;border-top:1px solid var(--line)}.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:24px}.footer-bottom .brand-img{width:120px}.copyright,.footer-bottom a{color:var(--text);font-size:12px}\n.wa-float{position:fixed;right:24px;bottom:24px;width:50px;height:50px;border-radius:50%;background:var(--wine);color:white!important;display:flex;align-items:center;justify-content:center;font-size:24px;z-index:70;box-shadow:0 4px 18px #6b1f2a24}\n@media(max-width:980px){.container{width:min(100% - 56px,1180px)}.hero-copy{max-width:62%}.hero-photo{width:37%;opacity:.93}.hero h1{font-size:clamp(45px,5.4vw,61px)}.problems-heading{gap:36px}.problem{padding-inline:17px}.footer-feature-grid{gap:40px}}\n@media(max-width:760px){.nav{height:72px}.brand-img{width:130px}.menu-toggle{display:block}.nav-links{display:none;position:absolute;top:72px;left:0;right:0;flex-direction:column;align-items:flex-start;gap:20px;background:#fff;border-bottom:1px solid var(--line);padding:25px 30px}.nav-links.open{display:flex}.hero{display:flex;flex-direction:column;padding:0;min-height:0}.hero .container{order:1;padding-block:68px}.hero-copy{max-width:100%}.hero-photo{position:relative;order:2;height:290px;width:100%;clip-path:none;opacity:1}.hero h1{font-size:clamp(42px,8vw,62px)}.section{padding:78px 0}.problems-heading{grid-template-columns:1fr;gap:4px;margin-bottom:40px}.problems-aside{font-size:15px}.problem-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 0}.problem:nth-child(2){border-right:0}.problem:nth-child(3){padding-left:0}.wheel-wrap{max-width:540px}.tracking-layout{grid-template-columns:1fr;gap:15px}.bio-layout{gap:34px;grid-template-columns:185px minmax(0,1fr)}.portrait-wrap{width:185px}.footer-feature{background:#F4F0F5}.footer-feature-grid{grid-template-columns:1fr;gap:44px}.footer-cta{padding:34px 0 0;border-left:0;border-top:1px solid #C8BCCC}}\n@media(max-width:520px){.container{width:calc(100% - 38px)}.section{padding:65px 0}.hero .container{padding-block:58px}.hero-photo{height:240px}.hero h1{font-size:42px}.hero .lead{font-size:16px}.problems-heading h2{font-size:36px}.problem-grid{grid-template-columns:1fr;gap:0}.problem{border-right:0;padding:21px 0!important;border-bottom:1px solid var(--line)}.problem:last-child{border:0}.problem h3{font-size:17px}.wheel-wrap{width:min(100%,410px)}.wheel-arcs text{font-size:17px;letter-spacing:2px}.wheel-interior{inset:17%}.wheel-quadrant{gap:3px;padding:6px 1px}.wheel-quadrant strong{font-size:clamp(12px,4.3vw,18px)}.wheel-quadrant small{font-size:clamp(6px,1.65vw,8px)}.wheel-crm{width:24%}.wheel-crm b{font-size:clamp(18px,5vw,24px)}.wheel-crm span{font-size:7px}.wheel-crm small{font-size:clamp(9px,3vw,12px)}.tracking-card{padding:22px}.tracking-bar{flex-direction:column;align-items:flex-start}.bio-layout{grid-template-columns:1fr;gap:22px}.portrait-wrap{width:190px}.footer-message h2{font-size:clamp(39px,9vw,51px)}.footer-inner{align-items:flex-start;flex-wrap:wrap}.footer-cta h2{font-size:36px}}\n@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}\n";
-export default function NeriniWeb(){
- const [open,setOpen]=useState(false);
- useEffect(()=>{document.title='NERINI | Departamento Externo de Marketing';},[]);
- return <div className="nerini-site" id="inicio">
-  <style>{STYLES}</style>
-  <header className="nav"><div className="container nav-inner"><a href="#inicio" aria-label="NERINI inicio"><Brand/></a><button className="menu-toggle" aria-label="Abrir menú" aria-expanded={open} onClick={()=>setOpen(!open)}>☰</button><nav className={'nav-links'+(open?' open':'')}><a href="#servicio" onClick={()=>setOpen(false)}>Servicio integral</a><a href="#seguimiento" onClick={()=>setOpen(false)}>Seguimiento</a><a href="#quien" onClick={()=>setOpen(false)}>Quién dirige</a><a href={AGENDA} className="button button-outline" target="_blank" rel="noreferrer">Agendemos una llamada</a></nav></div></header>
-  <main>
-   <section className="hero"><div className="hero-photo" role="img" aria-label="Reunión de un equipo de trabajo"/><div className="container"><div className="hero-copy"><span className="eyebrow">ESTRATEGIA · EJECUCIÓN · MEDICIÓN</span><h1>Departamento Externo de Marketing</h1><p className="lead">Somos el Departamento Externo de Marketing de empresas de servicios sin equipo interno. Dirigimos la estrategia y ejecutamos redes, pauta, sitio y email marketing con nuestro equipo, bajo un mismo sistema de seguimiento y medición.</p><div className="hero-actions"><a className="button" href={AGENDA} target="_blank" rel="noreferrer">Coordinemos una llamada <Icon name="arrow" size={17}/></a><span className="quiet">Un equipo. Una dirección. Un sistema.</span></div></div></div></section>
-   <section className="section" id="problemas"><div className="container"><div className="problems-heading"><div><span className="eyebrow">PUNTO DE PARTIDA</span><h2>Cuatro problemas, un mismo resultado: oportunidades que se pierden.</h2></div><p className="problems-aside">Sin una dirección integral, el marketing se vuelve fragmentado y difícil de medir.</p></div><div className="problem-grid">{problemas.map(p=><article className="problem" key={p.titulo}><Icon name={p.icon} size={28}/><h3>{p.titulo}</h3><p>{p.detalle}</p></article>)}</div></div></section>
-   <section className="section service-section" id="servicio"><div className="container"><div className="section-top"><span className="eyebrow">UN SOLO DEPARTAMENTO</span><h2>Servicio integral</h2><p className="lead">Redes, pauta, sitio y email marketing bajo una misma dirección. Un sistema centralizado conecta los canales, registra cada contacto y permite hacer seguimiento y medir.</p></div><ServiceWheel/></div></section>
-   <section className="section" id="seguimiento"><div className="container"><div className="section-top"><span className="eyebrow">SISTEMA CENTRALIZADO</span><h2>Seguimiento y medición</h2><p className="lead">Integramos los canales de comunicación para que cada contacto tenga registro de origen, historial y seguimiento comercial.</p></div><div className="tracking-layout"><div className="tracking-card"><h3>Canales digitales</h3><ul>{['Redes sociales','Pauta digital','Sitio web','WhatsApp'].map(t=><li key={t}>{t}</li>)}</ul></div><div className="tracking-card"><h3>Canales offline</h3><ul>{['Eventos y ferias','Referidos'].map(t=><li key={t}>{t}</li>)}</ul></div></div><div className="tracking-bar"><strong>CRM · Sistema centralizado</strong><span>Registro de origen · automatizaciones · seguimiento · tablero de medición</span></div></div></section>
-   <section className="section" id="quien"><div className="container bio-layout"><div className="portrait-wrap"><img className="portrait" src="/debora.png" alt="Debora Nerini" loading="lazy"/></div><div><span className="eyebrow">QUIÉN DIRIGE</span><h2 className="bio-heading">Debora Nerini</h2><p className="bio-role">Directora de Marketing</p><p className="bio-credentials">Lic. en Comercialización (UADE) · Especialización en Marketing Digital (UBA) · 15 años en marketing y negocios en grandes empresas.</p><p className="bio-text">Dirijo el marketing de cada empresa: defino el plan, coordino las áreas con nuestro equipo de especialistas y respondo por el resultado.</p></div></div></section>
-  </main>
-  <footer id="contacto"><div className="footer-feature"><div className="container footer-feature-grid"><div className="footer-message"><span className="eyebrow">MARKETING CON DIRECCIÓN · EJECUCIÓN · MEDICIÓN</span><h2>Hagamos que el marketing impulse tu negocio.</h2><p>Conversemos sobre el marketing de tu empresa.</p><a href={AGENDA} className="button" target="_blank" rel="noreferrer">Agendemos una llamada <Icon name="arrow" size={17}/></a></div><div className="footer-cta"><h2>Coordinemos una llamada</h2><p>Un equipo. Una dirección. Un sistema.</p><div className="footer-contact"><a href={AGENDA} target="_blank" rel="noreferrer">nerini.ar/agenda ↗</a><a href="mailto:debora@nerini.ar">debora@nerini.ar</a><a href={WA} target="_blank" rel="noreferrer">+54 9 11 2241 9299</a></div></div></div></div><div className="footer-bottom"><div className="container footer-inner"><Brand/><span className="copyright">© 2026 NERINI · Departamento Externo de Marketing</span><a href="https://nerini.ar">nerini.ar</a></div></div></footer>
-  <a className="wa-float" href={WA} aria-label="WhatsApp" target="_blank" rel="noreferrer">✆</a>
- </div>;
+
+function Brand() {
+  return <img className="brand-img" src="/nerini-logo-oficial.png" alt="NERINI Marketing" />;
+}
+
+function ServiceWheel() {
+  return (
+    <div className="wheel-wrap" role="img" aria-label="Servicio integral con Presencia, Crecimiento y Nutrición; redes sociales, pauta digital, sitio web, email marketing y CRM centralizado.">
+      <div className="wheel-shell">
+        <svg className="wheel-svg" viewBox="0 0 600 600" aria-hidden="true">
+          <defs>
+            <path id="arc-left" d="M 157 466 A 235 235 0 0 1 288 67" />
+            <path id="arc-top-right" d="M 313 67 A 235 235 0 0 1 530 297" />
+            <path id="arc-bottom" d="M 522 322 A 235 235 0 0 1 181 502" />
+          </defs>
+
+          <path d="M 157 466 A 235 235 0 0 1 288 67" fill="none" stroke="#6B1F2A" strokeWidth="62" />
+          <path d="M 313 67 A 235 235 0 0 1 530 297" fill="none" stroke="#A0714A" strokeWidth="62" />
+          <path d="M 522 322 A 235 235 0 0 1 181 502" fill="none" stroke="#C9BFBA" strokeWidth="62" />
+
+          <text className="wheel-arc-text"><textPath href="#arc-left" startOffset="49%" textAnchor="middle">PRESENCIA</textPath></text>
+          <text className="wheel-arc-text"><textPath href="#arc-top-right" startOffset="56%" textAnchor="middle">CRECIMIENTO</textPath></text>
+          <text className="wheel-arc-text"><textPath href="#arc-bottom" startOffset="50%" textAnchor="middle">NUTRICIÓN</textPath></text>
+        </svg>
+
+        <div className="wheel-core">
+          <div className="wheel-grid">
+            <div className="quad q1">
+              <strong>Redes<br/>sociales</strong>
+              <small>Instagram · LinkedIn</small>
+            </div>
+            <div className="quad q2">
+              <strong>Pauta<br/>digital</strong>
+              <small>Meta Ads · Google Ads</small>
+            </div>
+            <div className="quad q3">
+              <strong>Sitio<br/>web</strong>
+              <small>Estructura · medición</small>
+            </div>
+            <div className="quad q4">
+              <strong>Email<br/>marketing</strong>
+              <small>Envíos · secuencias</small>
+            </div>
+          </div>
+          <div className="crm-center">
+            <b>CRM</b>
+            <span>Sistema centralizado</span>
+            <small>Clientify</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function NeriniWeb() {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    document.title = 'NERINI | Departamento Externo de Marketing';
+  }, []);
+
+  return (
+    <div className="nerini-site" id="inicio">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap');
+
+        :root{
+          --bordo:#6B1F2A;
+          --tinta:#3A1A1F;
+          --cuero:#A0714A;
+          --gris:#6B6660;
+          --linea:#E8E2D9;
+          --malva:#DFD6E1;
+          --malva-fondo:#F2ECF2;
+          --gris-arena:#C9BFBA;
+          --blanco:#FFFFFF;
+        }
+
+        *{box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{margin:0;background:#fff}
+        a{text-decoration:none;color:inherit}
+        button{font:inherit}
+
+        .nerini-site{
+          font-family:'Raleway', Arial, sans-serif;
+          color:var(--tinta);
+          background:#fff;
+          line-height:1.55;
+          overflow-x:hidden;
+        }
+
+        .container{width:min(1180px, calc(100% - 80px)); margin:0 auto}
+        .eyebrow{
+          display:block;
+          color:#8B5F3D;
+          font-size:11px;
+          font-weight:700;
+          letter-spacing:.19em;
+          text-transform:uppercase;
+        }
+        h1,h2,h3,p{margin-top:0}
+        h1,h2,.serif{
+          font-family:'Playfair Display', Georgia, serif;
+          font-weight:500;
+          letter-spacing:-.035em;
+        }
+
+        .nav{
+          position:sticky;
+          top:0;
+          z-index:50;
+          background:rgba(255,255,255,.96);
+          border-bottom:1px solid var(--linea);
+          backdrop-filter:saturate(140%) blur(6px);
+        }
+        .nav-inner{
+          min-height:82px;
+          display:flex;
+          align-items:center;
+          justify-content:space-between;
+          gap:26px;
+        }
+        .brand-img{width:145px; height:auto; display:block}
+        .nav-links{display:flex; align-items:center; gap:28px}
+        .nav-links>a:not(.button){font-size:13px; color:var(--tinta)}
+        .menu-toggle{
+          display:none;
+          border:0;
+          background:none;
+          color:var(--bordo);
+          font-size:24px;
+          cursor:pointer;
+        }
+
+        .button{
+          display:inline-flex;
+          align-items:center;
+          justify-content:center;
+          gap:10px;
+          background:var(--bordo);
+          color:#fff;
+          border:1px solid var(--bordo);
+          border-radius:22px;
+          padding:13px 23px;
+          font-size:13px;
+          font-weight:600;
+          transition:.2s ease;
+        }
+        .button:hover{background:#541821}
+        .button-outline{background:#fff; color:var(--bordo)}
+        .button-outline:hover{background:#faf6f6}
+        .quiet{font-size:13px; color:var(--gris)}
+
+        .section{
+          padding:108px 0;
+          border-bottom:1px solid var(--linea);
+          scroll-margin-top:92px;
+        }
+        .section-top{max-width:900px; margin-bottom:42px}
+        .section-top h2{margin:16px 0 18px}
+        .lead{
+          font-size:17px;
+          line-height:1.75;
+          color:var(--gris);
+          max-width:760px;
+        }
+
+        .hero{
+          position:relative;
+          min-height:610px;
+          padding:110px 0 108px;
+          background:#fff;
+          border-bottom:1px solid var(--linea);
+          overflow:hidden;
+        }
+        .hero .container{position:relative; z-index:2}
+        .hero-top{display:flex; align-items:center; justify-content:space-between; gap:20px; max-width:560px}
+        .hero-rule{width:110px; height:1px; background:var(--malva); transform:rotate(-48deg); opacity:.65}
+        .hero h1{
+          font-size:clamp(48px,5.1vw,72px);
+          line-height:1.06;
+          color:var(--bordo);
+          max-width:610px;
+          margin:24px 0 20px;
+        }
+        .hero .lead{max-width:560px}
+        .hero-actions{display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-top:30px}
+        .hero-photo{
+          position:absolute;
+          right:0;
+          top:0;
+          bottom:0;
+          width:44%;
+          background:
+            linear-gradient(rgba(255,255,255,.18), rgba(255,255,255,.18)),
+            linear-gradient(140deg, rgba(223,214,225,.18), rgba(255,255,255,.1)),
+            url('/equipo-referencia.jpg') center/cover no-repeat;
+          clip-path:polygon(13% 0,100% 0,100% 100%,0 100%);
+        }
+
+        .problems-heading{
+          display:grid;
+          grid-template-columns:1.35fr .65fr;
+          gap:64px;
+          align-items:end;
+          margin-bottom:42px;
+        }
+        .problems-heading h2{
+          font-size:clamp(38px,4.2vw,56px);
+          line-height:1.12;
+          color:var(--bordo);
+          max-width:760px;
+          margin:16px 0 0;
+        }
+        .problems-aside{
+          color:var(--gris);
+          font-size:15px;
+          line-height:1.7;
+          padding-bottom:8px;
+          max-width:320px;
+        }
+        .problem-grid{
+          display:grid;
+          grid-template-columns:repeat(4, minmax(0,1fr));
+          border-top:1px solid var(--linea);
+          border-bottom:1px solid var(--linea);
+        }
+        .problem{
+          padding:34px 28px 34px;
+          border-right:1px solid var(--linea);
+          min-width:0;
+        }
+        .problem:first-child{padding-left:0}
+        .problem:last-child{border-right:0}
+        .problem svg{color:var(--cuero); margin-bottom:22px}
+        .problem h3{font-size:17px; line-height:1.45; font-weight:600; margin:0 0 14px}
+        .problem p{font-size:14px; line-height:1.7; color:var(--gris); margin:0}
+
+        .service-section{text-align:center}
+        .service-section .section-top{margin-left:auto; margin-right:auto; margin-bottom:44px}
+        .service-section .lead{margin:0 auto}
+
+        .wheel-wrap{display:flex; justify-content:center; margin-top:8px}
+        .wheel-shell{
+          position:relative;
+          width:min(560px, calc(100vw - 44px));
+          aspect-ratio:1;
+        }
+        .wheel-svg{position:absolute; inset:0; width:100%; height:100%; z-index:0; overflow:visible}
+        .wheel-arc-text{
+          fill:#fff;
+          font-family:'Raleway', Arial, sans-serif;
+          font-size:15px;
+          font-weight:700;
+          letter-spacing:3px;
+        }
+        .wheel-core{
+          position:absolute;
+          inset:13%;
+          border:1px solid var(--linea);
+          border-radius:50%;
+          overflow:hidden;
+          background:#fff;
+          z-index:1;
+        }
+        .wheel-grid{
+          width:100%;
+          height:100%;
+          display:grid;
+          grid-template-columns:1fr 1fr;
+          grid-template-rows:1fr 1fr;
+        }
+        .quad{
+          display:flex;
+          flex-direction:column;
+          align-items:center;
+          justify-content:center;
+          gap:8px;
+          padding:14px 8px;
+        }
+        .quad:nth-child(odd){border-right:1px solid var(--linea)}
+        .quad:nth-child(-n+2){border-bottom:1px solid var(--linea)}
+        .quad strong{
+          font-family:'Playfair Display', Georgia, serif;
+          font-size:clamp(17px,2vw,29px);
+          line-height:1.04;
+          font-weight:500;
+          color:var(--bordo);
+        }
+        .q2 strong,.q3 strong{color:var(--cuero)}
+        .quad small{font-size:clamp(9px,.95vw,12px); color:var(--gris)}
+        .crm-center{
+          position:absolute;
+          left:50%;
+          top:50%;
+          transform:translate(-50%, -50%);
+          width:26%;
+          aspect-ratio:1;
+          border-radius:50%;
+          background:#fff;
+          border:1px solid var(--malva);
+          display:flex;
+          flex-direction:column;
+          align-items:center;
+          justify-content:center;
+          gap:3px;
+          z-index:2;
+          padding:8px;
+        }
+        .crm-center b{
+          font-family:'Playfair Display', Georgia, serif;
+          font-size:clamp(24px,3vw,38px);
+          font-weight:500;
+          color:var(--bordo);
+        }
+        .crm-center span{font-size:clamp(7px,.8vw,11px); color:var(--gris); text-align:center; line-height:1.2}
+        .crm-center small{font-size:clamp(11px,1.2vw,17px); color:var(--bordo); font-weight:700}
+
+        #quien .bio-layout{
+          max-width:1000px;
+          display:grid;
+          grid-template-columns:220px minmax(0,1fr);
+          gap:64px;
+          align-items:center;
+        }
+        .portrait-wrap{
+          width:220px;
+          aspect-ratio:1;
+          border-radius:50%;
+          overflow:hidden;
+          background:#fff;
+        }
+        .portrait{
+          width:100%;
+          height:100%;
+          object-fit:cover;
+          object-position:center 29%;
+          display:block;
+        }
+        .bio-heading{
+          font-size:clamp(42px,4.1vw,56px);
+          color:var(--bordo);
+          margin:8px 0 2px;
+        }
+        .bio-role{
+          font-family:'Playfair Display', Georgia, serif;
+          font-size:28px;
+          color:var(--cuero);
+          margin:0 0 22px;
+        }
+        .bio-credentials{
+          font-size:15px;
+          color:var(--gris);
+          padding-top:18px;
+          border-top:1px solid var(--linea);
+          margin-bottom:18px;
+        }
+        .bio-text{font-size:16px; color:var(--gris); line-height:1.75; max-width:640px}
+
+        .footer{border-top:0}
+        .footer-feature{
+          background:linear-gradient(116deg, #F1ECF2 0%, #F1ECF2 50%, #FFFFFF 50.2%, #FFFFFF 100%);
+          padding:88px 0 86px;
+        }
+        .footer-feature-grid{
+          display:grid;
+          grid-template-columns:1.15fr .85fr;
+          gap:84px;
+          align-items:center;
+        }
+        .footer-message h2{
+          font-size:clamp(40px,4.25vw,60px);
+          line-height:1.12;
+          color:var(--bordo);
+          margin:18px 0 20px;
+          max-width:620px;
+        }
+        .footer-message p{font-size:17px; color:var(--gris); margin:0 0 24px}
+        .footer-cta{
+          border-left:1px solid #C8BCCC;
+          padding-left:60px;
+        }
+        .footer-cta h2{
+          font-size:clamp(31px,3vw,42px);
+          line-height:1.2;
+          color:var(--bordo);
+          margin:0 0 14px;
+        }
+        .footer-cta p{font-size:14px; color:var(--gris); margin:0 0 24px}
+        .footer-contact{
+          display:flex;
+          flex-direction:column;
+          align-items:flex-start;
+          gap:14px;
+        }
+        .footer-contact a{font-size:15px; color:var(--tinta); overflow-wrap:anywhere}
+        .footer-bottom{
+          background:#fff;
+          border-top:1px solid var(--linea);
+          padding:26px 0;
+        }
+        .footer-inner{
+          display:flex;
+          align-items:center;
+          justify-content:space-between;
+          gap:20px;
+          flex-wrap:wrap;
+        }
+        .footer-bottom .brand-img{width:125px}
+        .copyright,
+        .footer-bottom a{font-size:12px; color:var(--gris)}
+
+        .wa-float{
+          position:fixed;
+          right:22px;
+          bottom:22px;
+          z-index:40;
+          width:52px;
+          height:52px;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          border-radius:50%;
+          background:var(--bordo);
+          color:#fff;
+          box-shadow:0 10px 30px rgba(107,31,42,.2);
+          font-size:20px;
+          font-weight:700;
+        }
+
+        @media (max-width: 980px){
+          .container{width:min(100% - 56px, 1180px)}
+          .hero-photo{width:39%; opacity:.75}
+          .footer-feature-grid{gap:45px}
+          .footer-cta{padding-left:34px}
+        }
+
+        @media (max-width: 760px){
+          .menu-toggle{display:block}
+          .nav-links{
+            display:none;
+            position:absolute;
+            top:81px;
+            left:0;
+            right:0;
+            background:#fff;
+            border-bottom:1px solid var(--linea);
+            padding:20px 28px 24px;
+            flex-direction:column;
+            align-items:flex-start;
+            gap:16px;
+          }
+          .nav-links.open{display:flex}
+          .container{width:min(100% - 40px, 600px)}
+          .section{padding:76px 0}
+          .hero{padding:0; min-height:0; display:flex; flex-direction:column}
+          .hero .container{order:1; padding-top:78px; padding-bottom:62px}
+          .hero-photo{
+            position:relative;
+            order:2;
+            width:100%;
+            height:250px;
+            clip-path:none;
+            opacity:1;
+          }
+          .hero h1{font-size:clamp(42px,10vw,58px); max-width:100%}
+          .hero .lead{max-width:100%; font-size:16px}
+          .hero-top{max-width:100%}
+          .problems-heading{grid-template-columns:1fr; gap:14px; margin-bottom:22px}
+          .problems-heading h2{font-size:clamp(34px,8vw,44px)}
+          .problems-aside{padding-bottom:0; max-width:none}
+          .problem-grid{grid-template-columns:1fr 1fr}
+          .problem{padding:24px 16px !important; border-right:1px solid var(--linea); border-bottom:1px solid var(--linea)}
+          .problem:nth-child(2n){border-right:0}
+          .problem:nth-last-child(-n+2){border-bottom:0}
+          .problem:first-child{padding-left:16px !important}
+          .wheel-shell{width:min(100%, 480px)}
+          .wheel-arc-text{font-size:14px; letter-spacing:2.2px}
+          .quad{padding:8px 4px; gap:4px}
+          .quad strong{font-size:clamp(14px,4vw,22px)}
+          .quad small{font-size:clamp(7px,1.7vw,10px)}
+          #quien .bio-layout{grid-template-columns:1fr; gap:26px}
+          .portrait-wrap{width:190px}
+          .footer-feature{padding:72px 0; background:#F1ECF2}
+          .footer-feature-grid{grid-template-columns:1fr; gap:38px}
+          .footer-cta{border-left:0; border-top:1px solid #C8BCCC; padding:36px 0 0}
+          .footer-message h2{font-size:clamp(38px,8vw,50px)}
+        }
+
+        @media (max-width: 430px){
+          .container{width:calc(100% - 34px)}
+          .problem-grid{grid-template-columns:1fr}
+          .problem{padding:22px 0 !important; border-right:0 !important}
+          .problem:nth-last-child(-n+2){border-bottom:1px solid var(--linea)}
+          .problem:last-child{border-bottom:0}
+          .problem:first-child{padding-left:0 !important}
+          .hero-actions{gap:12px}
+          .wheel-shell{width:min(100%, 410px)}
+          .wheel-arc-text{font-size:13px; letter-spacing:1.2px}
+          .crm-center{width:28%}
+          .footer-inner{align-items:flex-start}
+        }
+
+        @media (prefers-reduced-motion: reduce){
+          html{scroll-behavior:auto}
+        }
+      `}</style>
+
+      <header className="nav">
+        <div className="container nav-inner">
+          <a href="#inicio" aria-label="NERINI inicio"><Brand /></a>
+          <button className="menu-toggle" aria-expanded={open} aria-label="Abrir menú" onClick={() => setOpen(!open)}>☰</button>
+          <nav className={'nav-links' + (open ? ' open' : '')}>
+            <a href="#servicio" onClick={() => setOpen(false)}>Servicio integral</a>
+            <a href="#quien" onClick={() => setOpen(false)}>Quién dirige</a>
+            <a className="button button-outline" href={AGENDA} target="_blank" rel="noreferrer">Agendemos una llamada</a>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section className="hero">
+          <div className="hero-photo" role="img" aria-label="Equipo de trabajo reunido en una mesa" />
+          <div className="container">
+            <div className="hero-top">
+              <span className="eyebrow">ESTRATEGIA · EJECUCIÓN · MEDICIÓN</span>
+              <span className="hero-rule" aria-hidden="true" />
+            </div>
+            <h1>Departamento Externo de Marketing</h1>
+            <p className="lead">Somos el Departamento Externo de Marketing de empresas de servicios sin equipo interno. Dirigimos la estrategia y ejecutamos redes, pauta, sitio y email marketing con nuestro equipo, bajo un mismo sistema de seguimiento y medición.</p>
+            <div className="hero-actions">
+              <a className="button" href={AGENDA} target="_blank" rel="noreferrer">Coordinemos una llamada <Icon name="arrow" size={17} /></a>
+              <span className="quiet">Un equipo. Una dirección. Un sistema.</span>
+            </div>
+          </div>
+        </section>
+
+        <section className="section" id="problemas">
+          <div className="container">
+            <div className="problems-heading">
+              <div>
+                <span className="eyebrow">PUNTO DE PARTIDA</span>
+                <h2>Cuatro problemas, un mismo resultado: oportunidades que se pierden.</h2>
+              </div>
+              <p className="problems-aside">Sin una dirección integral, el marketing se vuelve fragmentado y difícil de medir.</p>
+            </div>
+            <div className="problem-grid">
+              {problemas.map((p) => (
+                <article className="problem" key={p.titulo}>
+                  <Icon name={p.icon} />
+                  <h3>{p.titulo}</h3>
+                  <p>{p.detalle}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="section service-section" id="servicio">
+          <div className="container">
+            <div className="section-top">
+              <span className="eyebrow">UN SOLO DEPARTAMENTO</span>
+              <h2>Servicio integral</h2>
+              <p className="lead">Redes, pauta, sitio y email marketing bajo una misma dirección. Un sistema centralizado conecta los canales, registra cada contacto y permite hacer seguimiento y medir.</p>
+            </div>
+            <ServiceWheel />
+          </div>
+        </section>
+
+        <section className="section" id="quien">
+          <div className="container bio-layout">
+            <div className="portrait-wrap">
+              <img className="portrait" src="/debora.png" alt="Fotografía original de Debora Nerini" loading="lazy" decoding="async" />
+            </div>
+            <div>
+              <span className="eyebrow">QUIÉN DIRIGE</span>
+              <h2 className="bio-heading">Debora Nerini</h2>
+              <p className="bio-role">Directora de Marketing</p>
+              <p className="bio-credentials">Lic. en Comercialización (UADE) · Especialización en Marketing Digital (UBA) · 15 años en marketing y negocios en grandes empresas.</p>
+              <p className="bio-text">Dirijo el marketing de cada empresa: defino el plan, coordino las áreas con nuestro equipo de especialistas y respondo por el resultado.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="footer" id="contacto">
+        <div className="footer-feature">
+          <div className="container footer-feature-grid">
+            <div className="footer-message">
+              <span className="eyebrow">MARKETING CON DIRECCIÓN · EJECUCIÓN · MEDICIÓN</span>
+              <h2>Hagamos que el marketing impulse tu negocio.</h2>
+              <p>Conversemos sobre el marketing de tu empresa.</p>
+              <a className="button" href={AGENDA} target="_blank" rel="noreferrer">Agendemos una llamada <Icon name="arrow" size={17} /></a>
+            </div>
+            <div className="footer-cta">
+              <h2>Coordinemos una llamada</h2>
+              <p>Un equipo. Una dirección. Un sistema.</p>
+              <div className="footer-contact">
+                <a href={AGENDA} target="_blank" rel="noreferrer">nerini.ar/agenda ↗</a>
+                <a href="mailto:debora@nerini.ar">debora@nerini.ar</a>
+                <a href={WA} target="_blank" rel="noreferrer">+54 9 11 2241 9299</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="footer-bottom">
+          <div className="container footer-inner">
+            <Brand />
+            <span className="copyright">© 2026 NERINI · Departamento Externo de Marketing</span>
+            <a href="https://nerini.ar" rel="noreferrer">nerini.ar</a>
+          </div>
+        </div>
+      </footer>
+
+      <a className="wa-float" href={WA} target="_blank" rel="noreferrer" aria-label="Contacto por WhatsApp">✆</a>
+    </div>
+  );
 }
