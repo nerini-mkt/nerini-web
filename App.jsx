@@ -57,50 +57,63 @@ function Brand() {
 
 function ServiceWheel() {
   return (
-    <div className="wheel-wrap" role="img" aria-label="Servicio integral con Presencia, Crecimiento y Nutrición; redes sociales, pauta digital, sitio web y email marketing bajo un CRM centralizado.">
-      <div className="wheel-shell">
-        <svg className="wheel-svg" viewBox="0 0 640 640" aria-hidden="true">
-          <defs>
-            <path id="arc-presencia" d="M 178 503 A 245 245 0 0 1 300 85" />
-            <path id="arc-crecimiento" d="M 340 85 A 245 245 0 0 1 556 330" />
-            <path id="arc-nutricion" d="M 540 364 A 245 245 0 0 1 200 535" />
-          </defs>
+    <div className="wheel-wrap" role="img" aria-label="Servicio integral con Presencia, Crecimiento y Nutrición; redes sociales, pauta digital, sitio web, email marketing y CRM centralizado con Clientify.">
+      <svg className="service-wheel-svg" viewBox="0 0 700 700" aria-hidden="true">
+        <defs>
+          <path id="arc-presencia" d="M 170 510 A 250 250 0 0 1 305 92" />
+          <path id="arc-crecimiento" d="M 340 92 A 250 250 0 0 1 565 320" />
+          <path id="arc-nutricion" d="M 195 545 A 250 250 0 0 0 535 380" />
+          <clipPath id="wheel-clip">
+            <circle cx="350" cy="350" r="214" />
+          </clipPath>
+        </defs>
 
-          <path d="M 178 503 A 245 245 0 0 1 300 85" fill="none" stroke="#6B1F2A" strokeWidth="64" />
-          <path d="M 340 85 A 245 245 0 0 1 556 330" fill="none" stroke="#A0714A" strokeWidth="64" />
-          <path d="M 540 364 A 245 245 0 0 1 200 535" fill="none" stroke="#C9BFBA" strokeWidth="64" />
+        <path d="M 170 510 A 250 250 0 0 1 305 92" fill="none" stroke="#6B1F2A" strokeWidth="66" />
+        <path d="M 340 92 A 250 250 0 0 1 565 320" fill="none" stroke="#A0714A" strokeWidth="66" />
+        <path d="M 195 545 A 250 250 0 0 0 535 380" fill="none" stroke="#C9BFBA" strokeWidth="66" />
 
-          <text className="wheel-arc-text"><textPath href="#arc-presencia" startOffset="54%" textAnchor="middle">PRESENCIA</textPath></text>
-          <text className="wheel-arc-text"><textPath href="#arc-crecimiento" startOffset="58%" textAnchor="middle">CRECIMIENTO</textPath></text>
-          <text className="wheel-arc-text"><textPath href="#arc-nutricion" startOffset="52%" textAnchor="middle">NUTRICIÓN</textPath></text>
-        </svg>
+        <text className="wheel-arc-label"><textPath href="#arc-presencia" startOffset="51%" textAnchor="middle">PRESENCIA</textPath></text>
+        <text className="wheel-arc-label"><textPath href="#arc-crecimiento" startOffset="58%" textAnchor="middle">CRECIMIENTO</textPath></text>
+        <text className="wheel-arc-label"><textPath href="#arc-nutricion" startOffset="50%" textAnchor="middle">NUTRICIÓN</textPath></text>
 
-        <div className="wheel-core">
-          <div className="wheel-grid">
-            <div className="quad q-presencia">
-              <strong>Redes<br/>sociales</strong>
-              <small>Instagram · LinkedIn</small>
-            </div>
-            <div className="quad q-crecimiento">
-              <strong>Pauta<br/>digital</strong>
-              <small>Meta Ads · Google Ads</small>
-            </div>
-            <div className="quad q-presencia">
-              <strong>Sitio<br/>web</strong>
-              <small>Estructura · medición</small>
-            </div>
-            <div className="quad q-nutricion">
-              <strong>Email<br/>marketing</strong>
-              <small>Envíos · secuencias</small>
-            </div>
-          </div>
-          <div className="crm-center">
-            <b>CRM</b>
-            <span>Sistema centralizado</span>
-            <img className="clientify-logo" src="/clientify.png" alt="Clientify" />
-          </div>
-        </div>
-      </div>
+        <circle cx="350" cy="350" r="214" fill="#fff" stroke="#E8E2D9" strokeWidth="1.2" />
+        <g clipPath="url(#wheel-clip)">
+          <line x1="350" y1="136" x2="350" y2="564" stroke="#E8E2D9" strokeWidth="1.2" />
+          <line x1="136" y1="350" x2="564" y2="350" stroke="#E8E2D9" strokeWidth="1.2" />
+        </g>
+
+        <text x="250" y="236" textAnchor="middle" className="wheel-title presence">
+          <tspan x="250" dy="0">Redes</tspan>
+          <tspan x="250" dy="44">sociales</tspan>
+        </text>
+        <text x="250" y="297" textAnchor="middle" className="wheel-sub">Instagram · LinkedIn</text>
+
+        <text x="455" y="236" textAnchor="middle" className="wheel-title growth">
+          <tspan x="455" dy="0">Pauta</tspan>
+          <tspan x="455" dy="44">digital</tspan>
+        </text>
+        <text x="455" y="297" textAnchor="middle" className="wheel-sub">Meta Ads · Google Ads</text>
+
+        <text x="248" y="468" textAnchor="middle" className="wheel-title presence">
+          <tspan x="248" dy="0">Sitio</tspan>
+          <tspan x="248" dy="44">web</tspan>
+        </text>
+        <text x="248" y="529" textAnchor="middle" className="wheel-sub">Estructura · medición</text>
+
+        <text x="458" y="468" textAnchor="middle" className="wheel-title nurture">
+          <tspan x="458" dy="0">Email</tspan>
+          <tspan x="458" dy="44">marketing</tspan>
+        </text>
+        <text x="458" y="529" textAnchor="middle" className="wheel-sub">Envíos · secuencias</text>
+
+        <circle cx="350" cy="350" r="88" fill="#fff" stroke="#DFD6E1" strokeWidth="1.2" />
+        <text x="350" y="330" textAnchor="middle" className="wheel-crm-main">CRM</text>
+        <text x="350" y="367" textAnchor="middle" className="wheel-crm-sub">
+          <tspan x="350" dy="0">Sistema</tspan>
+          <tspan x="350" dy="22">centralizado</tspan>
+        </text>
+        <image href="/clientify.png" x="295" y="402" width="110" height="34" preserveAspectRatio="xMidYMid meet" />
+      </svg>
     </div>
   );
 }
@@ -127,17 +140,14 @@ export default function NeriniWeb() {
           --malva-fondo:#F2ECF2;
           --gris-arena:#C9BFBA;
         }
-
         *{box-sizing:border-box}
         html{scroll-behavior:smooth}
         body{margin:0;background:#fff}
         a{text-decoration:none;color:inherit}
         button{font:inherit}
-
         .nerini-site{font-family:'Raleway',Arial,sans-serif;color:var(--tinta);background:#fff;line-height:1.55;overflow-x:hidden}
         .container{width:min(1180px,calc(100% - 80px));margin:0 auto}
-        h1,h2,h3,p{margin-top:0}
-        h1,h2{font-family:'Playfair Display',Georgia,serif;font-weight:500;letter-spacing:-.035em}
+        h1,h2,h3,p{margin-top:0} h1,h2{font-family:'Playfair Display',Georgia,serif;font-weight:500;letter-spacing:-.035em}
         .eyebrow{display:block;color:#8B5F3D;font-size:11px;font-weight:700;letter-spacing:.19em;text-transform:uppercase}
 
         .nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);border-bottom:1px solid var(--linea);backdrop-filter:saturate(140%) blur(6px)}
@@ -166,23 +176,16 @@ export default function NeriniWeb() {
         .problem svg{color:var(--cuero);margin-bottom:22px}.problem h3{font-size:17px;line-height:1.45;font-weight:600;margin:0 0 14px}.problem p{font-size:14px;line-height:1.7;color:var(--gris);margin:0}
 
         .service-section{text-align:center}.service-section .section-top{margin-left:auto;margin-right:auto;margin-bottom:44px}.service-section .lead{margin:0 auto}
-        .wheel-wrap{display:flex;justify-content:center;margin-top:8px}
-        .wheel-shell{position:relative;width:min(590px,calc(100vw - 44px));aspect-ratio:1}
-        .wheel-svg{position:absolute;inset:0;width:100%;height:100%;z-index:0;overflow:visible}
-        .wheel-arc-text{fill:#fff;font-family:'Raleway',Arial,sans-serif;font-size:15px;font-weight:700;letter-spacing:2.2px}
-        .wheel-core{position:absolute;inset:14%;border:1px solid var(--linea);border-radius:50%;overflow:hidden;background:#fff;z-index:1}
-        .wheel-grid{width:100%;height:100%;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
-        .quad{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:14px 8px}
-        .quad:nth-child(odd){border-right:1px solid var(--linea)}.quad:nth-child(-n+2){border-bottom:1px solid var(--linea)}
-        .quad strong{font-family:'Playfair Display',Georgia,serif;font-size:clamp(18px,2vw,29px);line-height:1.04;font-weight:500}
-        .q-presencia strong{color:var(--bordo)}
-        .q-crecimiento strong{color:var(--cuero)}
-        .q-nutricion strong{color:#8E7F79}
-        .quad small{font-size:clamp(9px,.95vw,12px);color:var(--gris)}
-        .crm-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:26%;aspect-ratio:1;border-radius:50%;background:#fff;border:1px solid var(--malva);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;z-index:2;padding:8px}
-        .crm-center b{font-family:'Playfair Display',Georgia,serif;font-size:clamp(24px,3vw,38px);font-weight:500;color:var(--bordo)}
-        .crm-center span{font-size:clamp(7px,.8vw,11px);color:var(--gris);text-align:center;line-height:1.2}
-        .clientify-logo{width:82%;max-height:26%;object-fit:contain;display:block;border-radius:0}
+        .wheel-wrap{display:flex;justify-content:center;margin-top:12px}
+        .service-wheel-svg{width:min(620px,calc(100vw - 44px));height:auto;display:block}
+        .wheel-arc-label{fill:#fff;font-family:'Raleway',Arial,sans-serif;font-size:15px;font-weight:700;letter-spacing:2.1px}
+        .wheel-title{font-family:'Playfair Display',Georgia,serif;font-size:31px;font-weight:500;line-height:1.05}
+        .wheel-title.presence{fill:#6B1F2A}
+        .wheel-title.growth{fill:#A0714A}
+        .wheel-title.nurture{fill:#8E7F79}
+        .wheel-sub{fill:#6B6660;font-family:'Raleway',Arial,sans-serif;font-size:12px}
+        .wheel-crm-main{fill:#6B1F2A;font-family:'Playfair Display',Georgia,serif;font-size:40px;font-weight:500}
+        .wheel-crm-sub{fill:#6B6660;font-family:'Raleway',Arial,sans-serif;font-size:12px}
 
         #quien .bio-layout{max-width:1000px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:64px;align-items:center}
         .portrait-wrap{width:220px;aspect-ratio:1;border-radius:50%;overflow:hidden;background:#fff}.portrait{width:100%;height:100%;object-fit:cover;object-position:center 29%;display:block}
@@ -196,12 +199,11 @@ export default function NeriniWeb() {
         .footer-contact{display:flex;flex-direction:column;align-items:flex-start;gap:14px}.footer-contact a{font-size:15px;color:var(--tinta);overflow-wrap:anywhere}
         .footer-bottom{background:#fff;border-top:1px solid var(--linea);padding:26px 0}.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}.footer-bottom .brand-img{width:125px}.copyright,.footer-bottom a{font-size:12px;color:var(--gris)}
 
-        .wa-float{position:fixed;right:24px;bottom:24px;z-index:40;width:68px;height:68px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#25D366;color:#fff;box-shadow:0 12px 34px rgba(37,211,102,.28);font-size:0}
-        .wa-float svg{width:32px;height:32px}
+        .wa-float{position:fixed;right:24px;bottom:24px;z-index:40;width:68px;height:68px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#25D366;color:#fff;box-shadow:0 12px 34px rgba(37,211,102,.28);font-size:0}.wa-float svg{width:32px;height:32px}
 
         @media(max-width:980px){.container{width:min(100% - 56px,1180px)}.hero-photo{width:39%;opacity:.75}.footer-feature-grid{gap:45px}.footer-cta{padding-left:34px}}
-        @media(max-width:760px){.menu-toggle{display:block}.nav-links{display:none;position:absolute;top:81px;left:0;right:0;background:#fff;border-bottom:1px solid var(--linea);padding:20px 28px 24px;flex-direction:column;align-items:flex-start;gap:16px}.nav-links.open{display:flex}.container{width:min(100% - 40px,600px)}.section{padding:76px 0}.hero{padding:0;min-height:0;display:flex;flex-direction:column}.hero .container{order:1;padding-top:78px;padding-bottom:62px}.hero-photo{position:relative;order:2;width:100%;height:250px;clip-path:none;opacity:1}.hero h1{font-size:clamp(42px,10vw,58px);max-width:100%}.hero .lead{max-width:100%;font-size:16px}.hero-top{max-width:100%}.problems-heading{margin-bottom:24px}.problems-heading h2{font-size:clamp(34px,8vw,44px)}.problem-grid{grid-template-columns:1fr 1fr}.problem{padding:24px 16px!important;border-right:1px solid var(--linea);border-bottom:1px solid var(--linea)}.problem:nth-child(2n){border-right:0}.problem:nth-last-child(-n+2){border-bottom:0}.problem:first-child{padding-left:16px!important}.wheel-shell{width:min(100%,490px)}.wheel-arc-text{font-size:14px;letter-spacing:1.8px}.quad{padding:8px 4px;gap:4px}.quad strong{font-size:clamp(14px,4vw,22px)}.quad small{font-size:clamp(7px,1.7vw,10px)}#quien .bio-layout{grid-template-columns:1fr;gap:26px}.portrait-wrap{width:190px}.footer-feature{padding:72px 0;background:#F1ECF2}.footer-feature-grid{grid-template-columns:1fr;gap:38px}.footer-cta{border-left:0;border-top:1px solid #C8BCCC;padding:36px 0 0}.footer-message h2{font-size:clamp(38px,8vw,50px)}}
-        @media(max-width:430px){.container{width:calc(100% - 34px)}.problem-grid{grid-template-columns:1fr}.problem{padding:22px 0!important;border-right:0!important}.problem:nth-last-child(-n+2){border-bottom:1px solid var(--linea)}.problem:last-child{border-bottom:0}.problem:first-child{padding-left:0!important}.hero-actions{gap:12px}.wheel-shell{width:min(100%,420px)}.wheel-arc-text{font-size:12px;letter-spacing:.9px}.crm-center{width:29%}.footer-inner{align-items:flex-start}.wa-float{width:62px;height:62px;right:18px;bottom:18px}.wa-float svg{width:28px;height:28px}}
+        @media(max-width:760px){.menu-toggle{display:block}.nav-links{display:none;position:absolute;top:81px;left:0;right:0;background:#fff;border-bottom:1px solid var(--linea);padding:20px 28px 24px;flex-direction:column;align-items:flex-start;gap:16px}.nav-links.open{display:flex}.container{width:min(100% - 40px,600px)}.section{padding:76px 0}.hero{padding:0;min-height:0;display:flex;flex-direction:column}.hero .container{order:1;padding-top:78px;padding-bottom:62px}.hero-photo{position:relative;order:2;width:100%;height:250px;clip-path:none;opacity:1}.hero h1{font-size:clamp(42px,10vw,58px);max-width:100%}.hero .lead{max-width:100%;font-size:16px}.hero-top{max-width:100%}.problems-heading{margin-bottom:24px}.problems-heading h2{font-size:clamp(34px,8vw,44px)}.problem-grid{grid-template-columns:1fr 1fr}.problem{padding:24px 16px!important;border-right:1px solid var(--linea);border-bottom:1px solid var(--linea)}.problem:nth-child(2n){border-right:0}.problem:nth-last-child(-n+2){border-bottom:0}.problem:first-child{padding-left:16px!important}.service-wheel-svg{width:min(100%,520px)}.wheel-arc-label{font-size:13px;letter-spacing:1.4px}.wheel-title{font-size:28px}.wheel-sub{font-size:11px}#quien .bio-layout{grid-template-columns:1fr;gap:26px}.portrait-wrap{width:190px}.footer-feature{padding:72px 0;background:#F1ECF2}.footer-feature-grid{grid-template-columns:1fr;gap:38px}.footer-cta{border-left:0;border-top:1px solid #C8BCCC;padding:36px 0 0}.footer-message h2{font-size:clamp(38px,8vw,50px)}}
+        @media(max-width:430px){.container{width:calc(100% - 34px)}.problem-grid{grid-template-columns:1fr}.problem{padding:22px 0!important;border-right:0!important}.problem:nth-last-child(-n+2){border-bottom:1px solid var(--linea)}.problem:last-child{border-bottom:0}.problem:first-child{padding-left:0!important}.hero-actions{gap:12px}.service-wheel-svg{width:min(100%,400px)}.wheel-arc-label{font-size:11px;letter-spacing:.8px}.wheel-title{font-size:24px}.wheel-sub{font-size:10px}.wa-float{width:62px;height:62px;right:18px;bottom:18px}.wa-float svg{width:28px;height:28px}.footer-inner{align-items:flex-start}}
       `}</style>
 
       <header className="nav">
