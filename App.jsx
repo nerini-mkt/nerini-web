@@ -96,33 +96,33 @@ function ServiceWheel() {
           <line x1="136" y1="350" x2="564" y2="350" stroke="#E8E2D9" strokeWidth="1.2" />
         </g>
 
-        {/* Superior izquierdo — títulos altos, subtítulos bien separados del CRM */}
-        <text x="230" y="182" textAnchor="middle" className="wheel-title presence">
-          <tspan x="230" dy="0">Redes</tspan>
-          <tspan x="230" dy="30">sociales</tspan>
+        {/* Superior izquierdo */}
+        <text x="242" y="205" textAnchor="middle" className="wheel-title presence">
+          <tspan x="242" dy="0">Redes</tspan>
+          <tspan x="242" dy="30">sociales</tspan>
         </text>
-        <text x="230" y="236" textAnchor="middle" className="wheel-sub">Instagram + LinkedIn</text>
+        <text x="242" y="252" textAnchor="middle" className="wheel-sub">Instagram + LinkedIn</text>
 
         {/* Superior derecho */}
-        <text x="462" y="182" textAnchor="middle" className="wheel-title growth">
-          <tspan x="462" dy="0">Pauta</tspan>
-          <tspan x="462" dy="30">digital</tspan>
+        <text x="455" y="205" textAnchor="middle" className="wheel-title growth">
+          <tspan x="455" dy="0">Pauta</tspan>
+          <tspan x="455" dy="30">digital</tspan>
         </text>
-        <text x="462" y="236" textAnchor="middle" className="wheel-sub">Meta Ads + Google Ads</text>
+        <text x="455" y="252" textAnchor="middle" className="wheel-sub">Meta Ads + Google Ads</text>
 
         {/* Inferior izquierdo */}
-        <text x="230" y="418" textAnchor="middle" className="wheel-title presence">
-          <tspan x="230" dy="0">Sitio</tspan>
-          <tspan x="230" dy="30">web</tspan>
+        <text x="242" y="437" textAnchor="middle" className="wheel-title presence">
+          <tspan x="242" dy="0">Sitio</tspan>
+          <tspan x="242" dy="30">web</tspan>
         </text>
-        <text x="230" y="472" textAnchor="middle" className="wheel-sub">Estructura · medición</text>
+        <text x="242" y="482" textAnchor="middle" className="wheel-sub">Estructura · medición</text>
 
-        {/* Inferior derecho — x reducido para que "marketing" no salga del clip */}
-        <text x="448" y="418" textAnchor="middle" className="wheel-title nurture">
-          <tspan x="448" dy="0">Email</tspan>
-          <tspan x="448" dy="30">marketing</tspan>
+        {/* Inferior derecho — x=445 para que "marketing" quede dentro del clip */}
+        <text x="445" y="437" textAnchor="middle" className="wheel-title nurture">
+          <tspan x="445" dy="0">Email</tspan>
+          <tspan x="445" dy="30">marketing</tspan>
         </text>
-        <text x="448" y="472" textAnchor="middle" className="wheel-sub">Envíos · secuencias</text>
+        <text x="445" y="482" textAnchor="middle" className="wheel-sub">Envíos · secuencias</text>
 
         {/* CRM central — igual al one-pager: CRM + Partner oficial de + logo */}
         <circle cx="350" cy="350" r="88" fill="#fff" stroke="#DFD6E1" strokeWidth="1.2" />
