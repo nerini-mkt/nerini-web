@@ -97,32 +97,32 @@ function ServiceWheel() {
         </g>
 
         {/* Superior izquierdo */}
-        <text x="250" y="218" textAnchor="middle" className="wheel-title presence">
-          <tspan x="250" dy="0">Redes</tspan>
-          <tspan x="250" dy="36">sociales</tspan>
+        <text x="242" y="210" textAnchor="middle" className="wheel-title presence">
+          <tspan x="242" dy="0">Redes</tspan>
+          <tspan x="242" dy="30">sociales</tspan>
         </text>
-        <text x="250" y="272" textAnchor="middle" className="wheel-sub">Instagram · LinkedIn</text>
+        <text x="242" y="257" textAnchor="middle" className="wheel-sub">Instagram · LinkedIn</text>
 
         {/* Superior derecho */}
-        <text x="455" y="218" textAnchor="middle" className="wheel-title growth">
+        <text x="455" y="210" textAnchor="middle" className="wheel-title growth">
           <tspan x="455" dy="0">Pauta</tspan>
-          <tspan x="455" dy="36">digital</tspan>
+          <tspan x="455" dy="30">digital</tspan>
         </text>
-        <text x="455" y="272" textAnchor="middle" className="wheel-sub">Meta Ads · Google Ads</text>
+        <text x="455" y="257" textAnchor="middle" className="wheel-sub">Meta Ads · Google Ads</text>
 
         {/* Inferior izquierdo */}
-        <text x="248" y="440" textAnchor="middle" className="wheel-title presence">
-          <tspan x="248" dy="0">Sitio</tspan>
-          <tspan x="248" dy="36">web</tspan>
+        <text x="242" y="443" textAnchor="middle" className="wheel-title presence">
+          <tspan x="242" dy="0">Sitio</tspan>
+          <tspan x="242" dy="30">web</tspan>
         </text>
-        <text x="248" y="494" textAnchor="middle" className="wheel-sub">Estructura · medición</text>
+        <text x="242" y="490" textAnchor="middle" className="wheel-sub">Estructura · medición</text>
 
         {/* Inferior derecho */}
-        <text x="458" y="440" textAnchor="middle" className="wheel-title nurture">
-          <tspan x="458" dy="0">Email</tspan>
-          <tspan x="458" dy="36">marketing</tspan>
+        <text x="452" y="443" textAnchor="middle" className="wheel-title nurture">
+          <tspan x="452" dy="0">Email</tspan>
+          <tspan x="452" dy="30">marketing</tspan>
         </text>
-        <text x="458" y="494" textAnchor="middle" className="wheel-sub">Envíos · secuencias</text>
+        <text x="452" y="490" textAnchor="middle" className="wheel-sub">Envíos · secuencias</text>
 
         {/* CRM central */}
         <circle cx="350" cy="350" r="88" fill="#fff" stroke="#DFD6E1" strokeWidth="1.2" />
@@ -198,12 +198,12 @@ export default function NeriniWeb() {
         .wheel-wrap{display:flex;justify-content:center;margin-top:12px}
         .service-wheel-svg{width:min(620px,calc(100vw - 44px));height:auto;display:block}
         .wheel-arc-label{fill:#fff;font-family:'Raleway',Arial,sans-serif;font-size:15px;font-weight:700;letter-spacing:2.1px}
-        .wheel-title{font-family:'Playfair Display',Georgia,serif;font-size:31px;font-weight:500;line-height:1.05}
+        .wheel-title{font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:500;line-height:1.05}
         .wheel-title.presence{fill:#6B1F2A}
         .wheel-title.growth{fill:#A0714A}
         .wheel-title.nurture{fill:#8E7F79}
         .wheel-sub{fill:#6B6660;font-family:'Raleway',Arial,sans-serif;font-size:12px}
-        .wheel-crm-main{fill:#6B1F2A;font-family:'Playfair Display',Georgia,serif;font-size:40px;font-weight:500}
+        .wheel-crm-main{fill:#6B1F2A;font-family:'Playfair Display',Georgia,serif;font-size:36px;font-weight:500}
         .wheel-crm-sub{fill:#6B6660;font-family:'Raleway',Arial,sans-serif;font-size:12px}
 
         #quien .bio-layout{max-width:1000px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:64px;align-items:center}
