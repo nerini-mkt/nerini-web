@@ -96,42 +96,39 @@ function ServiceWheel() {
           <line x1="136" y1="350" x2="564" y2="350" stroke="#E8E2D9" strokeWidth="1.2" />
         </g>
 
-        {/* Superior izquierdo */}
-        <text x="242" y="210" textAnchor="middle" className="wheel-title presence">
-          <tspan x="242" dy="0">Redes</tspan>
-          <tspan x="242" dy="30">sociales</tspan>
+        {/* Superior izquierdo — títulos altos, subtítulos bien separados del CRM */}
+        <text x="230" y="182" textAnchor="middle" className="wheel-title presence">
+          <tspan x="230" dy="0">Redes</tspan>
+          <tspan x="230" dy="30">sociales</tspan>
         </text>
-        <text x="242" y="257" textAnchor="middle" className="wheel-sub">Instagram · LinkedIn</text>
+        <text x="230" y="236" textAnchor="middle" className="wheel-sub">Instagram + LinkedIn</text>
 
         {/* Superior derecho */}
-        <text x="455" y="210" textAnchor="middle" className="wheel-title growth">
-          <tspan x="455" dy="0">Pauta</tspan>
-          <tspan x="455" dy="30">digital</tspan>
+        <text x="462" y="182" textAnchor="middle" className="wheel-title growth">
+          <tspan x="462" dy="0">Pauta</tspan>
+          <tspan x="462" dy="30">digital</tspan>
         </text>
-        <text x="455" y="257" textAnchor="middle" className="wheel-sub">Meta Ads · Google Ads</text>
+        <text x="462" y="236" textAnchor="middle" className="wheel-sub">Meta Ads + Google Ads</text>
 
         {/* Inferior izquierdo */}
-        <text x="242" y="443" textAnchor="middle" className="wheel-title presence">
-          <tspan x="242" dy="0">Sitio</tspan>
-          <tspan x="242" dy="30">web</tspan>
+        <text x="230" y="418" textAnchor="middle" className="wheel-title presence">
+          <tspan x="230" dy="0">Sitio</tspan>
+          <tspan x="230" dy="30">web</tspan>
         </text>
-        <text x="242" y="490" textAnchor="middle" className="wheel-sub">Estructura · medición</text>
+        <text x="230" y="472" textAnchor="middle" className="wheel-sub">Estructura · medición</text>
 
-        {/* Inferior derecho */}
-        <text x="452" y="443" textAnchor="middle" className="wheel-title nurture">
-          <tspan x="452" dy="0">Email</tspan>
-          <tspan x="452" dy="30">marketing</tspan>
+        {/* Inferior derecho — x reducido para que "marketing" no salga del clip */}
+        <text x="448" y="418" textAnchor="middle" className="wheel-title nurture">
+          <tspan x="448" dy="0">Email</tspan>
+          <tspan x="448" dy="30">marketing</tspan>
         </text>
-        <text x="452" y="490" textAnchor="middle" className="wheel-sub">Envíos · secuencias</text>
+        <text x="448" y="472" textAnchor="middle" className="wheel-sub">Envíos · secuencias</text>
 
-        {/* CRM central */}
+        {/* CRM central — igual al one-pager: CRM + Partner oficial de + logo */}
         <circle cx="350" cy="350" r="88" fill="#fff" stroke="#DFD6E1" strokeWidth="1.2" />
-        <text x="350" y="330" textAnchor="middle" className="wheel-crm-main">CRM</text>
-        <text x="350" y="367" textAnchor="middle" className="wheel-crm-sub">
-          <tspan x="350" dy="0">Sistema</tspan>
-          <tspan x="350" dy="22">centralizado</tspan>
-        </text>
-        <image href="/clientify.png" x="295" y="402" width="110" height="34" preserveAspectRatio="xMidYMid meet" />
+        <text x="350" y="332" textAnchor="middle" className="wheel-crm-main">CRM</text>
+        <text x="350" y="355" textAnchor="middle" className="wheel-crm-partner">Partner oficial de</text>
+        <image href="/clientify.png" x="298" y="365" width="104" height="30" preserveAspectRatio="xMidYMid meet" />
       </svg>
     </div>
   );
@@ -204,7 +201,7 @@ export default function NeriniWeb() {
         .wheel-title.nurture{fill:#8E7F79}
         .wheel-sub{fill:#6B6660;font-family:'Raleway',Arial,sans-serif;font-size:12px}
         .wheel-crm-main{fill:#6B1F2A;font-family:'Playfair Display',Georgia,serif;font-size:36px;font-weight:500}
-        .wheel-crm-sub{fill:#6B6660;font-family:'Raleway',Arial,sans-serif;font-size:12px}
+        .wheel-crm-partner{fill:#8E7F79;font-family:'Raleway',Arial,sans-serif;font-size:11px;letter-spacing:.3px}
 
         #quien .bio-layout{max-width:1000px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:64px;align-items:center}
         .portrait-wrap{width:220px;aspect-ratio:1;border-radius:50%;overflow:hidden;background:#fff}.portrait{width:100%;height:100%;object-fit:cover;object-position:center 29%;display:block}
